@@ -1,27 +1,19 @@
-import type IUserEntity from './user.interface'
+import BaseEntity from '@shared/domain/entities/base.entity'
 import type IUserPayload from '../payloads/user.payload'
-import BaseEntity from '../../../shared/domain/entities/base.entity'
+import type IUser from './user.interface'
 
-class User extends BaseEntity<User, IUserPayload> implements IUserEntity {
-  firstName: string
-  lastName: string
-  phoneNumber: number
-  birthday: string
-
-  constructor(payload: IUserPayload) {
-    super(payload)
-    this.firstName = payload.firstName
-    this.lastName = payload.lastName
-    this.phoneNumber = payload.phoneNumber
-    this.birthday = payload.birthday
+class User extends BaseEntity<User, IUser, IUserPayload> {
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor(props: IUser) {
+    super(props)
   }
 
   toPrimitive(): IUserPayload {
     return {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      phoneNumber: this.phoneNumber,
-      birthday: this.birthday
+      firstName: this.data.firstName._value,
+      lastName: this.data.lastName._value,
+      phoneNumber: this.data.phoneNumber._value,
+      birthday: this.data.birthday._value
     }
   }
 }

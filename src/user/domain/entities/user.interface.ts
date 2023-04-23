@@ -1,5 +1,10 @@
-import type IUserPayload from '../payloads/user.payload'
+import { type FirstName, type LastName, type PhoneNumber, type Birthday } from '../value-objects/user.value-object'
 
-interface IUserEntity extends IUserPayload {}
+interface IUser {
+  firstName: FirstName
+  lastName: LastName
+  phoneNumber: PhoneNumber
+  birthday: Birthday
+};
 
-export default IUserEntity
+export default IUser
