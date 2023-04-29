@@ -1,8 +1,8 @@
+import type IBaseEntity from '../interface/base.entity.interface'
 import ImmutableEntity from './immutable.entity'
 import { v4 as uuidv4 } from 'uuid'
 
-abstract class BaseEntity<Entity, PrimitiveData, Payload> extends ImmutableEntity<PrimitiveData> {
-  // TODO: add value object
+abstract class BaseEntity<PrimitiveData> extends ImmutableEntity<PrimitiveData> implements IBaseEntity<PrimitiveData> {
   protected readonly _id: string
   protected readonly _createdAt: Date
   protected _updatedAt: Date
@@ -26,14 +26,10 @@ abstract class BaseEntity<Entity, PrimitiveData, Payload> extends ImmutableEntit
     return this._updatedAt
   }
 
-  abstract toPrimitive(): Payload
+  abstract toPrimitive(): PrimitiveData
 
   markAsUpdated(): void {
     this._updatedAt = new Date()
-  }
-
-  equals(other: BaseEntity<Entity, PrimitiveData, Payload>): boolean {
-    return this.id === other.id
   }
 }
 

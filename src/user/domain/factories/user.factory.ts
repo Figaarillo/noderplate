@@ -1,14 +1,13 @@
 import User from '../entities/user.entity'
 import type IUserPayload from '../payloads/user.payload'
-import { FirstName, LastName, PhoneNumber, Birthday } from '../value-objects/user.value-object'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class UserFactory {
   static create(payload: IUserPayload): User {
-    const firstName = new FirstName(payload.firstName)
-    const lastName = new LastName(payload.lastName)
-    const phoneNumber = new PhoneNumber(payload.phoneNumber)
-    const birthday = new Birthday(payload.birthday)
+    const firstName = payload.firstName
+    const lastName = payload.lastName
+    const phoneNumber = payload.phoneNumber
+    const birthday = payload.birthday
 
     const userPayload = {
       firstName,
