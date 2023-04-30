@@ -1,8 +1,8 @@
-import { type Nullable } from '@shared/domain/types/nullable.type'
-import type IBaseRepository from '../../interfaces/base.repository.interface'
-import type IBaseEntityData from '@shared/domain/interface/base-data.entity.interface'
+import type Nullable from '@shared/domain/types/nullable.type'
+import type IBaseRepository from '../interfaces/base.repository.interface'
+import type IBaseEntity from '@shared/domain/interfaces/base.entity.interface'
 
-class BaseInMemoryRepository<Entity extends IBaseEntityData> implements IBaseRepository<Entity> {
+class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
   #entityData: Entity[] = []
 
   async getAll(): Promise<Entity[]> {
