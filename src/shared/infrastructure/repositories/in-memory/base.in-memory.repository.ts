@@ -26,12 +26,7 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
   }
 
   async update(entity: Entity): Promise<Entity> {
-    this.#entityData = this.#entityData.map((entityStored) => {
-      if (entityStored.id === entity.id) {
-        return entity
-      }
-      return entityStored
-    })
+    this.#entityData = this.#entityData.map(entityStored => entityStored.id === entity.id ? entity : entityStored)
 
     return entity
   }

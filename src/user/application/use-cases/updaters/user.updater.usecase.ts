@@ -10,9 +10,19 @@ class UserUpdaterUseCase {
   }
 
   async execute(payload: UpdateUserPayload): Promise<IUserEntity | null> {
-    const userToUpdate: IUserEntity | null = await this.#userRepository.getById(payload.id)
+    const userStored: IUserEntity | null = await this.#userRepository.getById(payload.id)
 
-    if (userToUpdate === null) return null
+    if (userStored === null) return null
+
+    const userToUpdate: IUserEntity = {
+      id: userStored.id,
+      createdAt: userStored?.createdAt,
+      updatedAt: new Date(),
+      firstName: payload.firstName ?? userStored?.firstName,
+      lastName: payload.lastName ?? userStored?.lastName,
+      phoneNumber: payload.phoneNumber ?? userStored?.phoneNumber,
+      birthday: payload.birthday ?? userStored?.birthday
+    }
 
     const userUpdated = await this.#userRepository.update(userToUpdate)
 
