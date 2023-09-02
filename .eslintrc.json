@@ -17,6 +17,9 @@
     "semi": ["error", "never"],
     "no-console": ["warn", { "allow": ["error"] }],
     "@typescript-eslint/space-before-function-paren": "off",
-    "@typescript-eslint/no-floating-promises": "off"
+    "@typescript-eslint/no-floating-promises": "off",
+    "brace-style": "off",
+    "@typescript-eslint/brace-style": "off",
+    "@typescript-eslint/indent": "off"
   }
 }

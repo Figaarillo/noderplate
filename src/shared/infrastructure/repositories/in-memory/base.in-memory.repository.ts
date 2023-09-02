@@ -1,8 +1,11 @@
+/* eslint-disable indent */
 import type Nullable from '@shared/domain/types/nullable.type'
 import type IBaseRepository from '../interfaces/base.repository.interface'
 import type IBaseEntity from '@shared/domain/interfaces/base.entity.interface'
 
-class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
+class BaseInMemoryRepository<Entity extends IBaseEntity>
+  implements IBaseRepository<Entity>
+{
   #entityData: Entity[] = []
 
   async getAll(): Promise<Entity[]> {
@@ -18,7 +21,9 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
   }
 
   async getBy(property: string): Promise<Nullable<Entity>> {
-    const entityFoundByProperty: any = this.#entityData.find((entity: any) => entity[property] === property)
+    const entityFoundByProperty: any = this.#entityData.find(
+      (entity: any) => entity[property] === property
+    )
 
     if (entityFoundByProperty === undefined) return null
 
@@ -26,7 +31,9 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
   }
 
   async update(entity: Entity): Promise<Entity> {
-    this.#entityData = this.#entityData.map(entityStored => entityStored.id === entity.id ? entity : entityStored)
+    this.#entityData = this.#entityData.map(entityStored =>
+      entityStored.id === entity.id ? entity : entityStored
+    )
 
     return entity
   }

@@ -32,7 +32,7 @@ const userPayload4: IUserPayload = {
   birthday: '22-10-1998'
 }
 
-const test = async (): Promise<void> => {
+;(async (): Promise<void> => {
   const repository = new UserInMemoryRepository()
   const creatorUseCase = new UserCreatorUseCase(repository)
   const deleterUseCase = new UserDeleterUseCase(repository)
@@ -52,14 +52,10 @@ const test = async (): Promise<void> => {
     birthday: '22-10-1998'
   }
   await updaterUseCase.execute(newPayload)
-  // console.log('USER UPDATED')
-  // console.log(userUpdated)
 
   await creatorUseCase.execute(userPayload4)
   const getterUseCase = new UserGetterUseCase(repository)
   const getUser = await getterUseCase.execute()
 
   console.log(getUser)
-}
-
-test()
+})()

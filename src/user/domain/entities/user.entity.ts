@@ -3,35 +3,33 @@ import type IUserPayload from '../payloads/user.payload'
 import type IUserEntity from '../interfaces/user.entity.interface'
 
 class UserEntity extends BaseEntity<IUserPayload> implements IUserEntity {
-  #firstName: string
-  #lastName: string
-  #phoneNumber: number
-  #birthday: string
+  private readonly _firstName: string
+  private readonly _lastName: string
+  private readonly _phoneNumber: number
+  private readonly _birthday: string
 
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(props: IUserPayload) {
     super(props)
-    Object.freeze(this)
-    this.#firstName = this.data.firstName
-    this.#lastName = this.data.lastName
-    this.#phoneNumber = this.data.phoneNumber
-    this.#birthday = this.data.birthday
+    this._firstName = this.data.firstName
+    this._lastName = this.data.firstName
+    this._phoneNumber = this.data.phoneNumber
+    this._birthday = this.data.firstName
   }
 
   get firstName(): string {
-    return this.#firstName
+    return this._firstName
   }
 
   get lastName(): string {
-    return this.#lastName
+    return this._lastName
   }
 
   get phoneNumber(): number {
-    return this.#phoneNumber
+    return this._phoneNumber
   }
 
   get birthday(): string {
-    return this.#birthday
+    return this._birthday
   }
 }
 

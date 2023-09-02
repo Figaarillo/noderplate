@@ -35,5 +35,6 @@
   "ts-node": {
     "transpileOnly": true,
     "require": ["tsconfig-paths/register"]
-  }
+  },
+  "exclude": [/* "src/user/adapters/*",  */"src/user/tests/*"]
 }

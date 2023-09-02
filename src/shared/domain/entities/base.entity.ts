@@ -2,7 +2,10 @@ import type IBaseEntity from '../interfaces/base.entity.interface'
 import ImmutableEntity from './immutable.entity'
 import { v4 as uuidv4 } from 'uuid'
 
-abstract class BaseEntity<PrimitiveData> extends ImmutableEntity<PrimitiveData> implements IBaseEntity {
+abstract class BaseEntity<PrimitiveData>
+  extends ImmutableEntity<PrimitiveData>
+  implements IBaseEntity
+{
   protected readonly _id: string
   protected readonly _createdAt: Date
   protected _updatedAt: Date
