@@ -3,6 +3,6 @@ interface UserPayload {
   lastName: string
   phoneNumber: number
   birthday: string
-};
+}
 
 export default UserPayload

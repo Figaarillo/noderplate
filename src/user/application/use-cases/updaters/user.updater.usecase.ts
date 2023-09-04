@@ -10,7 +10,9 @@ class UserUpdaterUseCase {
   }
 
   async execute(payload: UpdateUserPayload): Promise<IUserEntity | null> {
-    const userStored: IUserEntity | null = await this.#userRepository.getById(payload.id)
+    const userStored: IUserEntity | null = await this.#userRepository.getById(
+      payload.id
+    )
 
     if (userStored === null) return null
 
