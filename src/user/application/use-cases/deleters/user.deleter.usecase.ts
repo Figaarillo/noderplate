@@ -9,7 +9,9 @@ class UserDeleterUseCase {
   }
 
   async execute(userId: string): Promise<IUserEntity | null> {
-    const userToDelete: IUserEntity | null = await this.#userRepository.getById(userId)
+    const userToDelete: IUserEntity | null = await this.#userRepository.getById(
+      userId
+    )
 
     if (userToDelete === null) {
       return null

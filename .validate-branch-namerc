@@ -1,0 +1,4 @@
+{
+  "pattern": "^(feature|bugfix|hotfix|refactor|merging|prerelease|release)(/[a-zA-Z0-9-]+)?(/[a-zA-Z0-9-]+)?/[a-zA-Z0-9-]+$",
+  "errorMsg": "Invalid branch name, please use the following format: <category>/<reference>/<description-in-kebab-case>"
+}
