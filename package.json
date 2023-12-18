@@ -13,12 +13,14 @@
     "ts-check": "tsc -p tsconfig.json --noEmit",
     "prepare": "husky install",
     "pre-check": "pnpm run ts-check && pnpm run prettier && pnpm run lint",
-  "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged"
   },
   "keywords": [],
   "author": "Figarillo",
   "license": "ISC",
   "devDependencies": {
+    "@commitlint/cli": "18.4.3",
+    "@commitlint/config-conventional": "18.4.3",
     "@types/node": "20.10.5",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
     "concurrently": "8.2.2",
