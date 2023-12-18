@@ -1,0 +1,14 @@
+{
+  "name": "boilerplate-api-server-ts",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/App.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Figarillo",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "20.10.5",
+    "typescript": "5.3.3"
+  }
+}
