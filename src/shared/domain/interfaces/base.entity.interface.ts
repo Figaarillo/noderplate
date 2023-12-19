@@ -2,8 +2,7 @@ interface IBaseEntity {
   id: string
   createdAt: Date
   updatedAt: Date
-  update: (data: IBaseEntity) => IBaseEntity
-  create: (data: IBaseEntity) => IBaseEntity
+  update: (data: any) => IBaseEntity
 }
 
 export default IBaseEntity
