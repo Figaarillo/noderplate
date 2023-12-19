@@ -5,7 +5,7 @@ interface IBaseRepository<Entity> {
   save: (entity: Entity) => Promise<Entity>
   getBy: (property: string) => Promise<Nullable<Entity>>
   update: (updatedEntity: Entity) => Promise<void>
-  delete: (entity: Entity) => Promise<void>
+  delete: (entityId: string) => Promise<void>
 }
 
 export default IBaseRepository

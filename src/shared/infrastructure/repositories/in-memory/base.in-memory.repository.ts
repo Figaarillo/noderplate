@@ -37,9 +37,9 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
     })
   }
 
-  async delete(entity: Entity): Promise<void> {
+  async delete(entityId: string): Promise<void> {
     const entities = this.entityData.filter(entityStored => {
-      return entityStored.id !== entity.id
+      return entityStored.id !== entityId
     })
 
     this.entityData = entities

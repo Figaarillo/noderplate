@@ -17,6 +17,10 @@ class UserService {
 
     return userCreated
   }
+
+  async deleteOne(id: string): Promise<void> {
+    this.userRepository.delete(id)
+  }
 }
 
 export default UserService
