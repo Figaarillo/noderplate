@@ -1,6 +1,6 @@
-import type IBaseEntity from 'src/shared/domain/interfaces/base.entity.interface'
+import type IBaseEntity from '../../../domain/interfaces/base.entity.interface'
+import type Nullable from '../../../domain/types/nullable.type'
 import type IBaseRepository from '../interfaces/base.repository.interface'
-import type Nullable from 'src/shared/domain/types/nullable.type'
 
 class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
   private readonly entityData: Entity[] = []

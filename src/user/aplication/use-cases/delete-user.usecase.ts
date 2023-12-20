@@ -1,5 +1,5 @@
-import UserService from 'src/user/domain/services/user.service'
-import type IUserRepository from 'src/user/infrastructure/repositories/interfaces/user.repository.interface'
+import UserService from '../../domain/services/user.service'
+import type IUserRepository from '../../infrastructure/repositories/interfaces/user.repository.interface'
 
 class DeleteUser {
   private readonly service: UserService
