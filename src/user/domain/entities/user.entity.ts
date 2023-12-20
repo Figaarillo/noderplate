@@ -7,7 +7,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
   private _lastName: string
   private _phoneNumber: number
   private _email: string
-  private _password: string
+  private readonly _password: string
 
   constructor(userPayload: UserPayload) {
     super()
@@ -38,13 +38,12 @@ class UserEntity extends BaseEntity implements IUserEntity {
     return this._password
   }
 
-  update(data: UserPayload): this {
+  update(data: Partial<UserPayload>): this {
     this._updatedAt = new Date()
-    this._firstName = data.firstName
-    this._lastName = data.lastName
-    this._phoneNumber = data.phoneNumber
-    this._email = data.email
-    this._password = data.password
+    this._firstName = data.firstName ?? this._firstName
+    this._lastName = data.lastName ?? this._lastName
+    this._phoneNumber = data.phoneNumber ?? this._phoneNumber
+    this._email = data.email ?? this._email
 
     return this
   }

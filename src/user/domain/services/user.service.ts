@@ -1,8 +1,8 @@
+import type Nullable from 'src/shared/domain/types/nullable.type'
 import type IUserRepository from 'src/user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserFactory from '../factories/user.factory'
 import type IUserEntity from '../interfaces/user.entity.interface'
 import type UserPayload from '../payloads/user.payload'
-import type Nullable from 'src/shared/domain/types/nullable.type'
 
 class UserService {
   private readonly repository: IUserRepository
@@ -20,7 +20,7 @@ class UserService {
   }
 
   async deleteOne(id: string): Promise<void> {
-    // TODO: validate that id is an id
+    // TODO: validate that id is an uuid
 
     this.repository.delete(id)
   }
@@ -35,6 +35,23 @@ class UserService {
     // TODO: validate that property is a valid property of IUserEntity
 
     return await this.repository.getBy({ property })
+  }
+
+  async update(id: string, payload: Partial<UserPayload>): Promise<IUserEntity> {
+    // TODO: validate that id is an uuid
+
+    const userFound = await this.getOneById(id)
+
+    if (userFound == null) {
+      throw new Error('User not found')
+    }
+
+    userFound.update(payload)
+    //  TODO: validate that operation was successful
+
+    this.repository.save(userFound)
+
+    return userFound
   }
 }
 

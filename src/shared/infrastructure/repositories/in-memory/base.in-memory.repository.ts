@@ -3,16 +3,14 @@ import type IBaseRepository from '../interfaces/base.repository.interface'
 import type Nullable from 'src/shared/domain/types/nullable.type'
 
 class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
-  private entityData: Entity[] = []
+  private readonly entityData: Entity[] = []
+
+  async delete(entityId: string): Promise<void> {
+    this.entityData.filter(entity => entity.id !== entityId)
+  }
 
   async getAll(): Promise<Entity[]> {
     const entity = this.entityData
-
-    return entity
-  }
-
-  async save(entity: Entity): Promise<Entity> {
-    this.entityData.push(entity)
 
     return entity
   }
@@ -29,6 +27,12 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
     return entityFoundByProperty
   }
 
+  async save(entity: Entity): Promise<Entity> {
+    this.entityData.push(entity)
+
+    return entity
+  }
+
   async update(updatedEntity: Entity): Promise<void> {
     this.entityData.map(entityStored => {
       if (entityStored.id === updatedEntity.id) {
@@ -37,14 +41,6 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
 
       return entityStored
     })
-  }
-
-  async delete(entityId: string): Promise<void> {
-    const entities = this.entityData.filter(entityStored => {
-      return entityStored.id !== entityId
-    })
-
-    this.entityData = entities
   }
 }
 
