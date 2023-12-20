@@ -10,8 +10,10 @@ class UpdateUser {
     this.service = new UserService(repository)
   }
 
-  async exec({ id, payload }: { id: string; payload: Partial<UserPayload> }): Promise<IUserEntity> {
-    const userUpdated = await this.service.update(id, payload)
+  async exec(payload: UpdateUserPayload): Promise<IUserEntity> {
+    const { id, ...userPayload } = payload
+
+    const userUpdated = await this.service.update(id, userPayload)
 
     return userUpdated
   }
