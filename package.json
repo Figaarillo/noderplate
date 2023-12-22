@@ -14,7 +14,7 @@
     "build:dev": "pnpm run tsc && pnpm run tsc-alias",
     "lint": "eslint --ext .ts src",
     "prettier": "prettier --write \"src/**/*.ts\"",
-    "lint:fix": "pnpm run lint -- --fix",
+    "lint:fix": "pnpm run lint --fix",
     "ts-check": "tsc -p tsconfig.json --noEmit",
     "prepare": "husky install",
     "pre-check": "pnpm run ts-check && pnpm run prettier && pnpm run lint",
