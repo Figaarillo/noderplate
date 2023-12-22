@@ -8,8 +8,8 @@ import {
 } from '../value-objects/user.value-object'
 
 interface IUserEntity extends IBaseEntity {
-  firstname: FirstName
-  lastname: LastName
+  firstName: FirstName
+  lastName: LastName
   phoneNumber: PhoneNumber
   email: Email
   password: Password
