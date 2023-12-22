@@ -1,7 +1,7 @@
-import type IUserEntity from '../../domain/interfaces/user.entity.interface'
-import type UserPayload from '../../domain/payloads/user.payload'
-import UserService from '../../domain/services/user.service'
-import type IUserRepository from '../../infrastructure/repositories/interfaces/user.repository.interface'
+import type IUserEntity from '@user/domain/interfaces/user.entity.interface'
+import type UserPayload from '@user/domain/payloads/user.payload'
+import UserService from '@user/domain/services/user.service'
+import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 
 class CreateUser {
   private readonly service: UserService

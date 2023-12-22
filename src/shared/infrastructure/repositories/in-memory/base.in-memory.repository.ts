@@ -1,5 +1,5 @@
-import type IBaseEntity from '../../../domain/interfaces/base.entity.interface'
-import type Nullable from '../../../domain/types/nullable.type'
+import type IBaseEntity from '@shared/domain/interfaces/base.entity.interface'
+import type Nullable from '@shared/domain/types/nullable.type'
 import type IBaseRepository from '../interfaces/base.repository.interface'
 
 class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {

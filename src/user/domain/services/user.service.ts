@@ -1,5 +1,5 @@
-import type Nullable from '../../../shared/domain/types/nullable.type'
-import type IUserRepository from '../../infrastructure/repositories/interfaces/user.repository.interface'
+import type Nullable from '@shared/domain/types/nullable.type'
+import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserFactory from '../factories/user.factory'
 import type IUserEntity from '../interfaces/user.entity.interface'
 import type UserPayload from '../payloads/user.payload'

@@ -1,4 +1,4 @@
-import type Nullable from '../../../domain/types/nullable.type'
+import type Nullable from '@shared/domain/types/nullable.type'
 
 interface IBaseRepository<Entity> {
   delete: (entityId: string) => Promise<void>
