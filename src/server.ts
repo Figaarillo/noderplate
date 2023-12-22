@@ -57,17 +57,19 @@ const userPayload4: UserPayload = {
   const userToDelete = await createUser.exec(userPayload2)
   console.log({ userToDelete })
 
-  await deleteUser.exec(userToDelete.id)
-  const userFound = await getUser.exec(userToDelete.id)
+  await deleteUser.exec(userToDelete.id.value)
+  const userFound = await getUser.exec(userToDelete.id.value)
   if (userFound != null) {
     console.log({ userFound })
+  } else {
+    console.log('User was not found')
   }
 
   // #### Update User ####
   console.log('#### Update User ####')
   const userToUpdate = await createUser.exec(userPayload3)
   const newPayload: UpdateUserPayload = {
-    id: userToUpdate.id,
+    id: userToUpdate.id.value,
     firstName: 'new name',
     lastName: 'new last name',
     phoneNumber: 134234234,
