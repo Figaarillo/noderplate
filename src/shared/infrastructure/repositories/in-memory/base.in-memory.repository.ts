@@ -3,10 +3,10 @@ import type Nullable from '@shared/domain/types/nullable.type'
 import type IBaseRepository from '../interfaces/base.repository.interface'
 
 class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
-  private readonly entityData: Entity[] = []
+  private entityData: Entity[] = []
 
   async delete(entityId: string): Promise<void> {
-    this.entityData.filter(entity => entity.id !== entityId)
+    this.entityData = this.entityData.filter(entity => entity.id.value !== entityId)
   }
 
   async getAll(): Promise<Entity[]> {
