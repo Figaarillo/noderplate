@@ -5,9 +5,15 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  immutable:
+    specifier: 5.0.0-beta.4
+    version: 5.0.0-beta.4
   rimraf:
     specifier: 5.0.5
     version: 5.0.5
+  zod:
+    specifier: 3.22.4
+    version: 3.22.4
 
 devDependencies:
   '@commitlint/cli':
@@ -1966,6 +1972,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immutable@5.0.0-beta.4:
+    resolution: {integrity: sha512-sl9RE3lqd2LoQSESc8VV0k8qE9y57iT7dinq3Q+8mR2dqReHDZlgUrudzmFfZhDXBLXlNJMVWv3SG1YpQIokig==}
+    dev: false
+
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -3620,3 +3630,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: false
