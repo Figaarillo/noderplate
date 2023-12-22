@@ -3,13 +3,15 @@ import UserDTO, { type UserTypeDTO } from '../dtos/user.dto'
 import { ZodError } from 'zod'
 
 class ValidateUserData {
+  readonly payload: UserPayload
+
   constructor(payload: UserPayload) {
-    this.validate(payload)
+    this.payload = payload
   }
 
-  validate(payload: UserPayload): UserTypeDTO {
+  validate(): UserTypeDTO {
     try {
-      return UserDTO.parse(payload)
+      return UserDTO.parse(this.payload)
     } catch (error) {
       if (error instanceof ZodError) {
         throw new Error(error.errors.map(err => err.message).join('\n'))

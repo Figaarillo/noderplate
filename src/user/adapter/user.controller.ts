@@ -5,6 +5,7 @@ import UpdateUser from '@user/aplication/use-cases/update-user.usecase'
 import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
 import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
 import type UserPayload from '@user/domain/payloads/user.payload'
+import ValidateUserData from '@user/infrastructure/middlewares/validate-user-data.middleware'
 import UserInMemoryRepository from '@user/infrastructure/repositories/in-memory/user.in-memory.repository'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 
@@ -25,7 +26,9 @@ class UserController {
 
   // TODO: modify return type
   async createUser(payload: UserPayload): Promise<IUserEntity> {
-    // TODO: implement class validator
+    const validateUserData = new ValidateUserData(payload)
+
+    validateUserData.validate()
 
     return await this.create.exec(payload)
 
