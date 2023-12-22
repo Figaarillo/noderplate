@@ -1,33 +1,30 @@
 import type IBaseEntity from '../interfaces/base.entity.interface'
-import ImmutableEntity from './immutable.entity'
-import { v4 as uuidv4 } from 'uuid'
+import { UpdateAt, CreateAt, Id } from '../value-objects/base.value-object'
 
-abstract class BaseEntity<PrimitiveData>
-  extends ImmutableEntity<PrimitiveData>
-  implements IBaseEntity
-{
-  protected readonly _id: string
-  protected readonly _createdAt: Date
-  protected _updatedAt: Date
+abstract class BaseEntity implements IBaseEntity {
+  protected readonly _id: Id
+  protected readonly _createdAt: CreateAt
+  protected _updatedAt: UpdateAt
 
-  constructor(data: PrimitiveData) {
-    super(data)
-    this._id = uuidv4()
-    this._createdAt = new Date()
-    this._updatedAt = new Date()
+  constructor() {
+    this._id = new Id()
+    this._createdAt = new CreateAt()
+    this._updatedAt = new UpdateAt()
   }
 
-  get id(): string {
+  get id(): Id {
     return this._id
   }
 
-  get createdAt(): Date {
+  get createdAt(): CreateAt {
     return this._createdAt
   }
 
-  get updatedAt(): Date {
+  get updatedAt(): UpdateAt {
     return this._updatedAt
   }
+
+  abstract update(data: any): this
 }
 
 export default BaseEntity

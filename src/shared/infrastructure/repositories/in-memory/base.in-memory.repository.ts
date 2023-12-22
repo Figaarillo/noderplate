@@ -1,57 +1,47 @@
-/* eslint-disable indent */
+import type IBaseEntity from '@shared/domain/interfaces/base.entity.interface'
 import type Nullable from '@shared/domain/types/nullable.type'
 import type IBaseRepository from '../interfaces/base.repository.interface'
-import type IBaseEntity from '@shared/domain/interfaces/base.entity.interface'
 
-class BaseInMemoryRepository<Entity extends IBaseEntity>
-  implements IBaseRepository<Entity>
-{
-  #entityData: Entity[] = []
+class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
+  private entityData: Entity[] = []
+
+  async delete(entityId: string): Promise<void> {
+    this.entityData = this.entityData.filter(entity => entity.id.value !== entityId)
+  }
 
   async getAll(): Promise<Entity[]> {
-    const entity = this.#entityData
+    const entity = this.entityData
 
     return entity
   }
 
-  async save(entity: Entity): Promise<Entity> {
-    this.#entityData.push(entity)
+  async getBy(property: Record<string, any>): Promise<Nullable<Entity>> {
+    const [propertyKey] = Object.keys(property)
+    const [propertyValue] = Object.values(property)
 
-    return entity
-  }
-
-  async getBy(property: string): Promise<Nullable<Entity>> {
-    const entityFoundByProperty: any = this.#entityData.find(
-      (entity: any) => entity[property] === property
-    )
+    const entityFoundByProperty: Entity | undefined = this.entityData.find(entity => {
+      return (entity as any)[propertyKey]?.value === propertyValue
+    })
 
     if (entityFoundByProperty === undefined) return null
 
     return entityFoundByProperty
   }
 
-  async update(entity: Entity): Promise<Entity> {
-    this.#entityData = this.#entityData.map(entityStored =>
-      entityStored.id === entity.id ? entity : entityStored
-    )
+  async save(entity: Entity): Promise<Entity> {
+    this.entityData.push(entity)
 
     return entity
   }
 
-  async delete(entity: Entity): Promise<void> {
-    const entities = this.#entityData.filter(entityStored => {
-      return entityStored.id !== entity.id
+  async update(updatedEntity: Entity): Promise<void> {
+    this.entityData.map(entityStored => {
+      if (entityStored.id.value === updatedEntity.id.value) {
+        return updatedEntity
+      }
+
+      return entityStored
     })
-
-    this.#entityData = entities
-  }
-
-  async getById(id: string): Promise<Nullable<Entity>> {
-    const entityFound = this.#entityData.find(entity => entity.id === id)
-
-    if (entityFound === undefined) return null
-
-    return entityFound
   }
 }
 

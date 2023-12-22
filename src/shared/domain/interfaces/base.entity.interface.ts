@@ -1,7 +1,10 @@
+import { type Id, type CreateAt, type UpdateAt } from '../value-objects/base.value-object'
+
 interface IBaseEntity {
-  readonly id: string
-  readonly createdAt: Date
-  readonly updatedAt: Date
+  id: Id
+  createdAt: CreateAt
+  updatedAt: UpdateAt
+  update: (data: any) => IBaseEntity
 }
 
 export default IBaseEntity

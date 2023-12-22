@@ -1,51 +1,105 @@
 export class FirstName {
-  readonly #value: string
+  constructor(private readonly _value: string) {
+    this.ensureValueIsNotEmpty(this._value)
+    this._value = _value
+  }
 
-  constructor(value: string) {
-    this.#value = value
+  private ensureValueIsNotEmpty(value: string | undefined | null): void {
+    if (value === undefined || value === null || value === '') {
+      // TODO: create a custom error
+      throw new Error('Value cannot be empty')
+    }
   }
 
   get value(): string {
-    return this.#value
-  }
-
-  getName(): string {
-    return this.#value
+    return this._value
   }
 }
 
 export class LastName {
-  readonly #value: string
+  constructor(private readonly _value: string) {
+    this.ensureValueIsNotEmpty(_value)
+    this._value = _value
+  }
 
-  constructor(value: string) {
-    this.#value = value
+  private ensureValueIsNotEmpty(value: string | undefined | null): void {
+    if (value === undefined || value === null || value === '') {
+      // TODO: create a custom error
+      throw new Error('Value cannot be empty')
+    }
   }
 
   get value(): string {
-    return this.#value
+    return this._value
   }
 }
 
 export class PhoneNumber {
-  readonly #value: number
+  constructor(private readonly _value: number) {
+    this.ensureValueIsNotEmpty(_value)
+    this._value = _value
+  }
 
-  constructor(value: number) {
-    this.#value = value
+  private ensureValueIsNotEmpty(value: number | undefined | null): void {
+    if (value === undefined || value === null) {
+      // TODO: create a custom error
+      throw new Error('Value cannot be empty')
+    }
   }
 
   get value(): number {
-    return this.#value
+    return this._value
   }
 }
 
-export class Birthday {
-  readonly #value: string
+export class Email {
+  constructor(private readonly _value: string) {
+    this.ensureValueIsNotEmpty(_value)
+    this.ensureValueIsValidEmail(_value)
+    this._value = _value
+  }
 
-  constructor(value: string) {
-    this.#value = value
+  private ensureValueIsNotEmpty(value: string | undefined | null): void {
+    if (value === undefined || value === null || value === '') {
+      // TODO: create a custom error
+      throw new Error('Value cannot be empty')
+    }
+  }
+
+  private ensureValueIsValidEmail(value: string): void {
+    if (!value.includes('@')) {
+      // TODO: create a custom error
+      throw new Error('Value is not a valid email')
+    }
   }
 
   get value(): string {
-    return this.#value
+    return this._value
+  }
+}
+
+export class Password {
+  constructor(private readonly _value: string) {
+    this.ensureValueIsNotEmpty(_value)
+    this.ensureValueIsValidPassword(_value)
+    this._value = _value
+  }
+
+  private ensureValueIsNotEmpty(value: string | undefined | null): void {
+    if (value === undefined || value === null || value === '') {
+      // TODO: create a custom error
+      throw new Error('Value cannot be empty')
+    }
+  }
+
+  private ensureValueIsValidPassword(value: string): void {
+    if (value.length < 8) {
+      // TODO: create a custom error
+      throw new Error('Value is not a valid password')
+    }
+  }
+
+  get value(): string {
+    return this._value
   }
 }

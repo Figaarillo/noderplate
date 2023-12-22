@@ -1,22 +1,10 @@
-import User from '../entities/user.entity'
-import type IUserPayload from '../payloads/user.payload'
+import UserEntity from '../entities/user.entity'
+import type UserPayload from '../payloads/user.payload'
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 class UserFactory {
-  static create(payload: IUserPayload): User {
-    const firstName = payload.firstName
-    const lastName = payload.lastName
-    const phoneNumber = payload.phoneNumber
-    const birthday = payload.birthday
-
-    const userPayload = {
-      firstName,
-      lastName,
-      phoneNumber,
-      birthday
-    }
-
-    return new User(userPayload)
+  static create(data: UserPayload): UserEntity {
+    return new UserEntity(data)
   }
 }
 

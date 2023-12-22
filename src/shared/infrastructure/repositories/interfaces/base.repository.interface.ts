@@ -1,12 +1,11 @@
 import type Nullable from '@shared/domain/types/nullable.type'
 
 interface IBaseRepository<Entity> {
+  delete: (entityId: string) => Promise<void>
   getAll: () => Promise<Entity[]>
+  getBy: (property: Record<string, any>) => Promise<Nullable<Entity>>
   save: (entity: Entity) => Promise<Entity>
-  getBy: (property: string) => Promise<Nullable<Entity>>
-  update: (entity: Entity) => Promise<Entity>
-  delete: (entity: Entity) => Promise<void>
-  getById: (id: string) => Promise<Nullable<Entity>>
+  update: (updatedEntity: Entity) => Promise<void>
 }
 
 export default IBaseRepository
