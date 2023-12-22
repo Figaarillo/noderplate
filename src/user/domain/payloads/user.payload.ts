@@ -1,6 +1,6 @@
 import { type Primitives } from '@shared/domain/utilities/primitives'
-import type IUserEntity from '../interfaces/user.entity.interface'
+import type IUserCoreData from '../interfaces/user-core-data.interface'
 
-interface UserPayload extends Primitives<IUserEntity> {}
+interface UserPayload extends Primitives<IUserCoreData> {}
 
 export default UserPayload

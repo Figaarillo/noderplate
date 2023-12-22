@@ -1,4 +1,3 @@
-import type IBaseEntity from '@shared/domain/interfaces/base.entity.interface'
 import {
   type PhoneNumber,
   type Email,
@@ -7,7 +6,7 @@ import {
   type LastName
 } from '../value-objects/user.value-object'
 
-interface IUserEntity extends IBaseEntity {
+interface IUserCoreData {
   firstName: FirstName
   lastName: LastName
   phoneNumber: PhoneNumber
@@ -15,4 +14,4 @@ interface IUserEntity extends IBaseEntity {
   password: Password
 }
 
-export default IUserEntity
+export default IUserCoreData
