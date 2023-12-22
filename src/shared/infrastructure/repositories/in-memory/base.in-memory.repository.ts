@@ -16,10 +16,11 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
   }
 
   async getBy(property: Record<string, any>): Promise<Nullable<Entity>> {
-    const propertyKey = Object.keys(property)[0]
+    const [propertyKey] = Object.keys(property)
+    const [propertyValue] = Object.values(property)
 
     const entityFoundByProperty: Entity | undefined = this.entityData.find(entity => {
-      return entity[propertyKey as keyof typeof entity] === property[propertyKey]
+      return (entity as any)[propertyKey]?.value === propertyValue
     })
 
     if (entityFoundByProperty === undefined) return null
@@ -35,7 +36,7 @@ class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseReposit
 
   async update(updatedEntity: Entity): Promise<void> {
     this.entityData.map(entityStored => {
-      if (entityStored.id === updatedEntity.id) {
+      if (entityStored.id.value === updatedEntity.id.value) {
         return updatedEntity
       }
 
