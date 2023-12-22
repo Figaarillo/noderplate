@@ -1,3 +1,4 @@
+import { type Primitives } from '@shared/domain/utilities/primitives'
 import CreateUser from '@user/aplication/use-cases/create-user.usecase'
 import DeleteUser from '@user/aplication/use-cases/delete-user.usecase'
 import GetUser from '@user/aplication/use-cases/get-user.usecase'
@@ -8,6 +9,7 @@ import type UserPayload from '@user/domain/payloads/user.payload'
 import ValidateUserData from '@user/infrastructure/middlewares/validate-user-data.middleware'
 import UserInMemoryRepository from '@user/infrastructure/repositories/in-memory/user.in-memory.repository'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
+import UserAdapter from './user.adapter'
 
 class UserController {
   private readonly repository: IUserRepository
@@ -24,15 +26,14 @@ class UserController {
     this.update = new UpdateUser(this.repository)
   }
 
-  // TODO: modify return type
-  async createUser(payload: UserPayload): Promise<IUserEntity> {
+  async createUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
     const validateUserData = new ValidateUserData(payload)
 
     validateUserData.validate()
 
-    return await this.create.exec(payload)
+    const userCreated = await this.create.exec(payload)
 
-    // TODO: adapt to return type
+    return UserAdapter(userCreated)
   }
 
   async deleteUser(id: string): Promise<void> {
