@@ -1,49 +1,51 @@
 import BaseEntity from '@shared/domain/entities/base.entity'
-import type IUserEntity from '../interfaces/user.entity.interface'
+import type IUserEntity from '../interfaces/user-entity.interface'
 import type UserPayload from '../payloads/user.payload'
+import { Email, FirstName, LastName, Password, PhoneNumber } from '../value-objects/user.value-object'
+import { UpdateAt } from '@shared/domain/value-objects/base.value-object'
 
 class UserEntity extends BaseEntity implements IUserEntity {
-  private _firstName: string
-  private _lastName: string
-  private _phoneNumber: number
-  private _email: string
-  private readonly _password: string
+  private _firstName: FirstName
+  private _lastName: LastName
+  private _phoneNumber: PhoneNumber
+  private _email: Email
+  private readonly _password: Password
 
   constructor(userPayload: UserPayload) {
     super()
-    this._firstName = userPayload.firstName
-    this._lastName = userPayload.lastName
-    this._phoneNumber = userPayload.phoneNumber
-    this._email = userPayload.email
-    this._password = userPayload.password
+    this._firstName = new FirstName(userPayload.firstName)
+    this._lastName = new LastName(userPayload.lastName)
+    this._phoneNumber = new PhoneNumber(userPayload.phoneNumber)
+    this._email = new Email(userPayload.email)
+    this._password = new Password(userPayload.password)
   }
 
-  get firstName(): string {
+  get firstName(): FirstName {
     return this._firstName
   }
 
-  get lastName(): string {
+  get lastName(): LastName {
     return this._lastName
   }
 
-  get phoneNumber(): number {
+  get phoneNumber(): PhoneNumber {
     return this._phoneNumber
   }
 
-  get email(): string {
+  get email(): Email {
     return this._email
   }
 
-  get password(): string {
+  get password(): Password {
     return this._password
   }
 
   update(data: Partial<UserPayload>): this {
-    this._updatedAt = new Date()
-    this._firstName = data.firstName ?? this._firstName
-    this._lastName = data.lastName ?? this._lastName
-    this._phoneNumber = data.phoneNumber ?? this._phoneNumber
-    this._email = data.email ?? this._email
+    this._updatedAt = new UpdateAt()
+    this._firstName = data.firstName !== undefined ? new FirstName(data.firstName) : this._firstName
+    this._lastName = data.lastName !== undefined ? new LastName(data.lastName) : this._lastName
+    this._phoneNumber = data.phoneNumber !== undefined ? new PhoneNumber(data.phoneNumber) : this._phoneNumber
+    this._email = data.email !== undefined ? new Email(data.email) : this._email
 
     return this
   }

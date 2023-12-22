@@ -1,25 +1,26 @@
 import type IBaseEntity from '../interfaces/base.entity.interface'
+import { UpdateAt, CreateAt, Id } from '../value-objects/base.value-object'
 
 abstract class BaseEntity implements IBaseEntity {
-  protected readonly _id: string
-  protected readonly _createdAt: Date
-  protected _updatedAt: Date
+  protected readonly _id: Id
+  protected readonly _createdAt: CreateAt
+  protected _updatedAt: UpdateAt
 
   constructor() {
-    this._id = String(Date.now())
-    this._createdAt = new Date()
-    this._updatedAt = new Date()
+    this._id = new Id()
+    this._createdAt = new CreateAt()
+    this._updatedAt = new UpdateAt()
   }
 
-  get id(): string {
+  get id(): Id {
     return this._id
   }
 
-  get createdAt(): Date {
+  get createdAt(): CreateAt {
     return this._createdAt
   }
 
-  get updatedAt(): Date {
+  get updatedAt(): UpdateAt {
     return this._updatedAt
   }
 
