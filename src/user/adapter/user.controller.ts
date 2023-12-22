@@ -23,48 +23,37 @@ class UserController {
     this.update = new UpdateUser(this.repository)
   }
 
+  // TODO: modify return type
   async createUser(payload: UserPayload): Promise<IUserEntity> {
-    try {
-      return await this.create.exec(payload)
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
-      // eslint-disable-next-line prettier/prettier
-      throw new Error('User could not be created')
-    }
+    // TODO: implement class validator
+
+    return await this.create.exec(payload)
+
+    // TODO: adapt to return type
   }
 
   async deleteUser(id: string): Promise<void> {
-    try {
-      await this.delete.exec(id)
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
-      // eslint-disable-next-line prettier/prettier
-      throw new Error('User could not be deleted')
-    }
+    // TODO: implement class validator
+
+    await this.delete.exec(id)
   }
 
+  // TODO: modify return type
   async getUserById(id: string): Promise<IUserEntity | null> {
-    try {
-      return await this.get.exec(id)
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
-      // eslint-disable-next-line prettier/prettier
-      throw new Error('User could not be found')
-    }
+    // TODO: implement class validator
+
+    return await this.get.exec(id)
+
+    // TODO: adapt to return type
   }
 
+  // TODO: modify return type
   async updateUser(payload: UpdateUserPayload): Promise<IUserEntity> {
-    try {
-      return await this.update.exec(payload)
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
-      // eslint-disable-next-line prettier/prettier
-      throw new Error('User could not be updated')
-    }
+    // TODO: implement class validator
+
+    return await this.update.exec(payload)
+
+    // TODO: adapt to return type
   }
 }
 
