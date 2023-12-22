@@ -1,5 +1,5 @@
 import BaseEntity from '@shared/domain/entities/base.entity'
-import type IUserEntity from '../interfaces/user.entity.interface'
+import type IUserEntity from '../interfaces/user-entity.interface'
 import type UserPayload from '../payloads/user.payload'
 import { Email, FirstName, LastName, Password, PhoneNumber } from '../value-objects/user.value-object'
 
