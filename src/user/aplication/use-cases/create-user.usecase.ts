@@ -1,4 +1,4 @@
-import type IUserEntity from '@user/domain/interfaces/user.entity.interface'
+import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
 import type UserPayload from '@user/domain/payloads/user.payload'
 import UserService from '@user/domain/services/user.service'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'

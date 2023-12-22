@@ -2,6 +2,7 @@ import BaseEntity from '@shared/domain/entities/base.entity'
 import type IUserEntity from '../interfaces/user-entity.interface'
 import type UserPayload from '../payloads/user.payload'
 import { Email, FirstName, LastName, Password, PhoneNumber } from '../value-objects/user.value-object'
+import { UpdateAt } from '@shared/domain/value-objects/base.value-object'
 
 class UserEntity extends BaseEntity implements IUserEntity {
   private _firstName: FirstName
@@ -40,7 +41,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
   }
 
   update(data: Partial<UserPayload>): this {
-    this._updatedAt = new Date()
+    this._updatedAt = new UpdateAt()
     this._firstName = data.firstName !== undefined ? new FirstName(data.firstName) : this._firstName
     this._lastName = data.lastName !== undefined ? new LastName(data.lastName) : this._lastName
     this._phoneNumber = data.phoneNumber !== undefined ? new PhoneNumber(data.phoneNumber) : this._phoneNumber
