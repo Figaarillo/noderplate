@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { emailDTO, firstNameDTO, lastNameDTO, passwordDTO, phoneNumberDTO } from './dto-types/dto-types'
 
-const UserDTO = z.object({
+const RegisterUserDTO = z.object({
   firstName: firstNameDTO,
   lastName: lastNameDTO,
   phoneNumber: phoneNumberDTO,
@@ -9,6 +9,6 @@ const UserDTO = z.object({
   password: passwordDTO
 })
 
-export type UserTypeDTO = z.infer<typeof UserDTO>
+export type UserTypeDTO = z.infer<typeof RegisterUserDTO>
 
-export default UserDTO
+export default RegisterUserDTO

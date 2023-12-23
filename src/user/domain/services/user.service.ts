@@ -11,7 +11,7 @@ class UserService {
     this.repository = userRepository
   }
 
-  async create(payload: UserPayload): Promise<IUserEntity> {
+  async register(payload: UserPayload): Promise<IUserEntity> {
     const userCreated = UserFactory.create(payload)
 
     this.repository.save(userCreated)

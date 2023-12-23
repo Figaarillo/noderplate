@@ -3,7 +3,7 @@ import type UserPayload from '@user/domain/payloads/user.payload'
 import UserService from '@user/domain/services/user.service'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 
-class CreateUser {
+class RegisterUser {
   private readonly service: UserService
 
   constructor(repository: IUserRepository) {
@@ -11,8 +11,8 @@ class CreateUser {
   }
 
   async exec(payload: UserPayload): Promise<IUserEntity> {
-    return await this.service.create(payload)
+    return await this.service.register(payload)
   }
 }
 
-export default CreateUser
+export default RegisterUser

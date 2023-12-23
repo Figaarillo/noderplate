@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import CreateUser from '@user/aplication/use-cases/create-user.usecase'
 import DeleteUser from '@user/aplication/use-cases/delete-user.usecase'
 import GetUser from '@user/aplication/use-cases/get-user.usecase'
+import RegisterUser from '@user/aplication/use-cases/register-user.usecase'
 import UpdateUser from '@user/aplication/use-cases/update-user.usecase'
 import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
 import type UserPayload from '@user/domain/payloads/user.payload'
@@ -41,7 +41,7 @@ const userPayload4: UserPayload = {
 
 ;(async (): Promise<void> => {
   const repository = new UserInMemoryRepository()
-  const createUser = new CreateUser(repository)
+  const register = new RegisterUser(repository)
   const deleteUser = new DeleteUser(repository)
   const getUser = new GetUser(repository)
   const updateUser = new UpdateUser(repository)
@@ -49,12 +49,12 @@ const userPayload4: UserPayload = {
   // #### Create User ####
   console.log('#### Create User ####')
 
-  const userCreated = await createUser.exec(userPayload)
+  const userCreated = await register.exec(userPayload)
   console.log({ userCreated })
 
   // #### Delete User ####
   console.log('#### Delete User ####')
-  const userToDelete = await createUser.exec(userPayload2)
+  const userToDelete = await register.exec(userPayload2)
   console.log({ userToDelete })
 
   await deleteUser.exec(userToDelete.id.value)
@@ -67,7 +67,7 @@ const userPayload4: UserPayload = {
 
   // #### Update User ####
   console.log('#### Update User ####')
-  const userToUpdate = await createUser.exec(userPayload3)
+  const userToUpdate = await register.exec(userPayload3)
   const newPayload: UpdateUserPayload = {
     id: userToUpdate.id.value,
     firstName: 'new name',
@@ -81,7 +81,7 @@ const userPayload4: UserPayload = {
 
   // #### Get User ####
   console.log('#### Get User ####')
-  const userCreated2 = await createUser.exec(userPayload4)
+  const userCreated2 = await register.exec(userPayload4)
   console.log({ userCreated2 })
 
   if (userCreated2 == null) {

@@ -1,17 +1,17 @@
 import type UserPayload from '@user/domain/payloads/user.payload'
-import UserDTO, { type UserTypeDTO } from '../dtos/user.dto'
 import { ZodError } from 'zod'
+import RegisterUserDTO, { type UserTypeDTO } from '../dtos/register-user.dto'
 
-class ValidateUserData {
+class RegisterValidator {
   readonly payload: UserPayload
 
   constructor(payload: UserPayload) {
     this.payload = payload
   }
 
-  validate(): UserTypeDTO {
+  exec(): UserTypeDTO {
     try {
-      return UserDTO.parse(this.payload)
+      return RegisterUserDTO.parse(this.payload)
     } catch (error) {
       if (error instanceof ZodError) {
         throw new Error(error.errors.map(err => err.message).join('\n'))
@@ -22,4 +22,4 @@ class ValidateUserData {
   }
 }
 
-export default ValidateUserData
+export default RegisterValidator
