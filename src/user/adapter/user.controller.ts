@@ -6,10 +6,11 @@ import UpdateUser from '@user/aplication/use-cases/update-user.usecase'
 import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
 import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
 import type UserPayload from '@user/domain/payloads/user.payload'
-import RegisterValidator from '@user/infrastructure/middlewares/register-validator.middleware'
+import SchemaValidator from '@user/infrastructure/middlewares/zod-schema-validator.middleware'
 import UserInMemoryRepository from '@user/infrastructure/repositories/in-memory/user.in-memory.repository'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserAdapter from './user.adapter'
+import RegisterUserDTO from '@user/infrastructure/dtos/register-user.dto'
 
 class UserController {
   private readonly repository: IUserRepository
@@ -27,7 +28,7 @@ class UserController {
   }
 
   async RegisterUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
-    const registerValidator = new RegisterValidator(payload)
+    const registerValidator = new SchemaValidator(RegisterUserDTO, payload)
 
     registerValidator.exec()
 
