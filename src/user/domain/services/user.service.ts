@@ -19,10 +19,13 @@ class UserService {
     return userCreated
   }
 
-  async deleteOne(id: string): Promise<void> {
-    // TODO: validate that id is an uuid
+  async deleteOne(id: string): Promise<IUserEntity> {
+    const userDeleted = await this.repository.delete(id)
+    if (userDeleted == null) {
+      throw new Error('User not found')
+    }
 
-    this.repository.delete(id)
+    return userDeleted
   }
 
   async getOneById(id: string): Promise<Nullable<IUserEntity>> {
