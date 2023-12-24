@@ -1,8 +1,12 @@
 import BaseEntity from '@shared/domain/entities/base.entity'
 import type IUserEntity from '../interfaces/user-entity.interface'
 import type UserPayload from '../payloads/user.payload'
-import { Email, FirstName, LastName, Password, PhoneNumber } from '../value-objects/user.value-object'
 import { UpdateAt } from '@shared/domain/value-objects/base.value-object'
+import Email from '../value-objects/email.value-object'
+import FirstName from '../value-objects/firstname.value-object'
+import LastName from '../value-objects/lastname.value-object'
+import Password from '../value-objects/password.value-object'
+import PhoneNumber from '../value-objects/phonenumber.value-object'
 
 class UserEntity extends BaseEntity implements IUserEntity {
   private _firstName: FirstName
