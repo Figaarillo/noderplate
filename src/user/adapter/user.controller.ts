@@ -7,12 +7,13 @@ import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
 import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
 import type UserPayload from '@user/domain/payloads/user.payload'
 import DeleteUserDTO from '@user/infrastructure/dtos/delete-user.dto'
+import GetUserByIdDTO from '@user/infrastructure/dtos/get-user-by-id.dto'
 import RegisterUserDTO from '@user/infrastructure/dtos/register-user.dto'
+import UpdateUserDTO from '@user/infrastructure/dtos/update-user.dto'
 import SchemaValidator from '@user/infrastructure/middlewares/zod-schema-validator.middleware'
 import UserInMemoryRepository from '@user/infrastructure/repositories/in-memory/user.in-memory.repository'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserAdapter from './user.adapter'
-import GetUserByIdDTO from '@user/infrastructure/dtos/get-user-by-id.dto'
 
 class UserController {
   private readonly repository: IUserRepository
@@ -56,15 +57,15 @@ class UserController {
     return UserAdapter(await getUseCase.exec(id))
   }
 
-  // TODO: modify return type
-  async updateUser(payload: UpdateUserPayload): Promise<IUserEntity> {
+  async updateUser(payload: UpdateUserPayload): Promise<Primitives<IUserEntity>> {
     const updateUseCase = new UpdateUser(this.repository)
 
-    // TODO: implement class validator
+    const schemaValidator = new SchemaValidator(UpdateUserDTO, payload)
+    schemaValidator.exec()
 
-    return await updateUseCase.exec(payload)
+    const userUpdated = await updateUseCase.exec(payload)
 
-    // TODO: adapt to return type
+    return UserAdapter(userUpdated)
   }
 }
 
