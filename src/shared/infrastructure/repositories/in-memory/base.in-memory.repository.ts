@@ -3,10 +3,16 @@ import type Nullable from '@shared/domain/types/nullable.type'
 import type IBaseRepository from '../interfaces/base.repository.interface'
 
 class BaseInMemoryRepository<Entity extends IBaseEntity> implements IBaseRepository<Entity> {
-  private entityData: Entity[] = []
+  private readonly entityData: Entity[] = []
 
-  async delete(entityId: string): Promise<void> {
-    this.entityData = this.entityData.filter(entity => entity.id.value !== entityId)
+  async delete(entityId: string): Promise<Nullable<Entity>> {
+    const indexToDelete = this.entityData.findIndex(entity => entity.id.value === entityId)
+
+    if (indexToDelete === -1) {
+      return null
+    }
+
+    return this.entityData.splice(indexToDelete, 1)[0]
   }
 
   async getAll(): Promise<Entity[]> {
