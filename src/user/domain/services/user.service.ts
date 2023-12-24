@@ -1,4 +1,3 @@
-import type Nullable from '@shared/domain/types/nullable.type'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserFactory from '../factories/user.factory'
 import type IUserEntity from '../interfaces/user-entity.interface'
@@ -28,26 +27,26 @@ class UserService {
     return userDeleted
   }
 
-  async getOneById(id: string): Promise<Nullable<IUserEntity>> {
-    // TODO: validate that id is an uuid
-
-    return await this.repository.getBy({ id })
-  }
-
-  async getOneByProperty(property: Record<string, any>): Promise<Nullable<IUserEntity>> {
-    // TODO: validate that property is a valid property of IUserEntity
-
-    return await this.repository.getBy({ property })
-  }
-
-  async update(id: string, payload: Partial<UserPayload>): Promise<IUserEntity> {
-    // TODO: validate that id is an uuid
-
-    const userFound = await this.getOneById(id)
-
+  async getOneById(id: string): Promise<IUserEntity> {
+    const userFound = await this.repository.getBy({ id })
     if (userFound == null) {
       throw new Error('User not found')
     }
+
+    return userFound
+  }
+
+  async getOneByProperty(property: Record<string, any>): Promise<IUserEntity> {
+    const userFound = await this.repository.getBy({ property })
+    if (userFound == null) {
+      throw new Error('User not found')
+    }
+
+    return userFound
+  }
+
+  async update(id: string, payload: Partial<UserPayload>): Promise<IUserEntity> {
+    const userFound = await this.getOneById(id)
 
     userFound.update(payload)
     //  TODO: validate that operation was successful
