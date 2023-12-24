@@ -1,8 +1,7 @@
-class FirstName {
+class LastName {
   private readonly _value: string
 
   constructor(value: string) {
-    this.validateMaxAndMinLength(value)
     this._value = value
   }
 
@@ -21,7 +20,7 @@ class FirstName {
   }
 
   // TODO: Validar: nombre no debe contener palabras comunes o nombres de empresas.
-  // TODO: Validar: nombre no debe coincidir con los datos de un documento de identidad válido.
+  // TODO: Validar: nombre y apellido no deben ser palabras comunes o nombres de empresas.
   // TODO: Validar: no se permiten ciertos nombres que sean ofensivos o inapropiados.
 
   get value(): string {
@@ -29,4 +28,4 @@ class FirstName {
   }
 }
 
-export default FirstName
+export default LastName
