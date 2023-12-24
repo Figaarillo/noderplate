@@ -12,6 +12,7 @@ import SchemaValidator from '@user/infrastructure/middlewares/zod-schema-validat
 import UserInMemoryRepository from '@user/infrastructure/repositories/in-memory/user.in-memory.repository'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserAdapter from './user.adapter'
+import GetUserByIdDTO from '@user/infrastructure/dtos/get-user-by-id.dto'
 
 class UserController {
   private readonly repository: IUserRepository
@@ -23,9 +24,8 @@ class UserController {
   async RegisterUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
     const registerUseCase = new RegisterUser(this.repository)
 
-    const registerValidator = new SchemaValidator(RegisterUserDTO, payload)
-
-    registerValidator.exec()
+    const schemaValidator = new SchemaValidator(RegisterUserDTO, payload)
+    schemaValidator.exec()
 
     const userRegistered = await registerUseCase.exec(payload)
 
@@ -37,24 +37,23 @@ class UserController {
 
     const deletePayload: Partial<UpdateUserPayload> = { id }
 
-    const registerValidator = new SchemaValidator(DeleteUserDTO, deletePayload)
-
-    registerValidator.exec()
+    const schemaValidator = new SchemaValidator(DeleteUserDTO, deletePayload)
+    schemaValidator.exec()
 
     const userDeleted = await deleteUseCase.exec(id)
 
     return UserAdapter(userDeleted)
   }
 
-  // TODO: modify return type
-  async getUserById(id: string): Promise<IUserEntity | null> {
+  async getUserById(id: string): Promise<Primitives<IUserEntity>> {
     const getUseCase = new GetUser(this.repository)
 
-    // TODO: implement class validator
+    const getUserPayload: Partial<UpdateUserPayload> = { id }
 
-    return await getUseCase.exec(id)
+    const schemaValidator = new SchemaValidator(GetUserByIdDTO, getUserPayload)
+    schemaValidator.exec()
 
-    // TODO: adapt to return type
+    return UserAdapter(await getUseCase.exec(id))
   }
 
   // TODO: modify return type
