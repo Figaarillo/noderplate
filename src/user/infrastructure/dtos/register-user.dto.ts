@@ -9,6 +9,4 @@ const RegisterUserDTO = z.object({
   password: passwordDTO
 })
 
-export type UserTypeDTO = z.infer<typeof RegisterUserDTO>
-
 export default RegisterUserDTO
