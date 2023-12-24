@@ -15,55 +15,55 @@ import UserAdapter from './user.adapter'
 
 class UserController {
   private readonly repository: IUserRepository
-  private readonly register: RegisterUser
-  private readonly delete: DeleteUser
-  private readonly get: GetUser
-  private readonly update: UpdateUser
 
   constructor() {
     this.repository = new UserInMemoryRepository()
-    this.register = new RegisterUser(this.repository)
-    this.delete = new DeleteUser(this.repository)
-    this.get = new GetUser(this.repository)
-    this.update = new UpdateUser(this.repository)
   }
 
   async RegisterUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
+    const registerUseCase = new RegisterUser(this.repository)
+
     const registerValidator = new SchemaValidator(RegisterUserDTO, payload)
 
     registerValidator.exec()
 
-    const userRegistered = await this.register.exec(payload)
+    const userRegistered = await registerUseCase.exec(payload)
 
     return UserAdapter(userRegistered)
   }
 
   async deleteUser(id: string): Promise<Primitives<IUserEntity>> {
+    const deleteUseCase = new DeleteUser(this.repository)
+
     const deletePayload: Partial<UpdateUserPayload> = { id }
 
     const registerValidator = new SchemaValidator(DeleteUserDTO, deletePayload)
 
     registerValidator.exec()
 
-    const userDeleted = await this.delete.exec(id)
+    const userDeleted = await deleteUseCase.exec(id)
 
     return UserAdapter(userDeleted)
   }
 
   // TODO: modify return type
   async getUserById(id: string): Promise<IUserEntity | null> {
+    const getUseCase = new GetUser(this.repository)
+
     // TODO: implement class validator
 
-    return await this.get.exec(id)
+    return await getUseCase.exec(id)
 
     // TODO: adapt to return type
   }
 
   // TODO: modify return type
   async updateUser(payload: UpdateUserPayload): Promise<IUserEntity> {
+    const updateUseCase = new UpdateUser(this.repository)
+
     // TODO: implement class validator
 
-    return await this.update.exec(payload)
+    return await updateUseCase.exec(payload)
 
     // TODO: adapt to return type
   }
