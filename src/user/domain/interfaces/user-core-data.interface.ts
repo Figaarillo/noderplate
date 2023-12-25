@@ -4,6 +4,7 @@ import type FirstName from '../value-objects/firstname.value-object'
 import type LastName from '../value-objects/lastname.value-object'
 import type Password from '../value-objects/password.value-object'
 import type PhoneNumber from '../value-objects/phonenumber.value-object'
+import type Province from '../value-objects/province.value-object'
 
 interface IUserCoreData {
   firstName: FirstName
@@ -12,7 +13,7 @@ interface IUserCoreData {
   password: Password
   phoneNumber: PhoneNumber
   city: City
-  province: string
+  province: Province
   country: string
   role: string
 }
