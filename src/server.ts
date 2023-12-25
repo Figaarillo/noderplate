@@ -1,94 +1,78 @@
 /* eslint-disable no-console */
-import DeleteUser from '@user/aplication/use-cases/delete-user.usecase'
-import GetUser from '@user/aplication/use-cases/get-user.usecase'
-import RegisterUser from '@user/aplication/use-cases/register-user.usecase'
-import UpdateUser from '@user/aplication/use-cases/update-user.usecase'
+import UserController from '@user/adapter/user.controller'
 import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
 import type UserPayload from '@user/domain/payloads/user.payload'
-import UserInMemoryRepository from '@user/infrastructure/repositories/in-memory/user.in-memory.repository'
 
 const userPayload: UserPayload = {
   firstName: 'Axel',
   lastName: 'Leonardi',
   phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '12345678'
+  password: '1029Test.'
 }
 
 const userPayload2: UserPayload = {
-  firstName: 'Name2',
-  lastName: 'lastName2',
+  firstName: 'Axel',
+  lastName: 'Leonardi',
   phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '12345678'
+  password: '1029Test.'
 }
 
 const userPayload3: UserPayload = {
-  firstName: 'firtsName3',
-  lastName: 'lastName3',
+  firstName: 'Axel',
+  lastName: 'Leonardi',
   phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '12345678'
+  password: '1029Test.'
 }
 
 const userPayload4: UserPayload = {
-  firstName: 'firstName4',
-  lastName: 'lastName4',
+  firstName: 'Axel',
+  lastName: 'Leonardi',
   phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '12345678'
+  password: '1029Test.'
 }
 
 ;(async (): Promise<void> => {
-  const repository = new UserInMemoryRepository()
-  const register = new RegisterUser(repository)
-  const deleteUser = new DeleteUser(repository)
-  const getUser = new GetUser(repository)
-  const updateUser = new UpdateUser(repository)
+  const userController = new UserController()
 
   // #### Create User ####
   console.log('#### Create User ####')
 
-  const userCreated = await register.exec(userPayload)
+  const userCreated = await userController.registerUser(userPayload)
   console.log({ userCreated })
 
   // #### Delete User ####
-  console.log('#### Delete User ####')
-  const userToDelete = await register.exec(userPayload2)
+  console.log('\n#### Delete User ####')
+  const userToDelete = await userController.registerUser(userPayload2)
   console.log({ userToDelete })
 
-  await deleteUser.exec(userToDelete.id.value)
-  const userFound = await getUser.exec(userToDelete.id.value)
-  if (userFound != null) {
-    console.log({ userFound })
-  } else {
-    console.log('User was not found')
-  }
+  const userDeleted = await userController.deleteUser(userToDelete.id)
+  console.log({ userDeleted })
 
   // #### Update User ####
-  console.log('#### Update User ####')
-  const userToUpdate = await register.exec(userPayload3)
+  console.log('\n#### Update User ####')
+  const userToUpdate = await userController.registerUser(userPayload3)
   const newPayload: UpdateUserPayload = {
-    id: userToUpdate.id.value,
-    firstName: 'new name',
-    lastName: 'new last name',
-    phoneNumber: 134234234,
+    id: userToUpdate.id,
+    firstName: 'newname',
+    lastName: 'newlastname',
+    phoneNumber: 92342434,
     email: 'zZLw2@example.com',
-    password: '12345678'
+    password: '1029Test.'
   }
-  const userUpdated = await updateUser.exec(newPayload)
+  const userUpdated = await userController.updateUser(newPayload)
   console.log({ userUpdated })
 
   // #### Get User ####
-  console.log('#### Get User ####')
-  const userCreated2 = await register.exec(userPayload4)
+  console.log('\n#### Get User ####')
+  const userCreated2 = await userController.registerUser(userPayload4)
   console.log({ userCreated2 })
 
-  if (userCreated2 == null) {
-    console.log('User was not found')
-  } else {
-    console.log({ userCreated2 })
-  }
+  const userFound = await userController.getUserById(userCreated2.id)
+  console.log({ userFound })
 
   console.log('\n🚀 ~ file: server.ts:run')
 })()
