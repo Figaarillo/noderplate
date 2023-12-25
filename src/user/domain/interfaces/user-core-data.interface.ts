@@ -7,9 +7,13 @@ import type PhoneNumber from '../value-objects/phonenumber.value-object'
 interface IUserCoreData {
   firstName: FirstName
   lastName: LastName
-  phoneNumber: PhoneNumber
   email: Email
   password: Password
+  phoneNumber: PhoneNumber
+  city: string
+  province: string
+  country: string
+  role: string
 }
 
 export default IUserCoreData
