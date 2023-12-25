@@ -22,7 +22,7 @@ class UserController {
     this.repository = new UserInMemoryRepository()
   }
 
-  async RegisterUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
+  async registerUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
     const registerUseCase = new RegisterUser(this.repository)
 
     const schemaValidator = new SchemaValidator(RegisterUserDTO, payload)

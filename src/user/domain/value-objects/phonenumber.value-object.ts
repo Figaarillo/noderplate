@@ -9,7 +9,7 @@ class PhoneNumber {
   private ensureValueIsNotEmpty(value: number | undefined | null): void {
     if (value === undefined || value === null) {
       // TODO: create a custom error
-      throw new Error('Value cannot be empty')
+      throw new Error('Phone number cannot be empty')
     }
   }
 

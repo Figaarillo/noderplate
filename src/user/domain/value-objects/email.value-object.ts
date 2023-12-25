@@ -8,7 +8,7 @@ class Email {
   private ensureValueIsNotEmpty(value: string | undefined | null): void {
     if (value === undefined || value === null || value === '') {
       // TODO: create a custom error
-      throw new Error('Value cannot be empty')
+      throw new Error('Email cannot be empty')
     }
   }
 

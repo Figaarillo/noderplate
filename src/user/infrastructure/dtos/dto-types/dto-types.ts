@@ -11,8 +11,8 @@ export const firstNameDTO = z
   .min(2, {
     message: 'The length of name must be greater than 2'
   })
-  .max(20, {
-    message: 'The length of name must be less than 20'
+  .max(50, {
+    message: 'The length of name must be less than 50'
   })
 
 export const lastNameDTO = z
@@ -37,7 +37,7 @@ export const emailDTO = z.string().email({
   message: 'The format of email must be email'
 })
 
-export const passwordDTO = z.string().refine(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{10,25}$/.test(value), {
+export const passwordDTO = z.string().refine(value => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(value), {
   message:
-    'The format of password must have 10 to 25 characters. Must have at least one uppercase letter, one lowercase letter, one number and one special character'
+    'The format of password must have at least 8 characters. Must have at least one uppercase letter, one lowercase letter, one number and one special character'
 })

@@ -4,28 +4,20 @@ class LastName {
   constructor(value: string) {
     this.validateMaxAndMinLength(value)
     this.validateAllowedCharacters(value)
-    this.ensureValueIsNotEmpty(value)
     this._value = value
   }
 
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
       // TODO: create a custom error
-      throw new Error('Value is not a valid name')
+      throw new Error('Last name is not a valid name')
     }
   }
 
   private validateAllowedCharacters(value: string): void {
-    if (value.match(/^[a-zA-Z]+$/) == null) {
+    if (value.match(/^[a-zA-Z ]+$/) == null) {
       // TODO: create a custom error
-      throw new Error('Value is not a valid name')
-    }
-  }
-
-  private ensureValueIsNotEmpty(value: string | undefined | null): void {
-    if (value === undefined || value === null || value === '') {
-      // TODO: create a custom error
-      throw new Error('Value cannot be empty')
+      throw new Error('Last name is not a valid name')
     }
   }
 

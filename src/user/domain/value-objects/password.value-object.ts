@@ -1,29 +1,21 @@
 class Password {
   constructor(private readonly _value: string) {
-    this.ensureValueIsNotEmpty(_value)
     this.ensurePasswordLength(_value)
     this.ensureValueIsValidPasswordComplexity(_value)
     this._value = _value
   }
 
-  private ensureValueIsNotEmpty(value: string | undefined | null): void {
-    if (value === undefined || value === null || value === '') {
-      // TODO: create a custom error
-      throw new Error('Value cannot be empty')
-    }
-  }
-
   private ensurePasswordLength(value: string): void {
     if (value.length < 8) {
       // TODO: create a custom error
-      throw new Error('Value is not a valid password')
+      throw new Error('Password is not a valid password')
     }
   }
 
   private ensureValueIsValidPasswordComplexity(value: string): void {
     if (value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=[{\]};:<>|./?,-]).{8,}$/) == null) {
       // TODO: create a custom error
-      throw new Error('Value is not a valid password complexity')
+      throw new Error('Password is not a valid password complexity')
     }
   }
 
