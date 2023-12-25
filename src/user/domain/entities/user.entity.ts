@@ -9,6 +9,7 @@ import Password from '../value-objects/password.value-object'
 import PhoneNumber from '../value-objects/phonenumber.value-object'
 import City from '../value-objects/city.value-object'
 import Province from '../value-objects/province.value-object'
+import Country from '../value-objects/country.value-object'
 
 class UserEntity extends BaseEntity implements IUserEntity {
   private _firstName: FirstName
@@ -18,6 +19,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
   private _phoneNumber: PhoneNumber
   private _city: City
   private _province: Province
+  private _conuntry: Country
 
   constructor(userPayload: UserPayload) {
     super()
@@ -28,6 +30,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
     this._password = new Password(userPayload.password)
     this._city = new City(userPayload.city)
     this._province = new Province(userPayload.province)
+    this._conuntry = new Country(userPayload.country)
   }
 
   get firstName(): FirstName {
@@ -38,16 +41,28 @@ class UserEntity extends BaseEntity implements IUserEntity {
     return this._lastName
   }
 
-  get phoneNumber(): PhoneNumber {
-    return this._phoneNumber
-  }
-
   get email(): Email {
     return this._email
   }
 
   get password(): Password {
     return this._password
+  }
+
+  get phoneNumber(): PhoneNumber {
+    return this._phoneNumber
+  }
+
+  get city(): City {
+    return this._city
+  }
+
+  get province(): Province {
+    return this._province
+  }
+
+  get country(): Country {
+    return this._conuntry
   }
 
   update(data: Partial<UserPayload>): this {
@@ -58,6 +73,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
     this._phoneNumber = data.phoneNumber !== undefined ? new PhoneNumber(data.phoneNumber) : this._phoneNumber
     this._city = data.city !== undefined ? new City(data.city) : this._city
     this._province = data.province !== undefined ? new Province(data.province) : this._province
+    this._conuntry = data.country !== undefined ? new Country(data.country) : this._conuntry
 
     return this
   }
