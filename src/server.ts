@@ -6,33 +6,49 @@ import type UserPayload from '@user/domain/payloads/user.payload'
 const userPayload: UserPayload = {
   firstName: 'Axel',
   lastName: 'Leonardi',
-  phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '1029Test.'
+  password: '1029Test.',
+  phoneNumber: 12342134,
+  city: 'Cordoba',
+  province: 'Cordoba',
+  country: 'Argentina',
+  role: 'user'
 }
 
 const userPayload2: UserPayload = {
   firstName: 'Axel',
   lastName: 'Leonardi',
-  phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '1029Test.'
+  password: '1029Test.',
+  phoneNumber: 12342134,
+  city: 'Cordoba',
+  province: 'Cordoba',
+  country: 'Argentina',
+  role: 'user'
 }
 
 const userPayload3: UserPayload = {
   firstName: 'Axel',
   lastName: 'Leonardi',
-  phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '1029Test.'
+  password: '1029Test.',
+  phoneNumber: 12342134,
+  city: 'Cordoba',
+  province: 'Cordoba',
+  country: 'Argentina',
+  role: 'user'
 }
 
 const userPayload4: UserPayload = {
   firstName: 'Axel',
   lastName: 'Leonardi',
-  phoneNumber: 12342134,
   email: 'zZLw2@example.com',
-  password: '1029Test.'
+  password: '1029Test.',
+  phoneNumber: 12342134,
+  city: 'Cordoba',
+  province: 'Cordoba',
+  country: 'Argentina',
+  role: 'user'
 }
 
 ;(async (): Promise<void> => {
@@ -59,9 +75,13 @@ const userPayload4: UserPayload = {
     id: userToUpdate.id,
     firstName: 'newname',
     lastName: 'newlastname',
-    phoneNumber: 92342434,
     email: 'zZLw2@example.com',
-    password: '1029Test.'
+    password: '1029Test.',
+    phoneNumber: 92342434,
+    city: 'Cordoba',
+    province: 'Cordoba',
+    country: 'Argentina',
+    role: 'user'
   }
   const userUpdated = await userController.updateUser(newPayload)
   console.log({ userUpdated })

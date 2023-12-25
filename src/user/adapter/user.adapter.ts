@@ -5,9 +5,13 @@ const UserAdapter = (user: IUserEntity): Primitives<IUserEntity> => ({
   id: user.id.value,
   firstName: user.firstName.value,
   lastName: user.lastName.value,
-  phoneNumber: user.phoneNumber.value,
   email: user.email.value,
   password: user.password.value,
+  phoneNumber: user.phoneNumber.value,
+  city: user.city.value,
+  province: user.province.value,
+  country: user.country.value,
+  role: user.role.value,
   createdAt: user.createdAt.value,
   updatedAt: user.updatedAt.value
 })
