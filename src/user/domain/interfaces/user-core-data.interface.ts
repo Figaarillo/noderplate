@@ -1,3 +1,4 @@
+import type City from '../value-objects/city.value-object'
 import type Email from '../value-objects/email.value-object'
 import type FirstName from '../value-objects/firstname.value-object'
 import type LastName from '../value-objects/lastname.value-object'
@@ -10,7 +11,7 @@ interface IUserCoreData {
   email: Email
   password: Password
   phoneNumber: PhoneNumber
-  city: string
+  city: City
   province: string
   country: string
   role: string

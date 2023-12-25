@@ -7,13 +7,15 @@ import FirstName from '../value-objects/firstname.value-object'
 import LastName from '../value-objects/lastname.value-object'
 import Password from '../value-objects/password.value-object'
 import PhoneNumber from '../value-objects/phonenumber.value-object'
+import City from '../value-objects/city.value-object'
 
 class UserEntity extends BaseEntity implements IUserEntity {
   private _firstName: FirstName
   private _lastName: LastName
-  private _phoneNumber: PhoneNumber
   private _email: Email
   private readonly _password: Password
+  private _phoneNumber: PhoneNumber
+  private _city: City
 
   constructor(userPayload: UserPayload) {
     super()
@@ -22,6 +24,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
     this._phoneNumber = new PhoneNumber(userPayload.phoneNumber)
     this._email = new Email(userPayload.email)
     this._password = new Password(userPayload.password)
+    this._city = new City(userPayload.city)
   }
 
   get firstName(): FirstName {
@@ -48,8 +51,9 @@ class UserEntity extends BaseEntity implements IUserEntity {
     this._updatedAt = new UpdateAt()
     this._firstName = data.firstName !== undefined ? new FirstName(data.firstName) : this._firstName
     this._lastName = data.lastName !== undefined ? new LastName(data.lastName) : this._lastName
-    this._phoneNumber = data.phoneNumber !== undefined ? new PhoneNumber(data.phoneNumber) : this._phoneNumber
     this._email = data.email !== undefined ? new Email(data.email) : this._email
+    this._phoneNumber = data.phoneNumber !== undefined ? new PhoneNumber(data.phoneNumber) : this._phoneNumber
+    this._city = data.city !== undefined ? new City(data.city) : this._city
 
     return this
   }
