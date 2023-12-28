@@ -15,7 +15,6 @@ class Password {
 
   private ensureValueIsValidPasswordComplexity(value: string): void {
     if (value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=[{\]};:<>|./?,-]).{8,}$/) == null) {
-      // TODO: create a custom error
       throw new ValueObjectFormatException(
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
       )

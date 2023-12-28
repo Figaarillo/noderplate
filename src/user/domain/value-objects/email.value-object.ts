@@ -9,14 +9,12 @@ class Email {
 
   private ensureValueIsNotEmpty(value: string | undefined | null): void {
     if (value === undefined || value === null || value === '') {
-      // TODO: create a custom error
       throw new ValueObjectFormatException('Email cannot be empty')
     }
   }
 
   private ensureValueIsValidEmail(value: string): void {
     if (value.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) == null) {
-      // TODO: create a custom error
       throw new ValueObjectFormatException('Email must be a valid email address')
     }
   }

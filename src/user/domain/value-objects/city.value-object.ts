@@ -18,7 +18,6 @@ class City {
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      // TODO: create a custom error
       throw new ValueObjectFormatException('City must only contain letters')
     }
   }

@@ -11,7 +11,6 @@ class LastName {
 
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
-      // TODO: create a custom error
       // eslint-disable-next-line quotes
       throw new ValueObjectFormatException("Last name's length must be between 2 and 50")
     }
@@ -19,7 +18,6 @@ class LastName {
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      // TODO: create a custom error
       throw new ValueObjectFormatException('Last name must only contain letters')
     }
   }
