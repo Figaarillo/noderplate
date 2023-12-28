@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv'
 
-abstract class ConfigServer {
+class ConfigServer {
   constructor() {
     const nodeEnvPath = this.createPathToEnvFile(this.getNodeEnv())
     dotenv.config({
