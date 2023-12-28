@@ -2,6 +2,7 @@ import type IUserRepository from '@user/infrastructure/repositories/interfaces/u
 import UserFactory from '../factories/user.factory'
 import type IUserEntity from '../interfaces/user-entity.interface'
 import type UserPayload from '../payloads/user.payload'
+import UserNotFoundException from '../exceptions/user-not-found.exception'
 
 class UserService {
   private readonly repository: IUserRepository
@@ -21,7 +22,7 @@ class UserService {
   async deleteOne(id: string): Promise<IUserEntity> {
     const userDeleted = await this.repository.delete(id)
     if (userDeleted == null) {
-      throw new Error('User not found')
+      throw new UserNotFoundException()
     }
 
     return userDeleted
@@ -30,7 +31,7 @@ class UserService {
   async getOneById(id: string): Promise<IUserEntity> {
     const userFound = await this.repository.getBy({ id })
     if (userFound == null) {
-      throw new Error('User not found')
+      throw new UserNotFoundException()
     }
 
     return userFound
@@ -39,7 +40,7 @@ class UserService {
   async getOneByProperty(property: Record<string, any>): Promise<IUserEntity> {
     const userFound = await this.repository.getBy({ property })
     if (userFound == null) {
-      throw new Error('User not found')
+      throw new UserNotFoundException()
     }
 
     return userFound

@@ -1,3 +1,4 @@
+import UserSchemaValidationError from '@user/domain/exceptions/user-schema-validation.error'
 import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
 import type UserPayload from '@user/domain/payloads/user.payload'
 import { ZodError, type ZodType } from 'zod'
@@ -16,7 +17,7 @@ class SchemaValidator<T> {
       return this.schema.parse(this.payload)
     } catch (error) {
       if (error instanceof ZodError) {
-        throw new Error(error.errors.map(err => err.message).join('\n'))
+        throw new UserSchemaValidationError(error.errors.map(err => err.message).join('\n'))
       }
 
       throw error

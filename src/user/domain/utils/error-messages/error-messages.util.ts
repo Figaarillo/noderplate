@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import type ErrorMessage from '@shared/domain/types/error-messages'
 
 const ErrorMessages: ErrorMessage = {
@@ -8,6 +9,10 @@ const ErrorMessages: ErrorMessage = {
   USER_ALREADY_EXISTS: {
     message: 'User already exists',
     statusCode: 409
+  },
+  USER_SCHEMA_VALIDATION: {
+    message: "Error validating user's schema",
+    statusCode: 422
   }
 }
 
