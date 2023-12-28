@@ -1,23 +1,38 @@
 /* eslint-disable n/no-path-concat */
-import { DataSource } from 'typeorm'
+import { DataSource, type DataSourceOptions } from 'typeorm'
 import ConfigServer from './server.config'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 
-const Config: ConfigServer = new ConfigServer()
+export class ConfigTypeorm extends ConfigServer {
+  private readonly config: DataSourceOptions
+  private readonly AppDataSource: DataSource
 
-const AppDataSource = new DataSource({
-  type: 'postgres',
-  host: Config.getEnviroment('db_hostname'),
-  port: Config.getNumberEnviroment('db_port'),
-  username: Config.getEnviroment('db_username'),
-  password: Config.getEnviroment('db_password'),
-  database: Config.getEnviroment('db_database'),
-  synchronize: false,
-  migrationsRun: true,
-  logging: true,
-  entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
-  migrations: [`${__dirname}/../migrations`],
-  namingStrategy: new SnakeNamingStrategy()
-})
+  constructor() {
+    super()
+    this.config = this.setupConfig()
+    this.AppDataSource = new DataSource(this.config)
+  }
 
-export default AppDataSource
+  private setupConfig(): DataSourceOptions {
+    return {
+      type: 'postgres',
+      host: this.getEnviroment('db_hostname'),
+      port: this.getNumberEnviroment('db_port'),
+      username: this.getEnviroment('db_username'),
+      password: this.getEnviroment('db_password'),
+      database: this.getEnviroment('db_database'),
+      synchronize: false,
+      migrationsRun: true,
+      logging: true,
+      entities: [`${__dirname}/../../**/*.entity{.ts,.js}`],
+      migrations: [`${__dirname}/../migrations`],
+      namingStrategy: new SnakeNamingStrategy()
+    }
+  }
+
+  getDataSource(): DataSource {
+    return this.AppDataSource
+  }
+}
+
+export default ConfigTypeorm
