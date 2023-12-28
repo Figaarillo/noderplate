@@ -1,4 +1,4 @@
-import { type Primitives } from '@shared/domain/utilities/primitives'
+import { type Primitives } from '@shared/domain/types/primitives'
 import DeleteUser from '@user/aplication/use-cases/delete-user.usecase'
 import GetUser from '@user/aplication/use-cases/get-user.usecase'
 import RegisterUser from '@user/aplication/use-cases/register-user.usecase'

@@ -1,4 +1,4 @@
-import { type Primitives } from '@shared/domain/utilities/primitives'
+import { type Primitives } from '@shared/domain/types/primitives'
 import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
 
 const UserAdapter = (user: IUserEntity): Primitives<IUserEntity> => ({
