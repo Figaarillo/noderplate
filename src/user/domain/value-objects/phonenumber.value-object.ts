@@ -1,3 +1,5 @@
+import ValueObjectFormatException from '../exceptions/value-object-format.exception'
+
 class PhoneNumber {
   private readonly _value: number
 
@@ -9,7 +11,7 @@ class PhoneNumber {
   private ensureValueIsNotEmpty(value: number | undefined | null): void {
     if (value === undefined || value === null) {
       // TODO: create a custom error
-      throw new Error('Phone number cannot be empty')
+      throw new ValueObjectFormatException('Phone number cannot be empty')
     }
   }
 

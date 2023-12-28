@@ -1,3 +1,5 @@
+import ValueObjectFormatException from '../exceptions/value-object-format.exception'
+
 class Country {
   private readonly _value: string
 
@@ -9,15 +11,13 @@ class Country {
 
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
-      // TODO: create a custom error
-      throw new Error('Country is not a valid name')
+      throw new ValueObjectFormatException('Country name must be between 2 and 50')
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      // TODO: create a custom error
-      throw new Error('Country name is not a valid name')
+      throw new ValueObjectFormatException('Country name must only contain letters')
     }
   }
 

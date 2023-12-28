@@ -1,3 +1,5 @@
+import ValueObjectFormatException from '../exceptions/value-object-format.exception'
+
 class Email {
   constructor(private readonly _value: string) {
     this.ensureValueIsNotEmpty(_value)
@@ -8,14 +10,14 @@ class Email {
   private ensureValueIsNotEmpty(value: string | undefined | null): void {
     if (value === undefined || value === null || value === '') {
       // TODO: create a custom error
-      throw new Error('Email cannot be empty')
+      throw new ValueObjectFormatException('Email cannot be empty')
     }
   }
 
   private ensureValueIsValidEmail(value: string): void {
     if (value.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) == null) {
       // TODO: create a custom error
-      throw new Error('Invalid email address')
+      throw new ValueObjectFormatException('Email must be a valid email address')
     }
   }
 

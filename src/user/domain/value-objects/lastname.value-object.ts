@@ -1,3 +1,5 @@
+import ValueObjectFormatException from '../exceptions/value-object-format.exception'
+
 class LastName {
   private readonly _value: string
 
@@ -10,14 +12,15 @@ class LastName {
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
       // TODO: create a custom error
-      throw new Error('Last name is not a valid name')
+      // eslint-disable-next-line quotes
+      throw new ValueObjectFormatException("Last name's length must be between 2 and 50")
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
       // TODO: create a custom error
-      throw new Error('Last name is not a valid name')
+      throw new ValueObjectFormatException('Last name must only contain letters')
     }
   }
 

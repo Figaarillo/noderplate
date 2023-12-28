@@ -1,3 +1,5 @@
+import ValueObjectFormatException from '../exceptions/value-object-format.exception'
+
 class Password {
   constructor(private readonly _value: string) {
     this.ensurePasswordLength(_value)
@@ -7,15 +9,16 @@ class Password {
 
   private ensurePasswordLength(value: string): void {
     if (value.length < 8) {
-      // TODO: create a custom error
-      throw new Error('Password is not a valid password')
+      throw new ValueObjectFormatException('Password must be at least 8 characters long')
     }
   }
 
   private ensureValueIsValidPasswordComplexity(value: string): void {
     if (value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=[{\]};:<>|./?,-]).{8,}$/) == null) {
       // TODO: create a custom error
-      throw new Error('Password is not a valid password complexity')
+      throw new ValueObjectFormatException(
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+      )
     }
   }
 

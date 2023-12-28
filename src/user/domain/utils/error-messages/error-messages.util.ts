@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import type ErrorMessage from '@shared/domain/types/error-messages'
 
 const ErrorMessages: ErrorMessage = {
@@ -11,7 +10,12 @@ const ErrorMessages: ErrorMessage = {
     statusCode: 409
   },
   USER_SCHEMA_VALIDATION: {
+    // eslint-disable-next-line quotes
     message: "Error validating user's schema",
+    statusCode: 422
+  },
+  VALUE_OBJECT_FORMAT_EXCEPTION: {
+    message: 'Error with value object format',
     statusCode: 422
   }
 }
