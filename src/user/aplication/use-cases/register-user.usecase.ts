@@ -1,5 +1,5 @@
 import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
-import type UserPayload from '@user/domain/payloads/user.payload'
+import type IUserPrimitiveData from '@user/domain/interfaces/user-primitive-data.interface'
 import UserService from '@user/domain/services/user.service'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 
@@ -10,7 +10,7 @@ class RegisterUser {
     this.service = new UserService(repository)
   }
 
-  async exec(payload: UserPayload): Promise<IUserEntity> {
+  async exec(payload: IUserPrimitiveData): Promise<IUserEntity> {
     return await this.service.register(payload)
   }
 }

@@ -1,15 +1,15 @@
 import BaseEntity from '@shared/domain/entities/base.entity'
-import type IUserEntity from '../interfaces/user-entity.interface'
-import type UserPayload from '../payloads/user.payload'
 import { UpdateAt } from '@shared/domain/value-objects/base.value-object'
+import type IUserEntity from '../interfaces/user-entity.interface'
+import type IUserPrimitiveData from '../interfaces/user-primitive-data.interface'
+import City from '../value-objects/city.value-object'
+import Country from '../value-objects/country.value-object'
 import Email from '../value-objects/email.value-object'
 import FirstName from '../value-objects/firstname.value-object'
 import LastName from '../value-objects/lastname.value-object'
 import Password from '../value-objects/password.value-object'
 import PhoneNumber from '../value-objects/phonenumber.value-object'
-import City from '../value-objects/city.value-object'
 import Province from '../value-objects/province.value-object'
-import Country from '../value-objects/country.value-object'
 import Role from '../value-objects/role.value-object'
 
 class UserEntity extends BaseEntity implements IUserEntity {
@@ -23,7 +23,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
   private _conuntry: Country
   private _role: Role
 
-  constructor(userPayload: UserPayload) {
+  constructor(userPayload: IUserPrimitiveData) {
     super()
     this._firstName = new FirstName(userPayload.firstName)
     this._lastName = new LastName(userPayload.lastName)
@@ -72,7 +72,7 @@ class UserEntity extends BaseEntity implements IUserEntity {
     return this._role
   }
 
-  update(data: Partial<UserPayload>): this {
+  update(data: Partial<IUserPrimitiveData>): this {
     this._updatedAt = new UpdateAt()
     this._firstName = data.firstName !== undefined ? new FirstName(data.firstName) : this._firstName
     this._lastName = data.lastName !== undefined ? new LastName(data.lastName) : this._lastName

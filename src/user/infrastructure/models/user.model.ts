@@ -1,10 +1,10 @@
 /* eslint-disable indent */
 import BaseModel from '@shared/infrastructure/models/base.model'
-import type UserPayload from '@user/domain/payloads/user.payload'
+import type IUserPrimitiveData from '@user/domain/interfaces/user-primitive-data.interface'
 import { Column, Entity } from 'typeorm'
 
 @Entity({ name: 'users' })
-class UserModel extends BaseModel implements UserPayload {
+class UserModel extends BaseModel implements IUserPrimitiveData {
   @Column()
   firstName!: string
 

@@ -3,9 +3,9 @@ import DeleteUser from '@user/aplication/use-cases/delete-user.usecase'
 import GetUser from '@user/aplication/use-cases/get-user.usecase'
 import RegisterUser from '@user/aplication/use-cases/register-user.usecase'
 import UpdateUser from '@user/aplication/use-cases/update-user.usecase'
+import type IUpdateUserData from '@user/domain/interfaces/update-user-data.interface'
 import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
-import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
-import type UserPayload from '@user/domain/payloads/user.payload'
+import type IUserPrimitiveData from '@user/domain/interfaces/user-primitive-data.interface'
 import DeleteUserDTO from '@user/infrastructure/dtos/delete-user.dto'
 import GetUserByIdDTO from '@user/infrastructure/dtos/get-user-by-id.dto'
 import RegisterUserDTO from '@user/infrastructure/dtos/register-user.dto'
@@ -22,7 +22,7 @@ class UserController {
     this.repository = new UserInMemoryRepository()
   }
 
-  async registerUser(payload: UserPayload): Promise<Primitives<IUserEntity>> {
+  async registerUser(payload: IUserPrimitiveData): Promise<Primitives<IUserEntity>> {
     const registerUseCase = new RegisterUser(this.repository)
 
     const schemaValidator = new SchemaValidator(RegisterUserDTO, payload)
@@ -36,7 +36,7 @@ class UserController {
   async deleteUser(id: string): Promise<Primitives<IUserEntity>> {
     const deleteUseCase = new DeleteUser(this.repository)
 
-    const deletePayload: Partial<UpdateUserPayload> = { id }
+    const deletePayload: Partial<IUpdateUserData> = { id }
 
     const schemaValidator = new SchemaValidator(DeleteUserDTO, deletePayload)
     schemaValidator.exec()
@@ -49,7 +49,7 @@ class UserController {
   async getUserById(id: string): Promise<Primitives<IUserEntity>> {
     const getUseCase = new GetUser(this.repository)
 
-    const getUserPayload: Partial<UpdateUserPayload> = { id }
+    const getUserPayload: Partial<IUpdateUserData> = { id }
 
     const schemaValidator = new SchemaValidator(GetUserByIdDTO, getUserPayload)
     schemaValidator.exec()
@@ -57,7 +57,7 @@ class UserController {
     return UserAdapter(await getUseCase.exec(id))
   }
 
-  async updateUser(payload: UpdateUserPayload): Promise<Primitives<IUserEntity>> {
+  async updateUser(payload: IUpdateUserData): Promise<Primitives<IUserEntity>> {
     const updateUseCase = new UpdateUser(this.repository)
 
     const schemaValidator = new SchemaValidator(UpdateUserDTO, payload)

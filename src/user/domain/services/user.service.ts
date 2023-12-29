@@ -1,8 +1,8 @@
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
+import UserNotFoundException from '../exceptions/user-not-found.exception'
 import UserFactory from '../factories/user.factory'
 import type IUserEntity from '../interfaces/user-entity.interface'
-import type UserPayload from '../payloads/user.payload'
-import UserNotFoundException from '../exceptions/user-not-found.exception'
+import type IUserPrimitiveData from '../interfaces/user-primitive-data.interface'
 
 class UserService {
   private readonly repository: IUserRepository
@@ -11,7 +11,7 @@ class UserService {
     this.repository = userRepository
   }
 
-  async register(payload: UserPayload): Promise<IUserEntity> {
+  async register(payload: IUserPrimitiveData): Promise<IUserEntity> {
     const userCreated = UserFactory.create(payload)
 
     this.repository.save(userCreated)
@@ -46,7 +46,7 @@ class UserService {
     return userFound
   }
 
-  async update(id: string, payload: Partial<UserPayload>): Promise<IUserEntity> {
+  async update(id: string, payload: Partial<IUserPrimitiveData>): Promise<IUserEntity> {
     const userFound = await this.getOneById(id)
 
     userFound.update(payload)
