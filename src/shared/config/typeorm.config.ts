@@ -30,8 +30,8 @@ export class ConfigTypeorm extends ConfigServer {
     }
   }
 
-  getDataSource(): DataSource {
-    return this.AppDataSource
+  async initDBConnection(): Promise<DataSource> {
+    return await this.AppDataSource.initialize()
   }
 }
 
