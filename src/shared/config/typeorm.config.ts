@@ -6,8 +6,9 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 export class ConfigTypeorm extends ConfigServer {
   private readonly config: DataSourceOptions
   private readonly AppDataSource: DataSource
+  private static instance: ConfigTypeorm
 
-  constructor() {
+  private constructor() {
     super()
     this.config = this.setupConfig()
     this.AppDataSource = new DataSource(this.config)
@@ -33,6 +34,13 @@ export class ConfigTypeorm extends ConfigServer {
   async initDBConnection(): Promise<DataSource> {
     return await this.AppDataSource.initialize()
   }
-}
 
-export default ConfigTypeorm
+  static getInstance(): ConfigTypeorm {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (!ConfigTypeorm.instance) {
+      ConfigTypeorm.instance = new ConfigTypeorm()
+    }
+
+    return ConfigTypeorm.instance
+  }
+}
