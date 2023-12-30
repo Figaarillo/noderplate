@@ -8,19 +8,19 @@ abstract class ConfigServer {
     })
   }
 
-  getEnviroment(key: string): string | undefined {
+  protected getEnviroment(key: string): string | undefined {
     return process.env[key.toUpperCase()]
   }
 
-  getNumberEnviroment(key: string): number | undefined {
+  protected getNumberEnviroment(key: string): number | undefined {
     return Number(this.getEnviroment(key))
   }
 
-  getNodeEnv(): string {
+  protected getNodeEnv(): string {
     return this.getEnviroment('NODE_ENV')?.trim() ?? ''
   }
 
-  createPathToEnvFile(path: string): string {
+  protected createPathToEnvFile(path: string): string {
     const ENV: string = '.env'
 
     if (path.length > 0) {
