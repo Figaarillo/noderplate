@@ -1,7 +1,6 @@
-import type IBaseEntity from '../interfaces/base.entity.interface'
 import { UpdateAt, CreateAt, Id } from '../value-objects/base.value-object'
 
-abstract class BaseEntity implements IBaseEntity {
+abstract class BaseEntity {
   protected readonly _id: Id
   protected readonly _createdAt: CreateAt
   protected _updatedAt: UpdateAt
