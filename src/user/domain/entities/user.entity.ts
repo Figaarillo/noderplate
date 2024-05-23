@@ -1,14 +1,16 @@
 import { CreateAt, Id, UpdateAt } from '@shared/domain/value-objects/base.value-object'
-import City from '../value-objects/city.value-object'
-import Country from '../value-objects/country.value-object'
-import Email from '../value-objects/email.value-object'
-import FirstName from '../value-objects/firstname.value-object'
-import LastName from '../value-objects/lastname.value-object'
-import Password from '../value-objects/password.value-object'
-import PhoneNumber from '../value-objects/phonenumber.value-object'
-import Province from '../value-objects/province.value-object'
-import Role from '../value-objects/role.value-object'
 import type UserDTO from '../dto/user.dto'
+import {
+  City,
+  Country,
+  Email,
+  FirstName,
+  LastName,
+  Password,
+  PhoneNumber,
+  Province,
+  Role
+} from '../value-objects/user.valueobject'
 
 class UserEntity {
   private readonly id: Id = new Id()
