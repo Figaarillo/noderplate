@@ -1,19 +1,18 @@
-import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
-import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
-import UserService from '@user/domain/services/user.service'
+import type UserDTO from '@user/domain/dto/user.dto'
+import type UserEntity from '@user/domain/entities/user.entity'
+import UserNotFoundException from '@user/domain/exceptions/user-not-found.exception'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 
 class UpdateUser {
-  private readonly service: UserService
-
-  constructor(repository: IUserRepository) {
-    this.service = new UserService(repository)
+  constructor(private readonly repository: IUserRepository) {
+    this.repository = repository
   }
 
-  async exec(payload: UpdateUserPayload): Promise<IUserEntity> {
-    const { id, ...userPayload } = payload
-
-    const userUpdated = await this.service.update(id, userPayload)
+  async exec(id: string, payload: UserDTO): Promise<UserEntity> {
+    const userUpdated = await this.repository.update(id, payload)
+    if (userUpdated == null) {
+      throw new UserNotFoundException()
+    }
 
     return userUpdated
   }
