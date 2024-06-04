@@ -1,16 +1,16 @@
-import type IUserEntity from '@user/domain/interfaces/user-entity.interface'
-import UserService from '@user/domain/services/user.service'
+import UserNotFoundException from '@user/domain/exceptions/user-not-found.exception'
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 
 class DeleteUser {
-  private readonly service: UserService
-
-  constructor(repository: IUserRepository) {
-    this.service = new UserService(repository)
+  constructor(private readonly repository: IUserRepository) {
+    this.repository = repository
   }
 
-  async exec(id: string): Promise<IUserEntity> {
-    const userDeleted = await this.service.deleteOne(id)
+  async exec(id: string): Promise<void> {
+    const userDeleted = await this.repository.delete(id)
+    if (userDeleted == null) {
+      throw new UserNotFoundException()
+    }
 
     return userDeleted
   }

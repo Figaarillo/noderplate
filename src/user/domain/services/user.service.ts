@@ -1,20 +1,10 @@
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
 import UserNotFoundException from '../exceptions/user-not-found.exception'
 import type UserEntity from '../entities/user.entity'
-import type UserDTO from '../dto/user.dto'
 
 class UserService {
   constructor(private readonly repository: IUserRepository) {
     this.repository = repository
-  }
-
-  async deleteOne(id: string): Promise<UserEntity> {
-    const userDeleted = await this.repository.delete(id)
-    if (userDeleted == null) {
-      throw new UserNotFoundException()
-    }
-
-    return userDeleted
   }
 
   async getOneById(id: string): Promise<UserEntity> {
