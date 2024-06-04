@@ -1,10 +1,10 @@
 import type UserDTO from '@user/domain/dto/user.dto'
 import type UserEntity from '@user/domain/entities/user.entity'
 import UserNotFoundException from '@user/domain/exceptions/user-not-found.exception'
-import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
+import type UserRepository from '@user/domain/repository/user.repository'
 
 class UpdateUser {
-  constructor(private readonly repository: IUserRepository) {
+  constructor(private readonly repository: UserRepository) {
     this.repository = repository
   }
 

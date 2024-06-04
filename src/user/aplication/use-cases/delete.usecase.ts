@@ -1,8 +1,8 @@
 import UserNotFoundException from '@user/domain/exceptions/user-not-found.exception'
-import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
+import type UserRepository from '@user/domain/repository/user.repository'
 
 class DeleteUser {
-  constructor(private readonly repository: IUserRepository) {
+  constructor(private readonly repository: UserRepository) {
     this.repository = repository
   }
 
@@ -11,8 +11,6 @@ class DeleteUser {
     if (userDeleted == null) {
       throw new UserNotFoundException()
     }
-
-    return userDeleted
   }
 }
 
