@@ -1,25 +1,14 @@
 import type IUserRepository from '@user/infrastructure/repositories/interfaces/user.repository.interface'
-import UserFactory from '../factories/user.factory'
-import type IUserEntity from '../interfaces/user-entity.interface'
-import type UserPayload from '../payloads/user.payload'
 import UserNotFoundException from '../exceptions/user-not-found.exception'
+import type UserEntity from '../entities/user.entity'
+import type UserDTO from '../dto/user.dto'
 
 class UserService {
-  private readonly repository: IUserRepository
-
-  constructor(userRepository: IUserRepository) {
-    this.repository = userRepository
+  constructor(private readonly repository: IUserRepository) {
+    this.repository = repository
   }
 
-  async register(payload: UserPayload): Promise<IUserEntity> {
-    const userCreated = UserFactory.create(payload)
-
-    this.repository.save(userCreated)
-
-    return userCreated
-  }
-
-  async deleteOne(id: string): Promise<IUserEntity> {
+  async deleteOne(id: string): Promise<UserEntity> {
     const userDeleted = await this.repository.delete(id)
     if (userDeleted == null) {
       throw new UserNotFoundException()
@@ -28,7 +17,7 @@ class UserService {
     return userDeleted
   }
 
-  async getOneById(id: string): Promise<IUserEntity> {
+  async getOneById(id: string): Promise<UserEntity> {
     const userFound = await this.repository.getBy({ id })
     if (userFound == null) {
       throw new UserNotFoundException()
@@ -37,7 +26,7 @@ class UserService {
     return userFound
   }
 
-  async getOneByProperty(property: Record<string, any>): Promise<IUserEntity> {
+  async getOneByProperty(property: Record<string, any>): Promise<UserEntity> {
     const userFound = await this.repository.getBy({ property })
     if (userFound == null) {
       throw new UserNotFoundException()
@@ -46,7 +35,7 @@ class UserService {
     return userFound
   }
 
-  async update(id: string, payload: Partial<UserPayload>): Promise<IUserEntity> {
+  async update(id: string, payload: Partial<UserPayload>): Promise<UserEntity> {
     const userFound = await this.getOneById(id)
 
     userFound.update(payload)
