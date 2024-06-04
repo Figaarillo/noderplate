@@ -7,15 +7,6 @@ class UserService {
     this.repository = repository
   }
 
-  async getOneByProperty(property: Record<string, any>): Promise<UserEntity> {
-    const userFound = await this.repository.getBy({ property })
-    if (userFound == null) {
-      throw new UserNotFoundException()
-    }
-
-    return userFound
-  }
-
   async update(id: string, payload: Partial<UserPayload>): Promise<UserEntity> {
     const userFound = await this.getOneById(id)
 
