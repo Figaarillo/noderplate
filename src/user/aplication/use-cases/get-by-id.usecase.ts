@@ -1,5 +1,5 @@
 import type UserEntity from '@user/domain/entities/user.entity'
-import UserNotFoundException from '@user/domain/exceptions/user-not-found.exception'
+import ErrorUserNotFound from '@user/domain/exceptions/user-not-found.exception'
 import type UserRepository from '@user/domain/repository/user.repository'
 
 class GetUserByID {
@@ -10,7 +10,7 @@ class GetUserByID {
   async exec(id: string): Promise<UserEntity> {
     const userFound = await this.repository.getByID(id)
     if (userFound == null) {
-      throw new UserNotFoundException()
+      throw new ErrorUserNotFound(`Cannont find user with id: ${id} when get user by id`)
     }
 
     return userFound

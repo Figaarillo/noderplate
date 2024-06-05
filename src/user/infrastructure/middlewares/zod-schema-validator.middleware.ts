@@ -1,5 +1,5 @@
 import type UserEntity from '@user/domain/entities/user.entity'
-import UserSchemaValidationError from '@user/domain/exceptions/user-schema-validation.error'
+import ErrorUserSchemaValidation from '@user/domain/exceptions/user-schema-validation.error'
 import { ZodError, type ZodType } from 'zod'
 
 class SchemaValidator<T> {
@@ -16,7 +16,7 @@ class SchemaValidator<T> {
       return this.schema.parse(this.payload)
     } catch (error) {
       if (error instanceof ZodError) {
-        throw new UserSchemaValidationError(error.errors.map(err => err.message).join('\n'))
+        throw new ErrorUserSchemaValidation(error.errors.map(err => err.message).join('\n'))
       }
 
       throw error

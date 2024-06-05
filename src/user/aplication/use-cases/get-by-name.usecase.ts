@@ -1,8 +1,8 @@
 import type UserEntity from '@user/domain/entities/user.entity'
-import UserNotFoundException from '@user/domain/exceptions/user-not-found.exception'
+import ErrorUserNotFound from '@user/domain/exceptions/user-not-found.exception'
 import type UserRepository from '@user/domain/repository/user.repository'
 
-class GetUserByProperty {
+class GetUserByName {
   constructor(private readonly repository: UserRepository) {
     this.repository = repository
   }
@@ -10,11 +10,11 @@ class GetUserByProperty {
   async exec(name: string): Promise<UserEntity> {
     const userFound = await this.repository.getByName(name)
     if (userFound == null) {
-      throw new UserNotFoundException()
+      throw new ErrorUserNotFound(`Cannont find user with name: ${name} when get user by name`)
     }
 
     return userFound
   }
 }
 
-export default GetUserByProperty
+export default GetUserByName
