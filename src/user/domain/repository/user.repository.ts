@@ -6,9 +6,9 @@ interface UserRepository {
   delete: (id: string) => Promise<Nullable<UserEntity>>
   getAll: () => Promise<UserEntity[]>
   getByID: (id: string) => Promise<Nullable<UserEntity>>
-  getByProperty: (property: Record<string, any>) => Promise<Nullable<UserEntity>>
+  getByName: (property: Record<string, any>) => Promise<Nullable<UserEntity>>
   register: (user: UserEntity) => Promise<UserEntity>
-  update: (id: string, user: UserDTO) => Promise<UserEntity>
+  update: (id: string, user: UserDTO) => Promise<Nullable<UserEntity>>
 }
 
 export default UserRepository
