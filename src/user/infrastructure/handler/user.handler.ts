@@ -1,8 +1,3 @@
-import DeleteUser from '@user/aplication/use-cases/delete.usecase'
-import GetAllUser from '@user/aplication/use-cases/get-all.usecase'
-import GetUserByID from '@user/aplication/use-cases/get-by-id.usecase'
-import RegisterUser from '@user/aplication/use-cases/register.usecase'
-import UpdateUser from '@user/aplication/use-cases/update.usecase'
 import type UserDTO from '@user/domain/dto/user.dto'
 import type UserRepository from '@user/domain/repository/user.repository'
 import DeleteUserDTO from '../dtos/delete-user.dto'
@@ -10,6 +5,11 @@ import GetUserByIdDTO from '../dtos/get-user-by-id.dto'
 import RegisterUserDTO from '../dtos/register-user.dto'
 import UpdateUserDTO from '../dtos/update-user.dto'
 import SchemaValidator from '../middlewares/zod-schema-validator.middleware'
+import DeleteUser from '@user/aplication/usecases/delete.usecase'
+import GetAllUser from '@user/aplication/usecases/get-all.usecase'
+import GetUserByID from '@user/aplication/usecases/get-by-id.usecase'
+import RegisterUser from '@user/aplication/usecases/register.usecase'
+import UpdateUser from '@user/aplication/usecases/update.usecase'
 
 class UserHandler {
   constructor(private readonly repository: UserRepository) {
