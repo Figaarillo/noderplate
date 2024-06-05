@@ -7,8 +7,8 @@ class GetUserByProperty {
     this.repository = repository
   }
 
-  async exec(property: Record<string, any>): Promise<UserEntity> {
-    const userFound = await this.repository.getByProperty({ property })
+  async exec(name: string): Promise<UserEntity> {
+    const userFound = await this.repository.getByName(name)
     if (userFound == null) {
       throw new UserNotFoundException()
     }
