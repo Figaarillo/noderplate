@@ -1,13 +1,12 @@
-import UserSchemaValidationError from '@user/domain/exceptions/user-schema-validation.error'
-import type UpdateUserPayload from '@user/domain/payloads/update-user.payload'
-import type UserPayload from '@user/domain/payloads/user.payload'
+import type UserEntity from '@user/domain/entities/user.entity'
+import ErrorUserSchemaValidation from '@user/domain/exceptions/user-schema-validation.error'
 import { ZodError, type ZodType } from 'zod'
 
 class SchemaValidator<T> {
   private readonly schema: ZodType<T>
-  private readonly payload: Partial<UserPayload>
+  private readonly payload: Partial<UserEntity>
 
-  constructor(schema: ZodType<T>, payload: Partial<UpdateUserPayload>) {
+  constructor(schema: ZodType<T>, payload: Partial<UserEntity>) {
     this.schema = schema
     this.payload = payload
   }
@@ -17,7 +16,7 @@ class SchemaValidator<T> {
       return this.schema.parse(this.payload)
     } catch (error) {
       if (error instanceof ZodError) {
-        throw new UserSchemaValidationError(error.errors.map(err => err.message).join('\n'))
+        throw new ErrorUserSchemaValidation(error.errors.map(err => err.message).join('\n'))
       }
 
       throw error

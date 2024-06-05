@@ -1,18 +1,21 @@
-import BaseEntity from '@shared/domain/entities/base.entity'
-import type IUserEntity from '../interfaces/user-entity.interface'
-import type UserPayload from '../payloads/user.payload'
-import { UpdateAt } from '@shared/domain/value-objects/base.value-object'
-import Email from '../value-objects/email.value-object'
-import FirstName from '../value-objects/firstname.value-object'
-import LastName from '../value-objects/lastname.value-object'
-import Password from '../value-objects/password.value-object'
-import PhoneNumber from '../value-objects/phonenumber.value-object'
-import City from '../value-objects/city.value-object'
-import Province from '../value-objects/province.value-object'
-import Country from '../value-objects/country.value-object'
-import Role from '../value-objects/role.value-object'
+import { CreateAt, Id, UpdateAt } from '@shared/domain/value-objects/base.value-object'
+import type UserDTO from '../dto/user.dto'
+import {
+  City,
+  Country,
+  Email,
+  FirstName,
+  LastName,
+  Password,
+  PhoneNumber,
+  Province,
+  Role
+} from '../value-objects/user.valueobject'
 
-class UserEntity extends BaseEntity implements IUserEntity {
+class UserEntity {
+  private readonly _id: Id = new Id()
+  private readonly _createdAt: CreateAt = new CreateAt()
+  private _updatedAt: UpdateAt = new UpdateAt()
   private _firstName: FirstName
   private _lastName: LastName
   private _email: Email
@@ -23,67 +26,93 @@ class UserEntity extends BaseEntity implements IUserEntity {
   private _conuntry: Country
   private _role: Role
 
-  constructor(userPayload: UserPayload) {
-    super()
-    this._firstName = new FirstName(userPayload.firstName)
-    this._lastName = new LastName(userPayload.lastName)
-    this._phoneNumber = new PhoneNumber(userPayload.phoneNumber)
-    this._email = new Email(userPayload.email)
-    this._password = new Password(userPayload.password)
-    this._city = new City(userPayload.city)
-    this._province = new Province(userPayload.province)
-    this._conuntry = new Country(userPayload.country)
-    this._role = new Role(userPayload.role)
+  constructor(data: UserDTO) {
+    this._firstName = new FirstName(data.firstName)
+    this._lastName = new LastName(data.lastName)
+    this._email = new Email(data.email)
+    this._password = new Password(data.password)
+    this._phoneNumber = new PhoneNumber(data.phoneNumber)
+    this._city = new City(data.city)
+    this._province = new Province(data.province)
+    this._conuntry = new Country(data.country)
+    this._role = new Role(data.role)
   }
 
-  get firstName(): FirstName {
-    return this._firstName
-  }
-
-  get lastName(): LastName {
-    return this._lastName
-  }
-
-  get email(): Email {
-    return this._email
-  }
-
-  get password(): Password {
-    return this._password
-  }
-
-  get phoneNumber(): PhoneNumber {
-    return this._phoneNumber
-  }
-
-  get city(): City {
-    return this._city
-  }
-
-  get province(): Province {
-    return this._province
-  }
-
-  get country(): Country {
-    return this._conuntry
-  }
-
-  get role(): Role {
-    return this._role
-  }
-
-  update(data: Partial<UserPayload>): this {
+  update(data: UserDTO): void {
     this._updatedAt = new UpdateAt()
-    this._firstName = data.firstName !== undefined ? new FirstName(data.firstName) : this._firstName
-    this._lastName = data.lastName !== undefined ? new LastName(data.lastName) : this._lastName
-    this._email = data.email !== undefined ? new Email(data.email) : this._email
-    this._phoneNumber = data.phoneNumber !== undefined ? new PhoneNumber(data.phoneNumber) : this._phoneNumber
-    this._city = data.city !== undefined ? new City(data.city) : this._city
-    this._province = data.province !== undefined ? new Province(data.province) : this._province
-    this._conuntry = data.country !== undefined ? new Country(data.country) : this._conuntry
-    this._role = data.role !== undefined ? new Role(data.role) : this._role
+    if (data.firstName !== undefined) {
+      this._firstName = new FirstName(data.firstName)
+    }
+    if (data.lastName !== undefined) {
+      this._lastName = new LastName(data.lastName)
+    }
+    if (data.email !== undefined) {
+      this._email = new Email(data.email)
+    }
+    if (data.phoneNumber !== undefined) {
+      this._phoneNumber = new PhoneNumber(data.phoneNumber)
+    }
+    if (data.city !== undefined) {
+      this._city = new City(data.city)
+    }
+    if (data.province !== undefined) {
+      this._province = new Province(data.province)
+    }
+    if (data.country !== undefined) {
+      this._conuntry = new Country(data.country)
+    }
+    if (data.role !== undefined) {
+      this._role = new Role(data.role)
+    }
+  }
 
-    return this
+  get id(): string {
+    return this._id.value
+  }
+
+  get firstName(): string {
+    return this._firstName.value
+  }
+
+  get lastName(): string {
+    return this._lastName.value
+  }
+
+  get email(): string {
+    return this._email.value
+  }
+
+  get password(): string {
+    // TODO: Encrypt password
+    return this._password.value
+  }
+
+  get phoneNumber(): number {
+    return this._phoneNumber.value
+  }
+
+  get city(): string {
+    return this._city.value
+  }
+
+  get province(): string {
+    return this._province.value
+  }
+
+  get conuntry(): string {
+    return this._conuntry.value
+  }
+
+  get role(): string {
+    return this._role.value
+  }
+
+  get createdAt(): Date {
+    return this._createdAt.value
+  }
+
+  get updatedAt(): Date {
+    return this._updatedAt.value
   }
 }
 

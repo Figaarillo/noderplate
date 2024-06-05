@@ -1,7 +1,7 @@
 {
-  "name": "boilerplate-api-server-ts",
+  "name": "noderplate",
   "version": "0.0.0",
-  "description": "",
+  "description": "noderpalte is a boilerplate for nodejs projects",
   "main": "dist/App.js",
   "scripts": {
     "start": "pnpm run build && node dist/server.js",
@@ -22,8 +22,9 @@
   },
   "keywords": [],
   "author": "Figarillo",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
+    "@types/bcrypt": "5.0.2",
     "@commitlint/cli": "18.4.3",
     "@commitlint/config-conventional": "18.4.3",
     "@types/node": "20.10.5",
@@ -47,6 +48,8 @@
     "uuid": "9.0.1"
   },
   "dependencies": {
+    "bcrypt": "5.1.1",
+    "dotenv": "16.3.1",
     "immutable": "5.0.0-beta.4",
     "rimraf": "5.0.5",
     "zod": "3.22.4"

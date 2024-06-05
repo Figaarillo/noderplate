@@ -1,6 +1,6 @@
-import type ErrorMessage from '@shared/domain/types/error-messages'
+import type IHttpErrorMessages from '@shared/domain/exceptions/http-error-message.interface.exeption'
 
-const ErrorMessages: ErrorMessage = {
+const ErrorMessages: Record<string, IHttpErrorMessages> = {
   USER_NOT_FOUND: {
     message: 'User not found',
     statusCode: 404
