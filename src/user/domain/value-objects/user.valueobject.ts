@@ -1,3 +1,4 @@
+import { compare, hash } from 'bcrypt'
 import ErrorValueObjectFormat from '../exceptions/value-object-format.exception'
 
 export class FirstName {
@@ -88,10 +89,10 @@ export class Email {
 }
 
 export class Password {
-  constructor(private readonly _value: string) {
+  constructor(private _value: string) {
     this.ensurePasswordLength(_value)
     this.ensureValueIsValidPasswordComplexity(_value)
-    this._value = _value
+    this.hashPassword()
   }
 
   private ensurePasswordLength(value: string): void {
@@ -112,6 +113,14 @@ export class Password {
   // TODO: Validar que la contraseña sea segura mediante una herramienta de análisis de contraseñas.
   // TODO: No debe ser igual a ninguna de las últimas 5 contraseñas utilizadas por el usuario.
   // TODO: Expiración de contraseñas y políticas de cambio periódico: La contraseña debe cambiarse cada 90 días, por ejemplo.
+
+  async hashPassword(): Promise<void> {
+    this._value = await hash(this.value, 10)
+  }
+
+  static async ComparePasswords(value: string, hash: string): Promise<boolean> {
+    return await compare(value, hash)
+  }
 
   get value(): string {
     return this._value
