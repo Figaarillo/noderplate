@@ -1,4 +1,4 @@
-import ValueObjectFormatException from '../exceptions/value-object-format.exception'
+import ErrorValueObjectFormat from '../exceptions/value-object-format.exception'
 
 export class FirstName {
   constructor(private readonly _value: string) {
@@ -10,13 +10,13 @@ export class FirstName {
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
       // eslint-disable-next-line quotes
-      throw new ValueObjectFormatException("First name's length must be between 2 and 50")
+      throw new ErrorValueObjectFormat("First name's length must be between 2 and 50")
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z]+$/) == null) {
-      throw new ValueObjectFormatException('First name must only contain letters')
+      throw new ErrorValueObjectFormat('First name must only contain letters')
     }
   }
 
@@ -39,13 +39,13 @@ export class LastName {
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
       // eslint-disable-next-line quotes
-      throw new ValueObjectFormatException("Last name's length must be between 2 and 50")
+      throw new ErrorValueObjectFormat("Last name's length must be between 2 and 50")
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      throw new ValueObjectFormatException('Last name must only contain letters')
+      throw new ErrorValueObjectFormat('Last name must only contain letters')
     }
   }
 
@@ -67,13 +67,13 @@ export class Email {
 
   private ensureValueIsNotEmpty(value: string | undefined | null): void {
     if (value === undefined || value === null || value === '') {
-      throw new ValueObjectFormatException('Email cannot be empty')
+      throw new ErrorValueObjectFormat('Email cannot be empty')
     }
   }
 
   private ensureValueIsValidEmail(value: string): void {
     if (value.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/) == null) {
-      throw new ValueObjectFormatException('Email must be a valid email address')
+      throw new ErrorValueObjectFormat('Email must be a valid email address')
     }
   }
 
@@ -96,13 +96,13 @@ export class Password {
 
   private ensurePasswordLength(value: string): void {
     if (value.length < 8) {
-      throw new ValueObjectFormatException('Password must be at least 8 characters long')
+      throw new ErrorValueObjectFormat('Password must be at least 8 characters long')
     }
   }
 
   private ensureValueIsValidPasswordComplexity(value: string): void {
     if (value.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=[{\]};:<>|./?,-]).{8,}$/) == null) {
-      throw new ValueObjectFormatException(
+      throw new ErrorValueObjectFormat(
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
       )
     }
@@ -126,7 +126,7 @@ export class PhoneNumber {
 
   private ensureValueIsNotEmpty(value: number | undefined | null): void {
     if (value === undefined || value === null) {
-      throw new ValueObjectFormatException('Phone number cannot be empty')
+      throw new ErrorValueObjectFormat('Phone number cannot be empty')
     }
   }
 
@@ -152,13 +152,13 @@ export class City {
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
       // eslint-disable-next-line quotes
-      throw new ValueObjectFormatException("City's length must be between 2 and 50")
+      throw new ErrorValueObjectFormat("City's length must be between 2 and 50")
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      throw new ValueObjectFormatException('City must only contain letters')
+      throw new ErrorValueObjectFormat('City must only contain letters')
     }
   }
 
@@ -176,13 +176,13 @@ export class Province {
 
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
-      throw new ValueObjectFormatException('Province name must be between 2 and 50')
+      throw new ErrorValueObjectFormat('Province name must be between 2 and 50')
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      throw new ValueObjectFormatException('Province must only contain letters and spaces')
+      throw new ErrorValueObjectFormat('Province must only contain letters and spaces')
     }
   }
 
@@ -200,13 +200,13 @@ export class Country {
 
   private validateMaxAndMinLength(value: string): void {
     if (value.length < 2 || value.length > 50) {
-      throw new ValueObjectFormatException('Country name must be between 2 and 50')
+      throw new ErrorValueObjectFormat('Country name must be between 2 and 50')
     }
   }
 
   private validateAllowedCharacters(value: string): void {
     if (value.match(/^[a-zA-Z ]+$/) == null) {
-      throw new ValueObjectFormatException('Country name must only contain letters')
+      throw new ErrorValueObjectFormat('Country name must only contain letters')
     }
   }
 

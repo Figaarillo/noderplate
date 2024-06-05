@@ -1,10 +1,10 @@
-import type IHTTPErrorMessage from './http-error-message.interface.exeption'
+import type IHTTPErrorMessages from './http-error-message.interface.exeption'
 
-const HTTPErrorMessage: Record<string, IHTTPErrorMessage> = {
+const HTTPErrorMessages: Record<string, IHTTPErrorMessages> = {
   UNEXPECTED_ERROR: {
     message: 'Unexpected error',
     statusCode: 500
   }
 }
 
-export default HTTPErrorMessage
+export default HTTPErrorMessages

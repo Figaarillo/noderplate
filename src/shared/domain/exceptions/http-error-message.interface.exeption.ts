@@ -1,6 +1,6 @@
-interface IHttpErrorMessage {
+interface IHttpErrorMessages {
   message: string
   statusCode: number
 }
 
-export default IHttpErrorMessage
+export default IHttpErrorMessages

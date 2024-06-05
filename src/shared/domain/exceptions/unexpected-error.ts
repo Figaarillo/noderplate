@@ -1,10 +1,8 @@
-class UnexpectedError extends Error {
-  constructor(
-    readonly description: string,
-    readonly name: string = UnexpectedError.name
-  ) {
-    super(description)
+class ErrorUnexpectedEventOcurred extends Error {
+  constructor(readonly message: string) {
+    super(message)
+    this.name = ErrorUnexpectedEventOcurred.name
   }
 }
 
-export default UnexpectedError
+export default ErrorUnexpectedEventOcurred
