@@ -11,8 +11,9 @@ import {
   Province,
   Role
 } from '../value-objects/user.valueobject'
+import type IUserEntity from './iuser.entity'
 
-class UserEntity {
+class UserEntity implements IUserEntity {
   private readonly _id: Id = new Id()
   private readonly _createdAt: CreateAt = new CreateAt()
   private _updatedAt: UpdateAt = new UpdateAt()
@@ -99,7 +100,7 @@ class UserEntity {
     return this._province.value
   }
 
-  get conuntry(): string {
+  get country(): string {
     return this._conuntry.value
   }
 
