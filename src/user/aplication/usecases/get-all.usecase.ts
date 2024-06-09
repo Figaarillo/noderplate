@@ -9,6 +9,10 @@ class GetAllUser {
 
   async exec(): Promise<UserEntity[]> {
     const usersFounded = await this.repository.getAll()
+    if (usersFounded == null) {
+      throw new ErrorUserNotFound('Cannot find any user when get all users')
+    }
+
     if (usersFounded.length === 0) {
       throw new ErrorUserNotFound('Cannot find any user when get all users')
     }
