@@ -34,17 +34,17 @@ class UserInMemoryRepository implements UserRepository {
     return user
   }
 
-  async delete(id: string): Promise<Nullable<UserEntity>> {
+  async delete(id: string): Promise<Nullable<void>> {
     const indexToDelete = this.userData.findIndex(entity => entity.id === id)
 
     if (indexToDelete === -1) {
       return null
     }
 
-    return this.userData.splice(indexToDelete, 1)[0]
+    this.userData.splice(indexToDelete, 1)
   }
 
-  async update(id: string, user: UserDTO): Promise<Nullable<UserEntity>> {
+  async update(id: string, user: UserDTO): Promise<Nullable<void>> {
     const userToUpdate = this.userData.find(user => {
       if (user.id === id) {
         return user
@@ -58,8 +58,6 @@ class UserInMemoryRepository implements UserRepository {
     }
 
     userToUpdate.update(user)
-
-    return userToUpdate
   }
 }
 
