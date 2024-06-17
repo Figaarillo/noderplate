@@ -1,3 +1,4 @@
+import 'module-alias/register'
 import TypeormConfig from '@shared/config/typeorm.config'
 import BootstrapUser from '@user/user.bootstrap'
 import * as dotenv from 'dotenv'
