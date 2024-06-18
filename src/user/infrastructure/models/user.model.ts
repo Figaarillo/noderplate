@@ -4,7 +4,7 @@ import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } fr
 
 class UserModel implements IUserEntity {
   @PrimaryGeneratedColumn('uuid')
-  id!: string
+  id!: string & { __brand: 'userId' }
 
   @CreateDateColumn({
     name: 'created_at',

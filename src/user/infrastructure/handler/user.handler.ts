@@ -18,9 +18,13 @@ class UserHandler {
 
   async getAllUsers(): Promise<void> {
     try {
+      // TODO: get offset and limit from http request
+      const offset = 0
+      const limit = 10
+
       const getAllUsersUseCase = new GetAllUser(this.repository)
 
-      await getAllUsersUseCase.exec()
+      await getAllUsersUseCase.exec(offset, limit)
 
       // TODO: send http response
     } catch (error) {

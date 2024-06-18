@@ -17,28 +17,32 @@ class UserTypeormRepository implements UserRepository {
     return getConnect.getRepository(UserEntity)
   }
 
-  async delete(id: string): Promise<Nullable<void>> {
+  async getAll(offset: number, limit: number): Promise<Nullable<UserEntity[]>> {
     const repository = await this.repository
 
-    repository.delete({ id })
-  }
-
-  async getAll(): Promise<Nullable<UserEntity[]>> {
-    const repository = await this.repository
-
-    return await repository.find()
+    return await repository.find({
+      skip: offset,
+      take: limit,
+      cache: 10000
+    })
   }
 
   async getByID(id: string): Promise<Nullable<UserEntity>> {
     const repository = await this.repository
 
-    return await repository.findOneBy({ id })
+    return await repository.findOne({
+      where: { id },
+      cache: 10000
+    })
   }
 
   async getByName(name: string): Promise<Nullable<UserEntity>> {
     const repository = await this.repository
 
-    return await repository.findOneBy({ firstName: name })
+    return await repository.findOne({
+      where: { firstName: name },
+      cache: 10000
+    })
   }
 
   async register(user: UserEntity): Promise<Nullable<UserEntity>> {
@@ -51,6 +55,12 @@ class UserTypeormRepository implements UserRepository {
     const repository = await this.repository
 
     await repository.update({ id }, user)
+  }
+
+  async delete(id: string): Promise<Nullable<void>> {
+    const repository = await this.repository
+
+    repository.delete({ id })
   }
 }
 
