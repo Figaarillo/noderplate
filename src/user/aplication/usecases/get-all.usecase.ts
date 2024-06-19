@@ -2,7 +2,7 @@ import type UserEntity from '@user/domain/entities/user.entity'
 import ErrorUserNotFound from '@user/domain/exceptions/user-not-found.exception'
 import type UserRepository from '@user/domain/repository/user.repository'
 
-class GetAllUser {
+class GetAllUserUseCase {
   constructor(private readonly repository: UserRepository) {
     this.repository = repository
   }
@@ -21,4 +21,4 @@ class GetAllUser {
   }
 }
 
-export default GetAllUser
+export default GetAllUserUseCase
