@@ -1,6 +1,6 @@
 import type Nullable from '@shared/domain/types/nullable.type'
-import type UserDTO from '@user/domain/dto/user.dto'
 import type UserEntity from '@user/domain/entities/user.entity'
+import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 
 class UserInMemoryRepository implements UserRepository {
@@ -44,7 +44,7 @@ class UserInMemoryRepository implements UserRepository {
     this.userData.splice(indexToDelete, 1)
   }
 
-  async update(id: string, user: UserDTO): Promise<Nullable<void>> {
+  async update(id: string, user: UserPayload): Promise<Nullable<void>> {
     const userToUpdate = this.userData.find(user => {
       if (user.id === id) {
         return user

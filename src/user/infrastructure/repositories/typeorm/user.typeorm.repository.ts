@@ -1,6 +1,6 @@
 import type Nullable from '@shared/domain/types/nullable.type'
-import type UserDTO from '@user/domain/dto/user.dto'
 import UserEntity from '@user/domain/entities/user.entity'
+import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 import { type DataSource, type Repository } from 'typeorm'
 
@@ -51,7 +51,7 @@ class UserTypeormRepository implements UserRepository {
     return await repository.save(user)
   }
 
-  async update(id: string, user: UserDTO): Promise<Nullable<void>> {
+  async update(id: string, user: UserPayload): Promise<Nullable<void>> {
     const repository = this.repository
 
     await repository.update({ id }, user)

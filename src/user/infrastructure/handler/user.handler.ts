@@ -4,7 +4,7 @@ import GetUserByIDUseCase from '@user/aplication/usecases/get-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
 import RegisterUser from '@user/aplication/usecases/register.usecase'
 import UpdateUser from '@user/aplication/usecases/update.usecase'
-import type UserDTO from '@user/domain/dto/user.dto'
+import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import DeleteUserDTO from '../dtos/delete-user.dto'
@@ -47,8 +47,10 @@ class UserHandler {
     }
   }
 
-  async Save(payload: UserDTO): Promise<void> {
+  async Save(req: FastifyRequest, _res: FastifyReply): Promise<void> {
     try {
+      const payload: UserPayload = req.body as UserPayload
+
       const registerUseCase = new RegisterUser(this.repository)
 
       const schemaValidator = new SchemaValidator(RegisterUserDTO, payload)
@@ -62,7 +64,7 @@ class UserHandler {
     }
   }
 
-  async Update(id: string, payload: UserDTO): Promise<void> {
+  async Update(id: string, payload: UserPayload): Promise<void> {
     try {
       const updateUseCase = new UpdateUser(this.repository)
 

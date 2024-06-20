@@ -1,5 +1,5 @@
-import { Id, CreateAt, UpdateAt } from '../../../shared/domain/value-objects/base.value-object'
-import type UserDTO from '../dto/user.dto'
+import { CreateAt, Id, UpdateAt } from '../../../shared/domain/value-objects/base.value-object'
+import type UserPayload from '../payload/user.payload'
 import {
   City,
   Country,
@@ -27,7 +27,7 @@ class UserEntity implements IUserEntity {
   country: string
   role: string
 
-  constructor(payload: UserDTO) {
+  constructor(payload: UserPayload) {
     this.id = new Id().value
     this.createdAt = new CreateAt().value
     this.updatedAt = new UpdateAt().value
@@ -42,7 +42,7 @@ class UserEntity implements IUserEntity {
     this.role = new Role(payload.role).value
   }
 
-  update(data: UserDTO): void {
+  update(data: UserPayload): void {
     this.updatedAt = new UpdateAt().value
     if (data.firstName !== undefined || data.lastName !== '') {
       this.firstName = new FirstName(data.firstName).value

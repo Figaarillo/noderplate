@@ -1,4 +1,4 @@
-interface UserDTO {
+interface UserPayload {
   firstName: string
   lastName: string
   email: string
@@ -10,4 +10,4 @@ interface UserDTO {
   role: string
 }
 
-export default UserDTO
+export default UserPayload

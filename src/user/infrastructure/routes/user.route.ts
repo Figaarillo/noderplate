@@ -15,9 +15,9 @@ class UserRoute {
     this.router.get('/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {
       await this.handler.GetByID(req, res)
     })
-    // this.router.post('/users', async (req, res) => {
-    //   await this.handler.registerUser(req, res)
-    // })
+    this.router.post('/users', async (req, res) => {
+      await this.handler.Save(req, res)
+    })
     // this.router.put('/users/:id', async (req, res) => {
     //   await this.handler.updateUser(req, res)
     // })
