@@ -1,6 +1,6 @@
 import { GetURLQueryParams, HandleHTTPResponse, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
-import GetUserByID from '@user/aplication/usecases/get-by-id.usecase'
+import GetUserByIDUseCase from '@user/aplication/usecases/get-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
 import RegisterUser from '@user/aplication/usecases/register.usecase'
 import UpdateUser from '@user/aplication/usecases/update.usecase'
@@ -31,18 +31,19 @@ class UserHandler {
     }
   }
 
-  async GetByID(id: string): Promise<void> {
+  async GetByID(req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply): Promise<void> {
     try {
-      const getUserByIdUseCase = new GetUserByID(this.repository)
+      const id = req.params.id
 
       const schemaValidator = new SchemaValidator(GetUserByIdDTO, { id })
       schemaValidator.exec()
 
-      await getUserByIdUseCase.exec(id)
+      const getByID = new GetUserByIDUseCase(this.repository)
+      await getByID.exec(id)
 
-      // TODO: send http response
+      HandleHTTPResponse(res, 'User retrieved successfully', 200)
     } catch (error) {
-      // TODO: send http error response
+      res.status(500).send(error)
     }
   }
 
