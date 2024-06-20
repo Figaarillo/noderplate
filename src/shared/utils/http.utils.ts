@@ -1,6 +1,6 @@
-import { type FastifyRequest } from 'fastify'
+import { type FastifyRequest, type FastifyReply } from 'fastify'
 
-export interface HTTPURLParams {
+export interface HTTPQueryParams {
   offset: string
   limit: string
 }
@@ -10,7 +10,7 @@ interface HTTPURLParamsReturn {
   limit: number
 }
 
-export function GetPaginationParams(req: FastifyRequest<{ Querystring: HTTPURLParams }>): HTTPURLParamsReturn {
+export function GetURLQueryParams(req: FastifyRequest<{ Querystring: HTTPQueryParams }>): HTTPURLParamsReturn {
   const offset = parseInt(req.query.offset ?? '0')
   const limit = parseInt(req.query.limit ?? '10')
 
@@ -18,4 +18,13 @@ export function GetPaginationParams(req: FastifyRequest<{ Querystring: HTTPURLPa
     offset,
     limit
   }
+}
+
+export function HandleHTTPResponse(res: FastifyReply, message: string, code: number, data?: any): void {
+  const response = {
+    message,
+    success: true,
+    data
+  }
+  res.status(code).send(response)
 }

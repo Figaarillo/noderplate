@@ -1,7 +1,4 @@
-import {
-  GetPaginationParams as GetURLQueryParams,
-  type HTTPURLParams as HTTPQueryParams
-} from '@shared/utils/http.utils'
+import { GetURLQueryParams, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
 import GetAllUserUseCase from '@user/aplication/usecases/get-all.usecase'
 import GetUserByID from '@user/aplication/usecases/get-by-id.usecase'

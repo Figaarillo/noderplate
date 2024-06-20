@@ -1,6 +1,6 @@
 import { type FastifyRequest, type FastifyInstance } from 'fastify'
 import type UserHandler from '../handler/user.handler'
-import { type HTTPURLParams } from '@shared/utils/http.utils'
+import { type HTTPQueryParams } from '@shared/utils/http.utils'
 
 class UserRoute {
   constructor(
@@ -9,7 +9,7 @@ class UserRoute {
   ) {}
 
   setupRoutes(): void {
-    this.router.get('/users', async (req: FastifyRequest<{ Querystring: HTTPURLParams }>, res) => {
+    this.router.get('/users', async (req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res) => {
       await this.handler.GetAllUser(req, res)
     })
     // this.router.get('/users/:id', async (req, res) => {
