@@ -5,8 +5,8 @@
   "main": "dist/App.js",
   "scripts": {
     "start": "pnpm run build && node dist/server.js",
-    "start:dev": "nodemon -x ts-node ./src/server.ts",
-    "start:test": "NODE_ENV=test pnpm run start:dev",
+    "dev": "nodemon -x ts-node ./src/server.ts",
+    "test": "NODE_ENV=test pnpm run start:dev",
     "clean": "rimraf dist && rimraf .tsbuildinfo",
     "tsc": "tsc",
     "tsc-alias": "tsc-alias",
