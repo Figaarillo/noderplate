@@ -2,10 +2,10 @@
   "name": "noderplate",
   "version": "0.0.0",
   "description": "noderpalte is a boilerplate for nodejs projects",
-  "main": "dist/App.js",
+  "main": "dist/main.js",
   "scripts": {
-    "start": "pnpm run build && node dist/server.js",
-    "dev": "nodemon -x ts-node ./src/server.ts",
+    "start": "pnpm run build && node dist/main.js",
+    "dev": "nodemon -x ts-node ./src/main.ts",
     "test": "NODE_ENV=test pnpm run start:dev",
     "clean": "rimraf dist && rimraf .tsbuildinfo",
     "tsc": "tsc",
