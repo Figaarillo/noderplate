@@ -1,12 +1,12 @@
+import { type FastifyInstance } from 'fastify'
 import { type DataSource } from 'typeorm'
 import type UserRepository from './domain/repository/user.repository'
-import UserInMemoryRepository from './infrastructure/repositories/in-memory/user.in-memory.repository'
 import UserHandler from './infrastructure/handler/user.handler'
-import { type FastifyInstance } from 'fastify'
+import UserTypeormRepository from './infrastructure/repositories/typeorm/user.typeorm.repository'
 import UserRoute from './infrastructure/routes/user.route'
 
-function BootstrapUser(_db: DataSource, router: FastifyInstance): void {
-  const repository: UserRepository = new UserInMemoryRepository()
+async function BootstrapUser(db: DataSource, router: FastifyInstance): Promise<void> {
+  const repository: UserRepository = new UserTypeormRepository(db)
 
   const handler = new UserHandler(repository)
 

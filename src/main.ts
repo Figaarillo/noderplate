@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import 'module-alias/register' // Must import this module first
+import 'module-alias/register' // Must be import this module first
 import * as dotenv from 'dotenv'
 import FastifyConifg from '@shared/config/fastify.config'
 import TypeormConfig from '@shared/config/typeorm.config'
