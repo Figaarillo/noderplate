@@ -10,7 +10,7 @@ class UserRoute {
 
   setupRoutes(): void {
     this.router.get('/users', async (req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res) => {
-      await this.handler.GetAllUser(req, res)
+      await this.handler.ListAll(req, res)
     })
     // this.router.get('/users/:id', async (req, res) => {
     //   await this.handler.getUserById(req, res)

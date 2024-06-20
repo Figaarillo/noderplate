@@ -18,7 +18,7 @@ class UserHandler {
     this.repository = repository
   }
 
-  async GetAllUser(req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res: FastifyReply): Promise<void> {
+  async ListAll(req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res: FastifyReply): Promise<void> {
     try {
       const { offset, limit } = GetURLQueryParams(req)
 
@@ -31,7 +31,7 @@ class UserHandler {
     }
   }
 
-  async getUserById(id: string): Promise<void> {
+  async GetByID(id: string): Promise<void> {
     try {
       const getUserByIdUseCase = new GetUserByID(this.repository)
 
@@ -46,7 +46,7 @@ class UserHandler {
     }
   }
 
-  async registerUser(payload: UserDTO): Promise<void> {
+  async Save(payload: UserDTO): Promise<void> {
     try {
       const registerUseCase = new RegisterUser(this.repository)
 
@@ -61,7 +61,7 @@ class UserHandler {
     }
   }
 
-  async updateUser(id: string, payload: UserDTO): Promise<void> {
+  async Update(id: string, payload: UserDTO): Promise<void> {
     try {
       const updateUseCase = new UpdateUser(this.repository)
 
@@ -76,7 +76,7 @@ class UserHandler {
     }
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async Delete(id: string): Promise<void> {
     try {
       const deleteUseCase = new DeleteUser(this.repository)
 
