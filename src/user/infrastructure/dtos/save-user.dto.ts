@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { emailDTO, firstNameDTO, lastNameDTO, passwordDTO, phoneNumberDTO } from './dto-types/dto-types'
 
-const RegisterUserDTO = z.object({
+const SaveUserDTO = z.object({
   firstName: firstNameDTO,
   lastName: lastNameDTO,
   phoneNumber: phoneNumberDTO,
@@ -9,4 +9,4 @@ const RegisterUserDTO = z.object({
   password: passwordDTO
 })
 
-export default RegisterUserDTO
+export default SaveUserDTO

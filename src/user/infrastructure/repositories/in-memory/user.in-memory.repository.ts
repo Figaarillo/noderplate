@@ -28,7 +28,7 @@ class UserInMemoryRepository implements UserRepository {
     return user
   }
 
-  async register(user: UserEntity): Promise<UserEntity> {
+  async Save(user: UserEntity): Promise<UserEntity> {
     this.userData.push(user)
 
     return user

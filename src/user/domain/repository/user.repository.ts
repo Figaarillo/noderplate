@@ -6,7 +6,7 @@ interface UserRepository {
   List: (offset: number, limit: number) => Promise<Nullable<UserEntity[]>>
   GetByID: (id: string) => Promise<Nullable<UserEntity>>
   getByName: (name: string) => Promise<Nullable<UserEntity>>
-  register: (user: UserEntity) => Promise<Nullable<UserEntity>>
+  Save: (user: UserEntity) => Promise<Nullable<UserEntity>>
   update: (id: string, user: UserPayload) => Promise<Nullable<void>>
   delete: (id: string) => Promise<Nullable<void>>
 }

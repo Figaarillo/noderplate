@@ -2,14 +2,14 @@ import { GetURLParams, GetURLQueryParams, HandleHTTPResponse, type HTTPQueryPara
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
 import GetUserByIDUseCase from '@user/aplication/usecases/get-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
-import RegisterUser from '@user/aplication/usecases/register.usecase'
+import SaveUserUseCase from '@user/aplication/usecases/save.usecase'
 import UpdateUser from '@user/aplication/usecases/update.usecase'
 import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import DeleteUserDTO from '../dtos/delete-user.dto'
 import GetUserByIdDTO from '../dtos/get-user-by-id.dto'
-import RegisterUserDTO from '../dtos/register-user.dto'
+import SaveUserDTO from '../dtos/save-user.dto'
 import UpdateUserDTO from '../dtos/update-user.dto'
 import SchemaValidator from '../middlewares/zod-schema-validator.middleware'
 
@@ -47,20 +47,19 @@ class UserHandler {
     }
   }
 
-  async Save(req: FastifyRequest, _res: FastifyReply): Promise<void> {
+  async Save(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const payload: UserPayload = req.body as UserPayload
 
-      const registerUseCase = new RegisterUser(this.repository)
+      const validateSaveUserSchema = new SchemaValidator(SaveUserDTO, payload)
+      validateSaveUserSchema.exec()
 
-      const schemaValidator = new SchemaValidator(RegisterUserDTO, payload)
-      schemaValidator.exec()
+      const saveUser = new SaveUserUseCase(this.repository)
+      await saveUser.exec(payload)
 
-      await registerUseCase.exec(payload)
-
-      // TODO: send http response
+      HandleHTTPResponse(res, 'User created successfully', 201)
     } catch (error) {
-      // TODO: send http error response
+      res.status(500).send(error)
     }
   }
 

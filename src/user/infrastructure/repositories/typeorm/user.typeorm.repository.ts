@@ -45,7 +45,7 @@ class UserTypeormRepository implements UserRepository {
     })
   }
 
-  async register(user: UserEntity): Promise<Nullable<UserEntity>> {
+  async Save(user: UserEntity): Promise<Nullable<UserEntity>> {
     const repository = this.repository
 
     return await repository.save(user)
