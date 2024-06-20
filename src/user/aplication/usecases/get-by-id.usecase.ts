@@ -8,7 +8,7 @@ class GetUserByIDUseCase {
   }
 
   async exec(id: string): Promise<UserEntity> {
-    const userFound = await this.repository.getByID(id)
+    const userFound = await this.repository.GetByID(id)
     if (userFound == null) {
       throw new ErrorUserNotFound(`Cannont find user with id: ${id} when get user by id`)
     }

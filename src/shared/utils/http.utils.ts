@@ -28,3 +28,7 @@ export function HandleHTTPResponse(res: FastifyReply, message: string, code: num
   }
   res.status(code).send(response)
 }
+
+export function GetURLParams(req: FastifyRequest<{ Params: Record<string, string> }>, key: string): string {
+  return req.params[key]
+}

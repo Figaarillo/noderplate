@@ -10,7 +10,7 @@ class UserInMemoryRepository implements UserRepository {
     return this.userData
   }
 
-  async getByID(id: string): Promise<Nullable<UserEntity>> {
+  async GetByID(id: string): Promise<Nullable<UserEntity>> {
     const user = this.userData.find(user => user.id === id)
     if (user == null) {
       return null

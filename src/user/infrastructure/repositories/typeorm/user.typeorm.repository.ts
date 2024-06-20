@@ -5,20 +5,20 @@ import type UserRepository from '@user/domain/repository/user.repository'
 import { type DataSource, type Repository } from 'typeorm'
 
 class UserTypeormRepository implements UserRepository {
-  private readonly repository: Promise<Repository<UserEntity>>
+  private readonly repository: Repository<UserEntity>
 
-  constructor(private readonly db: Promise<DataSource>) {
+  constructor(private readonly db: DataSource) {
     this.repository = this.initRepository()
   }
 
-  private async initRepository(): Promise<Repository<UserEntity>> {
-    const getConnect = await this.db
+  private initRepository(): Repository<UserEntity> {
+    const getConnect = this.db
 
     return getConnect.getRepository(UserEntity)
   }
 
   async List(offset: number, limit: number): Promise<Nullable<UserEntity[]>> {
-    const repository = await this.repository
+    const repository = this.repository
 
     return await repository.find({
       skip: offset,
@@ -27,8 +27,8 @@ class UserTypeormRepository implements UserRepository {
     })
   }
 
-  async getByID(id: string): Promise<Nullable<UserEntity>> {
-    const repository = await this.repository
+  async GetByID(id: string): Promise<Nullable<UserEntity>> {
+    const repository = this.repository
 
     return await repository.findOne({
       where: { id },
@@ -37,7 +37,7 @@ class UserTypeormRepository implements UserRepository {
   }
 
   async getByName(name: string): Promise<Nullable<UserEntity>> {
-    const repository = await this.repository
+    const repository = this.repository
 
     return await repository.findOne({
       where: { firstName: name },
@@ -46,19 +46,19 @@ class UserTypeormRepository implements UserRepository {
   }
 
   async register(user: UserEntity): Promise<Nullable<UserEntity>> {
-    const repository = await this.repository
+    const repository = this.repository
 
     return await repository.save(user)
   }
 
   async update(id: string, user: UserDTO): Promise<Nullable<void>> {
-    const repository = await this.repository
+    const repository = this.repository
 
     await repository.update({ id }, user)
   }
 
   async delete(id: string): Promise<Nullable<void>> {
-    const repository = await this.repository
+    const repository = this.repository
 
     repository.delete({ id })
   }
