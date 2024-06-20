@@ -1,4 +1,4 @@
-import { GetURLQueryParams, type HTTPQueryParams } from '@shared/utils/http.utils'
+import { GetURLQueryParams, HandleHTTPResponse, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
 import GetUserByID from '@user/aplication/usecases/get-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
@@ -22,10 +22,10 @@ class UserHandler {
     try {
       const { offset, limit } = GetURLQueryParams(req)
 
-      const getAllUsersUseCase = new ListUsersUseCase(this.repository)
-      const users = await getAllUsersUseCase.exec(offset, limit)
+      const listUsers = new ListUsersUseCase(this.repository)
+      const users = await listUsers.exec(offset, limit)
 
-      res.send(users)
+      HandleHTTPResponse(res, 'Users retrieved successfully', 200, users)
     } catch (error) {
       res.status(500).send(error)
     }
