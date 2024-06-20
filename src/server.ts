@@ -13,7 +13,8 @@ const PORT = Number(process.env.PORT)
   const dbConfig = new TypeormConfig()
   const db = await dbConfig.initDBConnection()
 
-  const fastify = new FastifyConifg().fastify
+  const fastifyConfig = new FastifyConifg()
+  const fastify = await fastifyConfig.server
 
   BootstrapUser(db, fastify)
 
@@ -22,7 +23,7 @@ const PORT = Number(process.env.PORT)
   })
 
   try {
-    await fastify.listen({ port: PORT })
+    await fastifyConfig.start()
     console.log(`Server is running!🔥 Go to http://localhost:${PORT}`)
   } catch (err) {
     console.error(err)
