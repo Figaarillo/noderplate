@@ -4,7 +4,7 @@ import type UserDTO from '../dto/user.dto'
 
 interface UserRepository {
   delete: (id: string) => Promise<Nullable<void>>
-  getAll: (offset: number, limit: number) => Promise<Nullable<UserEntity[]>>
+  List: (offset: number, limit: number) => Promise<Nullable<UserEntity[]>>
   getByID: (id: string) => Promise<Nullable<UserEntity>>
   getByName: (name: string) => Promise<Nullable<UserEntity>>
   register: (user: UserEntity) => Promise<Nullable<UserEntity>>

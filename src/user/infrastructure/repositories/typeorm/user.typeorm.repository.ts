@@ -17,7 +17,7 @@ class UserTypeormRepository implements UserRepository {
     return getConnect.getRepository(UserEntity)
   }
 
-  async getAll(offset: number, limit: number): Promise<Nullable<UserEntity[]>> {
+  async List(offset: number, limit: number): Promise<Nullable<UserEntity[]>> {
     const repository = await this.repository
 
     return await repository.find({

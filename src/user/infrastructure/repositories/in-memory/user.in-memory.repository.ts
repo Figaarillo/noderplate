@@ -6,7 +6,7 @@ import type UserRepository from '@user/domain/repository/user.repository'
 class UserInMemoryRepository implements UserRepository {
   private readonly userData: UserEntity[] = []
 
-  async getAll(): Promise<UserEntity[]> {
+  async List(): Promise<UserEntity[]> {
     return this.userData
   }
 

@@ -1,7 +1,7 @@
 import { GetURLQueryParams, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
-import GetAllUserUseCase from '@user/aplication/usecases/get-all.usecase'
 import GetUserByID from '@user/aplication/usecases/get-by-id.usecase'
+import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
 import RegisterUser from '@user/aplication/usecases/register.usecase'
 import UpdateUser from '@user/aplication/usecases/update.usecase'
 import type UserDTO from '@user/domain/dto/user.dto'
@@ -18,11 +18,11 @@ class UserHandler {
     this.repository = repository
   }
 
-  async ListAll(req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res: FastifyReply): Promise<void> {
+  async List(req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res: FastifyReply): Promise<void> {
     try {
       const { offset, limit } = GetURLQueryParams(req)
 
-      const getAllUsersUseCase = new GetAllUserUseCase(this.repository)
+      const getAllUsersUseCase = new ListUsersUseCase(this.repository)
       const users = await getAllUsersUseCase.exec(offset, limit)
 
       res.send(users)
