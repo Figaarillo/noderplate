@@ -10,19 +10,19 @@ const PORT = Number(process.env.PORT)
 
 /* Main */
 ;(async () => {
-  const dbConfig = new TypeormConfig()
-  const db = await dbConfig.initDBConnection()
-
-  const fastifyConfig = new FastifyConifg()
-  const fastify = await fastifyConfig.server
-
-  BootstrapUser(db, fastify)
-
-  fastify.get('/', async () => {
-    return 'Hello, World!'
-  })
-
   try {
+    const dbConfig = new TypeormConfig()
+    const db = await dbConfig.initDBConnection()
+    console.log('')
+
+    const fastifyConfig = new FastifyConifg()
+    const fastify = await fastifyConfig.server
+
+    BootstrapUser(db, fastify)
+
+    fastify.get('/', async () => {
+      return 'Hello, World!'
+    })
     await fastifyConfig.start()
     console.log(`Server is running!🔥 Go to http://localhost:${PORT}`)
   } catch (err) {

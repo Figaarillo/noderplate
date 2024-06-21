@@ -29,7 +29,10 @@ class TypeormConfig {
   }
 
   async initDBConnection(): Promise<DataSource> {
-    return await this.AppDataSource.initialize()
+    const connection = await this.AppDataSource.initialize()
+    // eslint-disable-next-line no-console
+    console.log('Successfully connected to database! 🚀')
+    return connection
   }
 }
 
