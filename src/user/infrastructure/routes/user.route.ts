@@ -9,13 +9,13 @@ class UserRoute {
   ) {}
 
   setupRoutes(): void {
-    this.router.get('/users', async (req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res) => {
+    this.router.get('/api/users', async (req: FastifyRequest<{ Querystring: HTTPQueryParams }>, res) => {
       await this.handler.List(req, res)
     })
-    this.router.get('/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {
+    this.router.get('/api/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {
       await this.handler.GetByID(req, res)
     })
-    this.router.post('/users', async (req, res) => {
+    this.router.post('/api/users', async (req, res) => {
       await this.handler.Save(req, res)
     })
     // this.router.put('/users/:id', async (req, res) => {
