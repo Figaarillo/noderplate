@@ -1,3 +1,4 @@
+import { Entity, CreateDateColumn, UpdateDateColumn, Column, PrimaryGeneratedColumn } from 'typeorm'
 import { CreateAt, Id, UpdateAt } from '../../../shared/domain/value-objects/base.value-object'
 import type UserPayload from '../payload/user.payload'
 import {
@@ -11,35 +12,39 @@ import {
   Province,
   Role
 } from '../value-objects/user.valueobject'
-import type IUserEntity from './iuser.entity'
 
-class UserEntity implements IUserEntity {
-  readonly id: string
-  readonly createdAt: Date
-  updatedAt: Date
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  phoneNumber: number
-  city: string
-  province: string
-  country: string
-  role: string
+@Entity()
+class UserEntity {
+  @PrimaryGeneratedColumn('uuid') id!: string
+  @CreateDateColumn({ name: 'created_at', type: 'timestamp' }) createdAt!: Date
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' }) updatedAt!: Date
+  @Column() firstName!: string
+  @Column() lastName!: string
+  @Column({ unique: true }) email!: string
+  @Column({ select: false }) password!: string
+  @Column() phoneNumber!: number
+  @Column() city!: string
+  @Column() province!: string
+  @Column() country!: string
+  @Column() role!: string
 
-  constructor(payload: UserPayload) {
-    this.id = new Id().value
-    this.createdAt = new CreateAt().value
-    this.updatedAt = new UpdateAt().value
-    this.firstName = new FirstName(payload.firstName).value
-    this.lastName = new LastName(payload.lastName).value
-    this.email = new Email(payload.email).value
-    this.password = new Password(payload.password).value
-    this.phoneNumber = new PhoneNumber(payload.phoneNumber).value
-    this.city = new City(payload.city).value
-    this.province = new Province(payload.province).value
-    this.country = new Country(payload.country).value
-    this.role = new Role(payload.role).value
+  static Create(payload: UserPayload): UserEntity {
+    const user = new UserEntity()
+
+    user.id = new Id().value
+    user.createdAt = new CreateAt().value
+    user.updatedAt = new UpdateAt().value
+    user.firstName = new FirstName(payload.firstName).value
+    user.lastName = new LastName(payload.lastName).value
+    user.email = new Email(payload.email).value
+    user.password = new Password(payload.password).value
+    user.phoneNumber = new PhoneNumber(payload.phoneNumber).value
+    user.city = new City(payload.city).value
+    user.province = new Province(payload.province).value
+    user.country = new Country(payload.country).value
+    user.role = new Role(payload.role).value
+
+    return user
   }
 
   update(data: UserPayload): void {

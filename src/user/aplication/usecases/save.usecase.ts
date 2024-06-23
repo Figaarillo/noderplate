@@ -8,7 +8,7 @@ class SaveUserUseCase {
   }
 
   async exec(payload: UserPayload): Promise<void> {
-    const newUser = new UserEntity(payload)
+    const newUser = UserEntity.Create(payload)
 
     await this.repository.Save(newUser)
   }
