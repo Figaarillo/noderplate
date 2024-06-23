@@ -17,7 +17,11 @@
     "ts-check": "tsc -p tsconfig.json --noEmit",
     "prepare": "husky install",
     "pre-check": "pnpm run ts-check && pnpm run prettier && pnpm run lint",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "pnpm run typeorm migration:generate ./migrations/migration -d ./src/shared/config/typeorm.config.ts",
+    "migration:run": "pnpm run typeorm migration:run -d ./src/shared/config/typeorm.config.ts",
+    "migration:revert": "pnpm run typeorm migration:revert --config ./src/config/ormconfig.ts"
   },
   "keywords": [],
   "author": "Figarillo",
