@@ -1,4 +1,4 @@
-import { type FastifyRequest, type FastifyReply } from 'fastify'
+import { type FastifyRequest } from 'fastify'
 
 export interface HTTPQueryParams {
   offset: string
@@ -18,15 +18,6 @@ export function GetURLQueryParams(req: FastifyRequest<{ Querystring: HTTPQueryPa
     offset,
     limit
   }
-}
-
-export function HandleHTTPResponse(res: FastifyReply, message: string, code: number, data?: any): void {
-  const response = {
-    message,
-    success: true,
-    data
-  }
-  res.status(code).send(response)
 }
 
 export function GetURLParams(req: FastifyRequest<{ Params: Record<string, string> }>, key: string): string {

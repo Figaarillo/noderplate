@@ -1,4 +1,4 @@
-import { GetURLParams, GetURLQueryParams, HandleHTTPResponse, type HTTPQueryParams } from '@shared/utils/http.utils'
+import { GetURLParams, GetURLQueryParams, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
 import FindUserByIDUseCase from '@user/aplication/usecases/find-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
@@ -11,6 +11,7 @@ import IdDTO from '../dtos/id.dto'
 import SaveUserDTO from '../dtos/save-user.dto'
 import UpdateUserDTO from '../dtos/update-user.dto'
 import SchemaValidator from '../middlewares/zod-schema-validator.middleware'
+import HandleHTTPResponse from '@shared/utils/http.response'
 
 class UserHandler {
   constructor(private readonly repository: UserRepository) {
@@ -24,7 +25,7 @@ class UserHandler {
       const listUsers = new ListUsersUseCase(this.repository)
       const users = await listUsers.exec(offset, limit)
 
-      HandleHTTPResponse(res, 'Users retrieved successfully', 200, users)
+      HandleHTTPResponse.OK(res, 'Users retrieved successfully', users)
     } catch (error) {
       res.status(500).send(error)
     }
@@ -40,7 +41,7 @@ class UserHandler {
       const findUser = new FindUserByIDUseCase(this.repository)
       const user = await findUser.exec(id)
 
-      HandleHTTPResponse(res, 'User retrieved successfully', 200, user)
+      HandleHTTPResponse.OK(res, 'User retrieved successfully', user)
     } catch (error) {
       res.status(500).send(error)
     }
@@ -56,7 +57,7 @@ class UserHandler {
       const saveUser = new SaveUserUseCase(this.repository)
       const user = await saveUser.exec(payload)
 
-      HandleHTTPResponse(res, 'User created successfully', 201, { id: user.id })
+      HandleHTTPResponse.Created(res, 'User created successfully', { id: user.id })
     } catch (error) {
       res.status(500).send(error)
     }
@@ -76,7 +77,7 @@ class UserHandler {
       const updateUser = new UpdateUserUseCase(this.repository)
       await updateUser.exec(id, payload)
 
-      HandleHTTPResponse(res, 'User updated successfully', 200, { id })
+      HandleHTTPResponse.OK(res, 'User updated successfully', { id })
     } catch (error) {
       res.status(500).send(error)
     }
@@ -92,7 +93,7 @@ class UserHandler {
       const deleteUser = new DeleteUser(this.repository)
       await deleteUser.exec(id)
 
-      HandleHTTPResponse(res, 'User deleted successfully', 200, { id })
+      HandleHTTPResponse.OK(res, 'User deleted successfully', { id })
     } catch (error) {
       res.status(500).send(error)
     }
