@@ -13,12 +13,12 @@ class UserRoute {
       await this.handler.List(req, res)
     })
     this.router.get('/api/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {
-      await this.handler.GetByID(req, res)
+      await this.handler.FindByID(req, res)
     })
     this.router.post('/api/users', async (req, res) => {
       await this.handler.Save(req, res)
     })
-    this.router.put('/api/users/:id', async (req: FastifyRequest<{ Params: Record<string, string> }>, res) => {
+    this.router.put('/api/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {
       await this.handler.Update(req, res)
     })
     this.router.delete('/api/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {

@@ -1,6 +1,5 @@
 import { GetURLParams, GetURLQueryParams, HandleHTTPResponse, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
-import GetUserByIDUseCase from '@user/aplication/usecases/get-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
 import SaveUserUseCase from '@user/aplication/usecases/save.usecase'
 import UpdateUserUseCase from '@user/aplication/usecases/update.usecase'
@@ -11,6 +10,7 @@ import IdDTO from '../dtos/id.dto'
 import SaveUserDTO from '../dtos/save-user.dto'
 import UpdateUserDTO from '../dtos/update-user.dto'
 import SchemaValidator from '../middlewares/zod-schema-validator.middleware'
+import FindUserByIDUseCase from '@user/aplication/usecases/find-by-id.usecase'
 
 class UserHandler {
   constructor(private readonly repository: UserRepository) {
@@ -30,15 +30,15 @@ class UserHandler {
     }
   }
 
-  async GetByID(req: FastifyRequest<{ Params: Record<string, string> }>, res: FastifyReply): Promise<void> {
+  async FindByID(req: FastifyRequest<{ Params: Record<string, string> }>, res: FastifyReply): Promise<void> {
     try {
       const id = GetURLParams(req, 'id')
 
       const validateIDSchema = new SchemaValidator(IdDTO, { id })
       validateIDSchema.exec()
 
-      const getByID = new GetUserByIDUseCase(this.repository)
-      const user = await getByID.exec(id)
+      const findUser = new FindUserByIDUseCase(this.repository)
+      const user = await findUser.exec(id)
 
       HandleHTTPResponse(res, 'User retrieved successfully', 200, user)
     } catch (error) {

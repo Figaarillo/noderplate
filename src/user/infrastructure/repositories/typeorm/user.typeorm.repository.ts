@@ -27,22 +27,13 @@ class UserTypeormRepository implements UserRepository {
     })
   }
 
-  async GetByID(id: string): Promise<Nullable<UserEntity>> {
-    const repository = this.repository
-
-    return await repository.findOne({
-      where: { id },
+  async Find(property: Record<string, string>): Promise<Nullable<UserEntity>> {
+    const user = await this.repository.findOne({
+      where: { ...property },
       cache: 10000
     })
-  }
 
-  async getByName(name: string): Promise<Nullable<UserEntity>> {
-    const repository = this.repository
-
-    return await repository.findOne({
-      where: { firstName: name },
-      cache: 10000
-    })
+    return user
   }
 
   async Save(user: UserEntity): Promise<Nullable<UserEntity>> {

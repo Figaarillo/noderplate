@@ -4,8 +4,7 @@ import type UserPayload from '../payload/user.payload'
 
 interface UserRepository {
   List: (offset: number, limit: number) => Promise<Nullable<UserEntity[]>>
-  GetByID: (id: string) => Promise<Nullable<UserEntity>>
-  getByName: (name: string) => Promise<Nullable<UserEntity>>
+  Find: (property: Record<string, string>) => Promise<Nullable<UserEntity>>
   Save: (user: UserEntity) => Promise<Nullable<UserEntity>>
   Update: (id: string, user: UserPayload) => Promise<Nullable<UserEntity>>
   Delete: (id: string) => Promise<void>

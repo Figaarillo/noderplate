@@ -8,7 +8,7 @@ class GetUserByName {
   }
 
   async exec(name: string): Promise<UserEntity> {
-    const userFound = await this.repository.getByName(name)
+    const userFound = await this.repository.Find({ name })
     if (userFound == null) {
       throw new ErrorUserNotFound(`Cannont find user with name: ${name} when get user by name`)
     }

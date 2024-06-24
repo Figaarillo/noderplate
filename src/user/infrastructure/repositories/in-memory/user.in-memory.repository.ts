@@ -28,6 +28,17 @@ class UserInMemoryRepository implements UserRepository {
     return user
   }
 
+  async Find(property: Record<string, string>): Promise<Nullable<UserEntity>> {
+    const user = this.userData.find(user => {
+      return Object.entries(property).every(([key, value]) => user[key as keyof UserEntity] === value)
+    })
+    if (user == null) {
+      return null
+    }
+
+    return user
+  }
+
   async Save(user: UserEntity): Promise<UserEntity> {
     this.userData.push(user)
 
