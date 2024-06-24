@@ -44,7 +44,7 @@ class UserInMemoryRepository implements UserRepository {
     this.userData.splice(indexToDelete, 1)
   }
 
-  async update(id: string, user: UserPayload): Promise<Nullable<void>> {
+  async Update(id: string, user: UserPayload): Promise<Nullable<UserEntity>> {
     const userToUpdate = this.userData.find(user => {
       if (user.id === id) {
         return user
@@ -58,6 +58,8 @@ class UserInMemoryRepository implements UserRepository {
     }
 
     userToUpdate.update(user)
+
+    return userToUpdate
   }
 }
 
