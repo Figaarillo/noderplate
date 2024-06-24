@@ -7,10 +7,15 @@ class SaveUserUseCase {
     this.repository = repository
   }
 
-  async exec(payload: UserPayload): Promise<void> {
+  async exec(payload: UserPayload): Promise<UserEntity> {
     const newUser = UserEntity.Create(payload)
 
-    await this.repository.Save(newUser)
+    const user = await this.repository.Save(newUser)
+    if (user == null) {
+      throw new Error('Cannot save user')
+    }
+
+    return user
   }
 }
 

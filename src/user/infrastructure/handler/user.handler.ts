@@ -1,5 +1,6 @@
 import { GetURLParams, GetURLQueryParams, HandleHTTPResponse, type HTTPQueryParams } from '@shared/utils/http.utils'
 import DeleteUser from '@user/aplication/usecases/delete.usecase'
+import FindUserByIDUseCase from '@user/aplication/usecases/find-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
 import SaveUserUseCase from '@user/aplication/usecases/save.usecase'
 import UpdateUserUseCase from '@user/aplication/usecases/update.usecase'
@@ -10,7 +11,6 @@ import IdDTO from '../dtos/id.dto'
 import SaveUserDTO from '../dtos/save-user.dto'
 import UpdateUserDTO from '../dtos/update-user.dto'
 import SchemaValidator from '../middlewares/zod-schema-validator.middleware'
-import FindUserByIDUseCase from '@user/aplication/usecases/find-by-id.usecase'
 
 class UserHandler {
   constructor(private readonly repository: UserRepository) {
@@ -54,9 +54,9 @@ class UserHandler {
       validateSaveUserSchema.exec()
 
       const saveUser = new SaveUserUseCase(this.repository)
-      await saveUser.exec(payload)
+      const user = await saveUser.exec(payload)
 
-      HandleHTTPResponse(res, 'User created successfully', 201)
+      HandleHTTPResponse(res, 'User created successfully', 201, { id: user.id })
     } catch (error) {
       res.status(500).send(error)
     }
