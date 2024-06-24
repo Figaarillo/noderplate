@@ -63,18 +63,20 @@ class UserHandler {
     }
   }
 
-  async Update(id: string, payload: UserPayload): Promise<void> {
+  async Update(req: FastifyRequest<{ Params: Record<string, string> }>, res: FastifyReply): Promise<void> {
     try {
-      const updateUseCase = new UpdateUser(this.repository)
+      const id = GetURLParams(req, 'id')
+      const payload: UserPayload = req.body as UserPayload
 
       const schemaValidator = new SchemaValidator(UpdateUserDTO, payload)
       schemaValidator.exec()
 
+      const updateUseCase = new UpdateUser(this.repository)
       await updateUseCase.exec(id, payload)
 
-      // TODO: send http response
+      HandleHTTPResponse(res, 'User updated successfully', 200, { id })
     } catch (error) {
-      // TODO: send http error response
+      res.status(500).send(error)
     }
   }
 

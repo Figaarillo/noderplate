@@ -18,9 +18,9 @@ class UserRoute {
     this.router.post('/api/users', async (req, res) => {
       await this.handler.Save(req, res)
     })
-    // this.router.put('/users/:id', async (req, res) => {
-    //   await this.handler.updateUser(req, res)
-    // })
+    this.router.put('/api/users/:id', async (req: FastifyRequest<{ Params: Record<string, string> }>, res) => {
+      await this.handler.Update(req, res)
+    })
     // this.router.delete('/users/:id', async (req, res) => {
     //   await this.handler.deleteUser(req, res)
     // })
