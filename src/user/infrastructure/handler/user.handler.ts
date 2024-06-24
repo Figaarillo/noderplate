@@ -7,8 +7,7 @@ import UpdateUserUseCase from '@user/aplication/usecases/update.usecase'
 import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
-import DeleteUserDTO from '../dtos/delete-user.dto'
-import GetUserByIdDTO from '../dtos/get-user-by-id.dto'
+import IdDTO from '../dtos/id.dto'
 import SaveUserDTO from '../dtos/save-user.dto'
 import UpdateUserDTO from '../dtos/update-user.dto'
 import SchemaValidator from '../middlewares/zod-schema-validator.middleware'
@@ -35,7 +34,7 @@ class UserHandler {
     try {
       const id = GetURLParams(req, 'id')
 
-      const validateIDSchema = new SchemaValidator(GetUserByIdDTO, { id })
+      const validateIDSchema = new SchemaValidator(IdDTO, { id })
       validateIDSchema.exec()
 
       const getByID = new GetUserByIDUseCase(this.repository)
@@ -68,6 +67,9 @@ class UserHandler {
       const id = GetURLParams(req, 'id')
       const payload: UserPayload = req.body as UserPayload
 
+      const validateIDSchema = new SchemaValidator(IdDTO, { id })
+      validateIDSchema.exec()
+
       const schemaValidator = new SchemaValidator(UpdateUserDTO, payload)
       schemaValidator.exec()
 
@@ -80,19 +82,19 @@ class UserHandler {
     }
   }
 
-  async Delete(id: string): Promise<void> {
+  async Delete(req: FastifyRequest<{ Params: { id: string } }>, res: FastifyReply): Promise<void> {
     try {
-      const deleteUseCase = new DeleteUser(this.repository)
+      const id = GetURLParams(req, 'id')
 
-      const schemaValidator = new SchemaValidator(DeleteUserDTO, { id })
-
+      const schemaValidator = new SchemaValidator(IdDTO, { id })
       schemaValidator.exec()
 
-      await deleteUseCase.exec(id)
+      const deleteUser = new DeleteUser(this.repository)
+      await deleteUser.exec(id)
 
-      // TODO: send http response
+      HandleHTTPResponse(res, 'User deleted successfully', 200, { id })
     } catch (error) {
-      // TODO: send http error response
+      res.status(500).send(error)
     }
   }
 }

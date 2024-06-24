@@ -21,9 +21,9 @@ class UserRoute {
     this.router.put('/api/users/:id', async (req: FastifyRequest<{ Params: Record<string, string> }>, res) => {
       await this.handler.Update(req, res)
     })
-    // this.router.delete('/users/:id', async (req, res) => {
-    //   await this.handler.deleteUser(req, res)
-    // })
+    this.router.delete('/api/users/:id', async (req: FastifyRequest<{ Params: { id: string } }>, res) => {
+      await this.handler.Delete(req, res)
+    })
   }
 }
 
