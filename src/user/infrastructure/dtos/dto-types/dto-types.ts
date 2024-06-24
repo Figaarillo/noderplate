@@ -14,7 +14,7 @@ export const lastNameDTO = z
 
 export const phoneNumberDTO = z
   .string()
-  .length(8, { message: 'The length of phone number must be 8' })
+  .min(8, { message: 'The length of phone number must be 8' })
   .regex(/^\d+$/, { message: 'The phone number must contain only digits' })
 
 export const emailDTO = z.string().email({ message: 'The format of email must be valid' })
@@ -22,10 +22,10 @@ export const emailDTO = z.string().email({ message: 'The format of email must be
 export const passwordDTO = z
   .string()
   .min(8, { message: 'Password must be at least 8 characters long' })
-  .regex(/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}/, {
-    message:
-      'Password must have at least one uppercase letter, one lowercase letter, one number, and one special character'
-  })
+  .regex(/(?=.*[a-z])/, { message: 'Password must contain at least one lowercase letter' })
+  .regex(/(?=.*[A-Z])/, { message: 'Password must contain at least one uppercase letter' })
+  .regex(/(?=.*\d)/, { message: 'Password must contain at least one digit' })
+  .regex(/(?=.*[@$!%*?&])/, { message: 'Password must contain at least one special character' })
 
 export const cityDTO = z
   .string()

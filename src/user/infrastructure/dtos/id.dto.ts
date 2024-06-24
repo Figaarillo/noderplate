@@ -1,8 +1,8 @@
 import { z } from 'zod'
 import { idDTO } from './dto-types/dto-types'
 
-const DeleteUserDTO = z.object({
+const IdDTO = z.object({
   id: idDTO
 })
 
-export default DeleteUserDTO
+export default IdDTO

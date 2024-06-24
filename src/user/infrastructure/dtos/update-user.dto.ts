@@ -1,13 +1,24 @@
 import { z } from 'zod'
-import { emailDTO, firstNameDTO, idDTO, lastNameDTO, passwordDTO, phoneNumberDTO } from './dto-types/dto-types'
+import {
+  firstNameDTO,
+  lastNameDTO,
+  phoneNumberDTO,
+  emailDTO,
+  cityDTO,
+  provinceDTO,
+  countryDTO,
+  roleDTO
+} from './dto-types/dto-types'
 
 const UpdateUserDTO = z.object({
-  id: idDTO,
-  firstName: firstNameDTO,
-  lastName: lastNameDTO,
-  phoneNumber: phoneNumberDTO,
-  email: emailDTO,
-  password: passwordDTO
+  firstName: firstNameDTO.optional(),
+  lastName: lastNameDTO.optional(),
+  phoneNumber: phoneNumberDTO.optional(),
+  email: emailDTO.optional(),
+  city: cityDTO.optional(),
+  province: provinceDTO.optional(),
+  country: countryDTO.optional(),
+  role: roleDTO.optional()
 })
 
 export default UpdateUserDTO
