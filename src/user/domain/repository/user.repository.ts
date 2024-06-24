@@ -8,7 +8,7 @@ interface UserRepository {
   getByName: (name: string) => Promise<Nullable<UserEntity>>
   Save: (user: UserEntity) => Promise<Nullable<UserEntity>>
   Update: (id: string, user: UserPayload) => Promise<Nullable<UserEntity>>
-  delete: (id: string) => Promise<Nullable<void>>
+  Delete: (id: string) => Promise<void>
 }
 
 export default UserRepository

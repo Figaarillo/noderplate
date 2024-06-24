@@ -62,10 +62,8 @@ class UserTypeormRepository implements UserRepository {
     return await this.repository.save(user)
   }
 
-  async delete(id: string): Promise<Nullable<void>> {
-    const repository = this.repository
-
-    repository.delete({ id })
+  async Delete(id: string): Promise<void> {
+    await this.repository.delete({ id })
   }
 }
 
