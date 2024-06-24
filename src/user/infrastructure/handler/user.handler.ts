@@ -3,7 +3,7 @@ import DeleteUser from '@user/aplication/usecases/delete.usecase'
 import GetUserByIDUseCase from '@user/aplication/usecases/get-by-id.usecase'
 import ListUsersUseCase from '@user/aplication/usecases/list.usecase'
 import SaveUserUseCase from '@user/aplication/usecases/save.usecase'
-import UpdateUser from '@user/aplication/usecases/update.usecase'
+import UpdateUserUseCase from '@user/aplication/usecases/update.usecase'
 import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 import { type FastifyReply, type FastifyRequest } from 'fastify'
@@ -71,8 +71,8 @@ class UserHandler {
       const schemaValidator = new SchemaValidator(UpdateUserDTO, payload)
       schemaValidator.exec()
 
-      const updateUseCase = new UpdateUser(this.repository)
-      await updateUseCase.exec(id, payload)
+      const updateUser = new UpdateUserUseCase(this.repository)
+      await updateUser.exec(id, payload)
 
       HandleHTTPResponse(res, 'User updated successfully', 200, { id })
     } catch (error) {

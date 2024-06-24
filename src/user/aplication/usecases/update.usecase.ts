@@ -3,7 +3,7 @@ import ErrorUserNotFound from '@user/domain/exceptions/user-not-found.exception'
 import type UserPayload from '@user/domain/payload/user.payload'
 import type UserRepository from '@user/domain/repository/user.repository'
 
-class UpdateUser {
+class UpdateUserUseCase {
   constructor(private readonly repository: UserRepository) {
     this.repository = repository
   }
@@ -18,4 +18,4 @@ class UpdateUser {
   }
 }
 
-export default UpdateUser
+export default UpdateUserUseCase
