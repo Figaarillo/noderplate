@@ -51,10 +51,15 @@ class UserTypeormRepository implements UserRepository {
     return await repository.save(user)
   }
 
-  async update(id: string, user: UserPayload): Promise<Nullable<void>> {
-    const repository = this.repository
+  async Update(id: string, userPayload: UserPayload): Promise<Nullable<UserEntity>> {
+    const user = await this.repository.findOne({ where: { id } })
+    if (user == null) {
+      return null
+    }
 
-    await repository.update({ id }, user)
+    user.update(userPayload)
+
+    return await this.repository.save(user)
   }
 
   async delete(id: string): Promise<Nullable<void>> {

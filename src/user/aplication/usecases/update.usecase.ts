@@ -9,9 +9,9 @@ class UpdateUser {
   }
 
   async exec(id: string, payload: UserPayload): Promise<UserEntity> {
-    const userUpdated = await this.repository.update(id, payload)
+    const userUpdated = await this.repository.Update(id, payload)
     if (userUpdated == null) {
-      throw new ErrorUserNotFound(`Cannont find user with id: ${id} when update user`)
+      throw new ErrorUserNotFound(`Cannot update user with id: ${id}`)
     }
 
     return userUpdated
