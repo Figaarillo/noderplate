@@ -15,7 +15,7 @@ class FastifyConifg {
     try {
       await this.server.listen({
         host: '0.0.0.0',
-        port: parseInt(process.env.PORT ?? '5000')
+        port: parseInt(process.env.SERVER_PORT ?? '5000')
       })
     } catch (err) {
       this.server.log.error(err)
