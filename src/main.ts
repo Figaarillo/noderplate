@@ -7,7 +7,7 @@ import BootstrapUser from '@user/user.bootstrap'
 import { type DataSource } from 'typeorm'
 
 dotenv.config()
-const PORT = Number(process.env.PORT)
+const PORT = Number(process.env.SERVER_PORT)
 
 /* Main */
 ;(async () => {
