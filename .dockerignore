@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.gitignore
+.DS_Store
+README.md
+.dockerignore
+.husky
+commitlint.config.js
+notes
+.prettier*
+.eslint*
+.vscode
