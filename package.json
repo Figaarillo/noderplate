@@ -20,7 +20,15 @@
     "pre-commit": "lint-staged",
     "db:migrate": "pnpm ts-node ./src/infrastructure/persistence/mikro-orm/cli.ts"
   },
-  "keywords": ["nodejs", "typescript", "hexagonal-architecture", "clean-architecture", "fastify", "nest", "mikro-orm"],
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "hexagonal-architecture",
+    "clean-architecture",
+    "fastify",
+    "nest",
+    "mikro-orm"
+  ],
   "author": "Figaarillo",
   "license": "MIT",
   "devDependencies": {
@@ -55,7 +63,7 @@
     "@mikro-orm/core": "^6.2.0",
     "@mikro-orm/migrations": "^6.2.0",
     "@mikro-orm/postgresql": "^6.2.0",
-    "bcrypt": "5.1.1",
+    "argon2": "^0.31.2",
     "dotenv": "16.3.1",
     "immutable": "5.0.0-beta.4",
     "jsonwebtoken": "9.0.2",
@@ -72,6 +80,8 @@
   },
   "mikro-orm": {
     "useTsNode": true,
-    "configPaths": ["./src/infrastructure/persistence/mikro-orm/config/mikro-orm.config.ts"]
+    "configPaths": [
+      "./src/infrastructure/persistence/mikro-orm/config/mikro-orm.config.ts"
+    ]
   }
 }

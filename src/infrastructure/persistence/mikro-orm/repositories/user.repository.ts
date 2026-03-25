@@ -1,5 +1,6 @@
 import type { EntityManager } from '@mikro-orm/core'
-import type { User, UpdateUserInput } from '@core/users/domain/entities/user.entity'
+import type { User } from '@core/users/domain/entities/user.entity'
+import type { UpdateUserPayload } from '@core/users/domain/payloads/update-user.payload'
 import type { UserRepository } from '@core/users/domain/repositories/user.repository'
 import { UserMikroORM } from '../entities/user.entity'
 
@@ -33,7 +34,7 @@ export class MikroORMUserRepository implements UserRepository {
     return this.mapToDomain(userORM)
   }
 
-  async update(id: string, data: UpdateUserInput): Promise<User | null> {
+  async update(id: string, data: UpdateUserPayload): Promise<User | null> {
     const user = await this.em.findOne(UserMikroORM, { id })
     if (user == null) {
       return null

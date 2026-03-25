@@ -1,5 +1,4 @@
-export interface User {
-  id: string
+export interface RegisterUserPayload {
   firstName: string
   lastName: string
   email: string
@@ -8,7 +7,5 @@ export interface User {
   city: string
   province: string
   country: string
-  role: string
-  createdAt: Date
-  updatedAt: Date
+  role?: string
 }
