@@ -1,14 +1,19 @@
 import { MikroORM } from '@mikro-orm/core'
-import { mikroORMConfig } from '../../infrastructure/persistence/mikro-orm/config/mikro-orm.config'
-import type { UserRepository } from '../../core/users/domain/repositories/user.repository'
-import { MikroORMUserRepository } from '../../infrastructure/persistence/mikro-orm/repositories/user.repository'
+import mikroORMConfig from '../../infrastructure/persistence/mikro-orm/config/mikro-orm.config'
+import type { AppContainer } from './types'
 
-export async function registerInfrastructure(container: Map<symbol, unknown>): Promise<void> {
+export async function registerInfrastructure(container: AppContainer): Promise<void> {
   const orm = await MikroORM.init(mikroORMConfig)
   const em = orm.em.fork()
 
-  const userRepository: UserRepository = new MikroORMUserRepository(em)
-  container.set(Symbol.for('UserRepository'), userRepository)
-}
+  container.orm = orm
+  container.em = em
 
-export { TOKENS } from './tokens'
+  const { MikroORMUserRepository } = await import(
+    '../../infrastructure/persistence/mikro-orm/repositories/user.repository'
+  )
+
+  container.repositories = {
+    userRepository: new MikroORMUserRepository(em)
+  }
+}

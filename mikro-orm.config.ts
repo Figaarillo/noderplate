@@ -6,8 +6,8 @@ export default defineConfig({
   user: process.env.DATABASE_USER ?? 'postgres',
   password: process.env.DATABASE_PASS ?? 'postgres',
   dbName: process.env.DATABASE_NAME ?? 'noderplate',
-  entities: ['./src/infrastructure/persistence/mikro-orm/entities'],
+  entities: ['./dist/infrastructure/persistence/mikro-orm/entities'],
   migrations: {
-    path: './src/infrastructure/persistence/mikro-orm/migrations'
+    path: './dist/infrastructure/persistence/mikro-orm/migrations'
   }
 })

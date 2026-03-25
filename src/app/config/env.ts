@@ -1,9 +1,11 @@
 import * as dotenv from 'dotenv'
 import { join } from 'path'
 
-dotenv.config({
-  path: join(process.cwd(), `.env.${process.env.NODE_ENV ?? ''}`)
-})
+dotenv.config()
+const envFile = `.env.${process.env.NODE_ENV}`
+if (process.env.NODE_ENV) {
+  dotenv.config({ path: join(process.cwd(), envFile) })
+}
 
 export function getEnv(key: string): string {
   const value = process.env[key.toUpperCase()]
@@ -23,4 +25,20 @@ export function getNumberEnv(key: string): number {
 
 export function getBooleanEnv(key: string): boolean {
   return getEnv(key) === 'true'
+}
+
+export const env = {
+  httpRuntime: getEnvOrDefault('HTTP_RUNTIME', 'fastify'),
+  port: getNumberEnv('PORT'),
+  database: {
+    host: getEnvOrDefault('DATABASE_HOST', 'localhost'),
+    port: getNumberEnv('DATABASE_PORT'),
+    user: getEnv('DATABASE_USER'),
+    password: getEnv('DATABASE_PASS'),
+    name: getEnv('DATABASE_NAME')
+  },
+  jwt: {
+    secret: getEnvOrDefault('JWT_SECRET', 'default-secret'),
+    expiresIn: getEnvOrDefault('JWT_EXPIRES_IN', '1h')
+  }
 }

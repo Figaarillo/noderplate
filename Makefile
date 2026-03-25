@@ -41,7 +41,7 @@ install:
 	pnpm install
 
 # ############# DEV ############ #
-dev:
+run:
 	@echo "╭────────────────────────────────────────╮"
 	@echo "│      RUNNING SERVER IN WATCH MODE      │"
 	@echo "╰────────────────────────────────────────╯"

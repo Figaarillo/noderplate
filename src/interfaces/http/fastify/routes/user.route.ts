@@ -1,52 +1,46 @@
-import type { FastifyInstance } from 'fastify'
-import { UserController, type PaginationQuery, type IdParams } from '../controllers/user.controller'
-import type { UserRepository } from '../../../../core/users/domain/repositories/user.repository'
-import { RegisterUserDTO, LoginUserDTO, UpdateUserDTO, CheckIdDTO } from '../dtos/user.dto'
-import { SchemaValidator } from '../middlewares/zod-schema-validator.middleware'
+import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { AppContainer } from '../../../../app/container/types'
+import type { PaginationQuery, IdParams } from '../controllers/user.controller'
 import type { RegisterUserPayload } from '../../../../core/users/domain/payloads/register-user.payload'
-import type { LoginUserPayload } from '../../../../core/users/domain/payloads/login-user.payload'
 import type { UpdateUserPayload } from '../../../../core/users/domain/payloads/update-user.payload'
+import { RegisterUserDTO, UpdateUserDTO, CheckIdDTO } from '../dtos/user.dto'
+import { SchemaValidator } from '../middlewares/zod-schema-validator.middleware'
 
-export function registerUserRoutes(fastify: FastifyInstance, repository: UserRepository): void {
-  const controller = new UserController(repository)
+export function registerUserRoutes(app: FastifyInstance, container: AppContainer): void {
+  const controller = container.controllers.userController
 
-  fastify.get<{ Querystring: PaginationQuery }>('/api/users', async (req, res) => {
-    await controller.list(req, res)
+  app.get('/api/users', async (req: FastifyRequest, res: FastifyReply) => {
+    await controller.list(req as FastifyRequest<{ Querystring: PaginationQuery }>, res)
   })
 
-  fastify.get<{ Params: IdParams }>('/api/users/:id', async (req, res) => {
-    const validator = new SchemaValidator(CheckIdDTO, req.params)
-    validator.validate()
-    await controller.findById(req, res)
+  app.get('/api/users/:id', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(CheckIdDTO, req.params).validate()
+    await controller.findById(req as FastifyRequest<{ Params: IdParams }>, res)
   })
 
-  fastify.get<{ Querystring: { email: string } }>('/api/users/email', async (req, res) => {
-    await controller.findByEmail(req, res)
+  app.get('/api/users/email', async (req: FastifyRequest, res: FastifyReply) => {
+    await controller.findByEmail(req as FastifyRequest<{ Querystring: { email: string } }>, res)
   })
 
-  fastify.post<{ Body: RegisterUserPayload }>('/api/users', async (req, res) => {
-    const validator = new SchemaValidator(RegisterUserDTO, req.body)
-    validator.validate()
-    await controller.register(req, res)
+  app.post('/api/users', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(RegisterUserDTO, req.body).validate()
+    await controller.register(req as FastifyRequest<{ Body: RegisterUserPayload }>, res)
   })
 
-  fastify.post<{ Body: LoginUserPayload }>('/api/users/auth/login', async (req, res) => {
-    const validator = new SchemaValidator(LoginUserDTO, req.body)
-    validator.validate()
-    await controller.login(req, res)
+  // Login route will be added when auth module is implemented
+  // app.post('/api/users/auth/login', async (req: FastifyRequest, res: FastifyReply) => {
+  //   new SchemaValidator(LoginUserDTO, req.body).validate()
+  //   await controller.login(req as FastifyRequest<{ Body: LoginUserPayload }>, res)
+  // })
+
+  app.put('/api/users/:id', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(CheckIdDTO, req.params).validate()
+    new SchemaValidator(UpdateUserDTO, req.body).validate()
+    await controller.update(req as FastifyRequest<{ Params: IdParams; Body: UpdateUserPayload }>, res)
   })
 
-  fastify.put<{ Params: IdParams; Body: UpdateUserPayload }>('/api/users/:id', async (req, res) => {
-    const idValidator = new SchemaValidator(CheckIdDTO, req.params)
-    idValidator.validate()
-    const bodyValidator = new SchemaValidator(UpdateUserDTO, req.body)
-    bodyValidator.validate()
-    await controller.update(req, res)
-  })
-
-  fastify.delete<{ Params: IdParams }>('/api/users/:id', async (req, res) => {
-    const validator = new SchemaValidator(CheckIdDTO, req.params)
-    validator.validate()
-    await controller.delete(req, res)
+  app.delete('/api/users/:id', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(CheckIdDTO, req.params).validate()
+    await controller.delete(req as FastifyRequest<{ Params: IdParams }>, res)
   })
 }
