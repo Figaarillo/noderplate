@@ -1,39 +1,24 @@
-/* eslint-disable no-console */
-import 'module-alias/register' // Must be import this module first
-import * as dotenv from 'dotenv'
-import FastifyConifg from '@shared/config/fastify.config'
-import AppDataSource from '@shared/config/typeorm.config'
-import BootstrapUser from '@user/user.bootstrap'
-import { type DataSource } from 'typeorm'
+import 'module-alias/register'
+import { MikroORM } from '@mikro-orm/core'
+import { mikroORMConfig } from './infrastructure/persistence/mikro-orm/config/mikro-orm.config'
+import { MikroORMUserRepository } from './infrastructure/persistence/mikro-orm/repositories/user.repository'
+import { createFastifyApp, startFastifyApp } from './app/bootstrap/fastify.bootstrap'
 
-dotenv.config()
-const PORT = Number(process.env.PORT)
-
-/* Main */
-;(async () => {
+async function main(): Promise<void> {
   try {
-    const dataSource: DataSource = AppDataSource
-    const db = await initDBConnection(dataSource)
+    const orm = await MikroORM.init(mikroORMConfig)
+    // eslint-disable-next-line no-console
+    console.log('MikroORM connected! 🚀')
 
-    const fastifyConfig = new FastifyConifg()
-    const fastify = await fastifyConfig.server
+    const em = orm.em.fork()
+    const userRepository = new MikroORMUserRepository(em)
 
-    BootstrapUser(db, fastify)
-
-    fastify.get('/', async () => {
-      return 'Hello, World!'
-    })
-    await fastifyConfig.start()
-    console.log(`Server is running!🔥 Go to http://localhost:${PORT}`)
-  } catch (err) {
-    console.error(err)
+    const fastify = await createFastifyApp(userRepository)
+    await startFastifyApp(fastify)
+  } catch (error) {
+    console.error('Failed to start application:', error)
     process.exit(1)
   }
-})()
-
-async function initDBConnection(dataSource: DataSource): Promise<DataSource> {
-  const connection = await dataSource.initialize()
-  // eslint-disable-next-line no-console
-  console.log('Successfully connected to database! 🚀')
-  return connection
 }
+
+main()

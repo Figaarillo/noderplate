@@ -1,7 +1,7 @@
 {
   "name": "noderplate",
   "version": "0.0.0",
-  "description": "noderpalte is a boilerplate for nodejs projects",
+  "description": "Noderplate is a modular Node.js boilerplate with hexagonal architecture",
   "main": "dist/main.js",
   "scripts": {
     "start": "pnpm run build && node dist/main.js",
@@ -18,23 +18,20 @@
     "prepare": "husky install",
     "pre-check": "pnpm run ts-check && pnpm run prettier && pnpm run lint",
     "pre-commit": "lint-staged",
-    "typeorm": "typeorm-ts-node-commonjs",
-    "migration:generate": "pnpm run typeorm migration:generate ./migrations/migration -d ./src/shared/config/typeorm.config.ts",
-    "migration:run": "pnpm run typeorm migration:run -d ./src/shared/config/typeorm.config.ts",
-    "migration:revert": "pnpm run typeorm migration:revert --config ./src/config/ormconfig.ts"
+    "db:migrate": "pnpm ts-node ./src/infrastructure/persistence/mikro-orm/cli.ts"
   },
-  "keywords": [],
-  "author": "Figarillo",
+  "keywords": ["nodejs", "typescript", "hexagonal-architecture", "clean-architecture", "fastify", "nest", "mikro-orm"],
+  "author": "Figaarillo",
   "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "18.4.3",
     "@commitlint/config-conventional": "18.4.3",
     "@types/bcrypt": "5.0.2",
+    "@types/jsonwebtoken": "9.0.5",
     "@types/module-alias": "2.0.4",
     "@types/node": "20.10.5",
     "@types/uuid": "9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "concurrently": "8.2.2",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-config-standard-with-typescript": "43.0.0",
@@ -54,18 +51,27 @@
     "uuid": "9.0.1"
   },
   "dependencies": {
+    "@mikro-orm/cli": "^6.2.0",
+    "@mikro-orm/core": "^6.2.0",
+    "@mikro-orm/migrations": "^6.2.0",
+    "@mikro-orm/postgresql": "^6.2.0",
     "bcrypt": "5.1.1",
     "dotenv": "16.3.1",
     "immutable": "5.0.0-beta.4",
+    "jsonwebtoken": "9.0.2",
     "pg": "8.12.0",
     "reflect-metadata": "0.2.2",
     "rimraf": "5.0.5",
-    "typeorm": "0.3.20",
-    "typeorm-naming-strategies": "4.1.0",
     "zod": "3.22.4"
   },
   "_moduleAliases": {
-    "@shared": "./src/shared",
-    "@user": "./src/user"
+    "@core": "./src/core",
+    "@app": "./src/app",
+    "@infrastructure": "./src/infrastructure",
+    "@interfaces": "./src/interfaces"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": ["./src/infrastructure/persistence/mikro-orm/config/mikro-orm.config.ts"]
   }
 }
