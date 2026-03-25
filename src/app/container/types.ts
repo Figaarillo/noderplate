@@ -1,6 +1,6 @@
 import type { EntityManager, MikroORM } from '@mikro-orm/core'
-import type { UserRepository } from '../../core/users/domain/repositories/user.repository'
-import type { UserController } from '../../interfaces/http/fastify/controllers/user.controller'
+import type { UserRepository } from '../../features/users/domain/repositories/user.repository'
+import type { UserController } from '../../features/users/interfaces/fastify/controllers/user.controller'
 
 export interface AppContainer {
   orm: MikroORM

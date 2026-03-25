@@ -22,7 +22,7 @@
     "prepare": "husky install",
     "pre-check": "pnpm run ts-check && pnpm run prettier && pnpm run lint",
     "pre-commit": "lint-staged",
-    "db:migrate": "pnpm ts-node ./src/infrastructure/persistence/mikro-orm/cli.ts"
+    "db:migrate": "pnpm ts-node ./src/shared/infrastructure/persistence/mikro-orm/cli.ts"
   },
   "keywords": [
     "nodejs",
@@ -93,7 +93,7 @@
   "mikro-orm": {
     "useTsNode": true,
     "configPaths": [
-      "./src/infrastructure/persistence/mikro-orm/config/mikro-orm.config.ts"
+      "./src/features/users/infrastructure/mikro-orm/config/mikro-orm.config.ts"
     ]
   }
 }

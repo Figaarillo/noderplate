@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { FindByIdUseCase } from '../../../core/users/application/use-cases/find-by-id.usecase'
+import { FindByIdUseCase } from '../../../features/users/application/use-cases/find-by-id.usecase'
 import { createMockUser, MockUserRepository } from '../helpers'
 
 describe('FindByIdUseCase', () => {

@@ -1,5 +1,5 @@
 import { MikroORM } from '@mikro-orm/core'
-import mikroORMConfig from '../../infrastructure/persistence/mikro-orm/config/mikro-orm.config'
+import mikroORMConfig from '../../features/users/infrastructure/mikro-orm/config/mikro-orm.config'
 import type { AppContainer } from './types'
 
 export async function registerInfrastructure(container: AppContainer): Promise<void> {
@@ -10,7 +10,7 @@ export async function registerInfrastructure(container: AppContainer): Promise<v
   container.em = em
 
   const { MikroORMUserRepository } = await import(
-    '../../infrastructure/persistence/mikro-orm/repositories/user.repository'
+    '../../features/users/infrastructure/mikro-orm/repositories/user.repository'
   )
 
   container.repositories = {

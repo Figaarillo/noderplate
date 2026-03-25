@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { FindByEmailUseCase } from '../../../core/users/application/use-cases/find-by-email.usecase'
+import { FindByEmailUseCase } from '../../../features/users/application/use-cases/find-by-email.usecase'
 import { createMockUser, MockUserRepository, USER_FIXTURE } from '../helpers'
 
 describe('FindByEmailUseCase', () => {

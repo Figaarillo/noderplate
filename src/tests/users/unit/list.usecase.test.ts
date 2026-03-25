@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { ListUsersUseCase } from '../../../core/users/application/use-cases/list.usecase'
+import { ListUsersUseCase } from '../../../features/users/application/use-cases/list.usecase'
 import { createMockUser, MockUserRepository, resetUserIdCounter, USER_FIXTURE, USER_FIXTURE_2 } from '../helpers'
 
 describe('ListUsersUseCase', () => {

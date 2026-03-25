@@ -1,7 +1,7 @@
-import type { User } from '../../core/users/domain/entities/user.entity'
-import type { RegisterUserPayload } from '../../core/users/domain/payloads/register-user.payload'
-import type { LoginUserPayload } from '../../core/users/domain/payloads/login-user.payload'
-import type { UpdateUserPayload } from '../../core/users/domain/payloads/update-user.payload'
+import type { User } from '../../features/users/domain/entities/user.entity'
+import type { RegisterUserPayload } from '../../features/users/domain/payloads/register-user.payload'
+import type { LoginUserPayload } from '../../features/users/domain/payloads/login-user.payload'
+import type { UpdateUserPayload } from '../../features/users/domain/payloads/update-user.payload'
 
 export const USER_FIXTURE: RegisterUserPayload = {
   firstName: 'John',

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { DeleteUserUseCase } from '../../../core/users/application/use-cases/delete.usecase'
+import { DeleteUserUseCase } from '../../../features/users/application/use-cases/delete.usecase'
 import { createMockUser, MockUserRepository } from '../helpers'
 
 describe('DeleteUserUseCase', () => {

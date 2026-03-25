@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
-import { AppModule } from '../../interfaces/http/nest/app.module'
+import { AppModule } from '../../features/users/interfaces/nest/module/app.module'
 import { env } from '../config/env'
 
 interface AppRuntime {

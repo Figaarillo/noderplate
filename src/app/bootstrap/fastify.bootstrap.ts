@@ -1,6 +1,6 @@
 import Fastify, { type FastifyInstance } from 'fastify'
 import { buildContainer } from '../container/build-container'
-import { registerUserRoutes } from '../../interfaces/http/fastify/routes/user.route'
+import { registerUserRoutes } from '../../features/users/interfaces/fastify/routes/user.route'
 import type { AppContainer } from '../container/types'
 
 interface AppRuntime {

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { LoginUserUseCase } from '../../../core/users/application/use-cases/login.usecase'
+import { LoginUserUseCase } from '../../../features/users/application/use-cases/login.usecase'
 import { createMockUser, MockUserRepository, LOGIN_FIXTURE } from '../helpers'
 
 vi.mock('argon2', () => ({

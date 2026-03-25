@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import type { UserRepository } from '../../../core/users/domain/repositories/user.repository'
+import type { UserRepository } from '../../../features/users/domain/repositories/user.repository'
 import { MockUserRepository, USER_FIXTURE, USER_FIXTURE_2, UPDATE_FIXTURE } from '../helpers'
-import { RegisterUserUseCase } from '../../../core/users/application/use-cases/register.usecase'
-import { DeleteUserUseCase } from '../../../core/users/application/use-cases/delete.usecase'
-import { FindByIdUseCase } from '../../../core/users/application/use-cases/find-by-id.usecase'
-import { FindByEmailUseCase } from '../../../core/users/application/use-cases/find-by-email.usecase'
-import { ListUsersUseCase } from '../../../core/users/application/use-cases/list.usecase'
-import { UpdateUserUseCase } from '../../../core/users/application/use-cases/update.usecase'
+import { RegisterUserUseCase } from '../../../features/users/application/use-cases/register.usecase'
+import { DeleteUserUseCase } from '../../../features/users/application/use-cases/delete.usecase'
+import { FindByIdUseCase } from '../../../features/users/application/use-cases/find-by-id.usecase'
+import { FindByEmailUseCase } from '../../../features/users/application/use-cases/find-by-email.usecase'
+import { ListUsersUseCase } from '../../../features/users/application/use-cases/list.usecase'
+import { UpdateUserUseCase } from '../../../features/users/application/use-cases/update.usecase'
 
 describe('User Module E2E', () => {
   let repository: UserRepository
