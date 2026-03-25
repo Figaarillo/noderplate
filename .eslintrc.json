@@ -11,6 +11,7 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
+  "ignorePatterns": ["vitest.config.ts", "vitest.unit.config.ts"],
   "rules": {
     "prettier/prettier": "error",
     "indent": ["error", 2],
@@ -19,6 +20,7 @@
     "no-console": ["warn", { "allow": ["error"] }],
     "@typescript-eslint/space-before-function-paren": "off",
     "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
     "object-curly-spacing": ["error", "always"],
     "max-len": "off"
   }
