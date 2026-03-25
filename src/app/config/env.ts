@@ -29,13 +29,20 @@ export function getBooleanEnv(key: string): boolean {
 
 export const env = {
   httpRuntime: getEnvOrDefault('HTTP_RUNTIME', 'fastify'),
+  orm: getEnvOrDefault('ORM', 'mikroorm'),
   port: getNumberEnv('PORT'),
   database: {
     host: getEnvOrDefault('DATABASE_HOST', 'localhost'),
     port: getNumberEnv('DATABASE_PORT'),
     user: getEnv('DATABASE_USER'),
     password: getEnv('DATABASE_PASS'),
-    name: getEnv('DATABASE_NAME')
+    name: getEnv('DATABASE_NAME'),
+    url: getEnvOrDefault(
+      'DATABASE_URL',
+      `postgresql://${process.env.DATABASE_USER ?? 'postgres'}:${process.env.DATABASE_PASS ?? 'postgres'}@${
+        process.env.DATABASE_HOST ?? 'localhost'
+      }:${process.env.DATABASE_PORT ?? 5432}/${process.env.DATABASE_NAME ?? 'noderplate'}`
+    )
   },
   jwt: {
     secret: getEnvOrDefault('JWT_SECRET', 'default-secret'),
