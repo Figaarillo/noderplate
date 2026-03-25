@@ -1,7 +1,7 @@
 import type { EntityManager } from '@mikro-orm/core'
-import type { User } from '@core/users/domain/entities/user.entity'
-import type { UpdateUserPayload } from '@core/users/domain/payloads/update-user.payload'
-import type { UserRepository } from '@core/users/domain/repositories/user.repository'
+import type { User } from '../../../../core/users/domain/entities/user.entity'
+import type { UpdateUserPayload } from '../../../../core/users/domain/payloads/update-user.payload'
+import type { UserRepository } from '../../../../core/users/domain/repositories/user.repository'
 import { UserMikroORM } from '../entities/user.entity'
 
 export class MikroORMUserRepository implements UserRepository {

@@ -1,11 +1,11 @@
 import type { FastifyInstance } from 'fastify'
 import { UserController, type PaginationQuery, type IdParams } from '../controllers/user.controller'
-import type { UserRepository } from '@core/users/domain/repositories/user.repository'
+import type { UserRepository } from '../../../../core/users/domain/repositories/user.repository'
 import { RegisterUserDTO, LoginUserDTO, UpdateUserDTO, CheckIdDTO } from '../dtos/user.dto'
 import { SchemaValidator } from '../middlewares/zod-schema-validator.middleware'
-import type { RegisterUserPayload } from '@core/users/domain/payloads/register-user.payload'
-import type { LoginUserPayload } from '@core/users/domain/payloads/login-user.payload'
-import type { UpdateUserPayload } from '@core/users/domain/payloads/update-user.payload'
+import type { RegisterUserPayload } from '../../../../core/users/domain/payloads/register-user.payload'
+import type { LoginUserPayload } from '../../../../core/users/domain/payloads/login-user.payload'
+import type { UpdateUserPayload } from '../../../../core/users/domain/payloads/update-user.payload'
 
 export function registerUserRoutes(fastify: FastifyInstance, repository: UserRepository): void {
   const controller = new UserController(repository)

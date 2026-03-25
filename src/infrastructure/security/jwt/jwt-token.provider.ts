@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import type { TokenProvider } from '@core/shared/contracts/security/token.provider'
+import type { TokenProvider } from '../../../core/shared/contracts/security/token.provider'
 
 export class JwtTokenProvider implements TokenProvider {
   private readonly secret = process.env.JWT_SECRET ?? 'default-secret'

@@ -1,5 +1,5 @@
 import { hash, compare } from 'bcrypt'
-import type { HashProvider } from '@core/shared/contracts/security/hash.provider'
+import type { HashProvider } from '../../../core/shared/contracts/security/hash.provider'
 
 export class BcryptHashProvider implements HashProvider {
   private readonly saltRounds = 10

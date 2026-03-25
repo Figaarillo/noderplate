@@ -1,7 +1,7 @@
 import Fastify from 'fastify'
 import type { FastifyInstance } from 'fastify'
-import { registerUserRoutes } from '@interfaces/http/fastify/routes/user.route'
-import type { UserRepository } from '@core/users/domain/repositories/user.repository'
+import { registerUserRoutes } from '../../interfaces/http/fastify/routes/user.route'
+import type { UserRepository } from '../../core/users/domain/repositories/user.repository'
 
 export async function createFastifyApp(repository: UserRepository): Promise<FastifyInstance> {
   const fastify = Fastify({

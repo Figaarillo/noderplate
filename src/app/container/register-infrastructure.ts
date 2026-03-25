@@ -1,7 +1,7 @@
 import { MikroORM } from '@mikro-orm/core'
-import { mikroORMConfig } from '@infrastructure/persistence/mikro-orm/config/mikro-orm.config'
-import type { UserRepository } from '@core/users/domain/repositories/user.repository'
-import { MikroORMUserRepository } from '@infrastructure/persistence/mikro-orm/repositories/user.repository'
+import { mikroORMConfig } from '../../infrastructure/persistence/mikro-orm/config/mikro-orm.config'
+import type { UserRepository } from '../../core/users/domain/repositories/user.repository'
+import { MikroORMUserRepository } from '../../infrastructure/persistence/mikro-orm/repositories/user.repository'
 
 export async function registerInfrastructure(container: Map<symbol, unknown>): Promise<void> {
   const orm = await MikroORM.init(mikroORMConfig)
