@@ -1,11 +1,11 @@
 import type { AppContainer } from './types'
-import { UserController } from '../../features/users/interfaces/fastify/controllers/user.controller'
-import { RegisterUserUseCase } from '../../features/users/application/use-cases/register.usecase'
-import { ListUsersUseCase } from '../../features/users/application/use-cases/list.usecase'
-import { FindByIdUseCase } from '../../features/users/application/use-cases/find-by-id.usecase'
-import { FindByEmailUseCase } from '../../features/users/application/use-cases/find-by-email.usecase'
-import { UpdateUserUseCase } from '../../features/users/application/use-cases/update.usecase'
-import { DeleteUserUseCase } from '../../features/users/application/use-cases/delete.usecase'
+import { UserController } from '../../interfaces/http/fastify/users/controllers/user.controller'
+import { RegisterUserUseCase } from '../../core/users/application/use-cases/register.usecase'
+import { ListUsersUseCase } from '../../core/users/application/use-cases/list.usecase'
+import { FindByIdUseCase } from '../../core/users/application/use-cases/find-by-id.usecase'
+import { FindByEmailUseCase } from '../../core/users/application/use-cases/find-by-email.usecase'
+import { UpdateUserUseCase } from '../../core/users/application/use-cases/update.usecase'
+import { DeleteUserUseCase } from '../../core/users/application/use-cases/delete.usecase'
 
 export function registerUsers(container: AppContainer): void {
   const userRepository = container.repositories.userRepository

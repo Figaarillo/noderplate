@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { RegisterUserUseCase } from '../../../features/users/application/use-cases/register.usecase'
+import { RegisterUserUseCase } from '../../../core/users/application/use-cases/register.usecase'
 import { createMockUser, MockUserRepository, USER_FIXTURE } from '../helpers'
 
 describe('RegisterUserUseCase', () => {

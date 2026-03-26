@@ -1,10 +1,10 @@
 import type { EntityManager, MikroORM } from '@mikro-orm/core'
-import type { UserRepository } from '../../features/users/domain/repositories/user.repository'
-import type { UserController } from '../../features/users/interfaces/fastify/controllers/user.controller'
+import type { UserRepository } from '../../core/users/domain/repositories/user.repository'
+import type { UserController } from '../../interfaces/http/fastify/users/controllers/user.controller'
 
 export interface AppContainer {
-  orm: MikroORM
-  em: EntityManager
+  orm: MikroORM | null
+  em: EntityManager | null
   repositories: {
     userRepository: UserRepository
   }
@@ -15,8 +15,8 @@ export interface AppContainer {
 
 export function createContainer(): AppContainer {
   return {
-    orm: null as unknown as MikroORM,
-    em: null as unknown as EntityManager,
+    orm: null,
+    em: null,
     repositories: null as unknown as { userRepository: UserRepository },
     controllers: null as unknown as { userController: UserController }
   }

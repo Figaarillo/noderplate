@@ -14,12 +14,6 @@
     "rootDir": "src/",
     "moduleResolution": "node",
     "baseUrl": "./",
-    "paths": {
-      "@core/*": ["src/core/*"],
-      "@app/*": ["src/app/*"],
-      "@infrastructure/*": ["src/infrastructure/*"],
-      "@interfaces/*": ["src/interfaces/*"]
-    },
     "resolveJsonModule": true,
 
     "sourceMap": true,

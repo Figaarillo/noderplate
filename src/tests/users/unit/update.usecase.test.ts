@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { UpdateUserUseCase } from '../../../features/users/application/use-cases/update.usecase'
+import { UpdateUserUseCase } from '../../../core/users/application/use-cases/update.usecase'
 import { createMockUser, MockUserRepository, UPDATE_FIXTURE } from '../helpers'
 
 describe('UpdateUserUseCase', () => {

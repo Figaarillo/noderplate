@@ -1,6 +1,4 @@
 import { env } from '../config/env'
-import { createFastifyRuntime } from './fastify.bootstrap'
-import { createNestRuntime } from './nest.bootstrap'
 
 interface AppRuntime {
   start: () => Promise<void>
@@ -8,8 +6,10 @@ interface AppRuntime {
 
 export async function bootstrapApplication(): Promise<AppRuntime> {
   if (env.httpRuntime === 'nest') {
+    const { createNestRuntime } = await import('./nest.bootstrap')
     return await createNestRuntime()
   }
 
+  const { createFastifyRuntime } = await import('./fastify.bootstrap')
   return await createFastifyRuntime()
 }

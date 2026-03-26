@@ -1,18 +1,6 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { LoginUserUseCase } from '../../../features/users/application/use-cases/login.usecase'
+import { afterEach, describe, expect, it } from 'vitest'
+import { LoginUserUseCase } from '../../../core/users/application/use-cases/login.usecase'
 import { createMockUser, MockUserRepository, LOGIN_FIXTURE } from '../helpers'
-
-vi.mock('argon2', () => ({
-  default: {
-    hash: vi.fn().mockResolvedValue('hashedpassword'),
-    verify: vi.fn().mockImplementation(async (hash: string, password: string) => {
-      if (password === LOGIN_FIXTURE.password && hash === 'hashedpassword') {
-        return await Promise.resolve(true)
-      }
-      return await Promise.resolve(false)
-    })
-  }
-}))
 
 describe('LoginUserUseCase', () => {
   const repository = new MockUserRepository()
@@ -24,7 +12,7 @@ describe('LoginUserUseCase', () => {
 
   describe('execute', () => {
     it('returns user when credentials are valid', async () => {
-      const user = createMockUser({ email: LOGIN_FIXTURE.email, password: 'hashedpassword' })
+      const user = createMockUser({ email: LOGIN_FIXTURE.email, password: LOGIN_FIXTURE.password })
       await repository.save(user)
 
       const result = await useCase.execute(LOGIN_FIXTURE)
@@ -37,7 +25,7 @@ describe('LoginUserUseCase', () => {
     })
 
     it('throws InvalidCredentialsError when password is wrong', async () => {
-      const user = createMockUser({ email: LOGIN_FIXTURE.email, password: 'wronghash' })
+      const user = createMockUser({ email: LOGIN_FIXTURE.email, password: 'wrongpassword' })
       await repository.save(user)
 
       await expect(useCase.execute(LOGIN_FIXTURE)).rejects.toThrow('Invalid credentials provided')

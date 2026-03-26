@@ -4,8 +4,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['./src/tests/unit/**/*.test.ts'],
-    exclude: ['node_modules'],
+    include: ['./src/tests/**/*.test.ts'],
+    exclude: ['node_modules', '**/e2e/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
