@@ -40,35 +40,30 @@ export function getBooleanEnv(key: string, defaultValue?: boolean): boolean {
 export const env = {
   httpRuntime: getEnvOrDefault('HTTP_RUNTIME', 'nest'),
   orm: getEnvOrDefault('ORM', 'prisma'),
-  port: getNumberEnv('PORT') || 8080,
+  port: getNumberEnv('PORT', 8080),
   database: {
     host: getEnvOrDefault('DATABASE_HOST', 'localhost'),
-    port: getNumberEnv('DATABASE_PORT'),
+    port: getNumberEnv('DATABASE_PORT', 5432),
     user: getEnv('DATABASE_USER'),
     password: getEnv('DATABASE_PASS'),
     name: getEnv('DATABASE_NAME'),
-    url: getEnvOrDefault(
-      'DATABASE_URL',
-      `postgresql://${process.env.DATABASE_USER ?? 'postgres'}:${process.env.DATABASE_PASS ?? 'postgres'}@${
-        process.env.DATABASE_HOST ?? 'localhost'
-      }:${process.env.DATABASE_PORT ?? 5432}/${process.env.DATABASE_NAME ?? 'noderplate'}`
-    )
+    url: getEnv('DATABASE_URL')
   },
   jwt: {
-    secret: getEnvOrDefault('JWT_SECRET', 'default-secret'),
-    accessTokenSecret: getEnvOrDefault('JWT_ACCESS_TOKEN_SECRET', getEnvOrDefault('JWT_SECRET', 'default-secret')),
-    refreshTokenSecret: getEnvOrDefault('JWT_REFRESH_TOKEN_SECRET', getEnvOrDefault('JWT_SECRET', 'default-secret')),
+    secret: getEnv('JWT_SECRET'),
+    accessTokenSecret: getEnvOrDefault('JWT_ACCESS_TOKEN_SECRET', getEnv('JWT_SECRET')),
+    refreshTokenSecret: getEnvOrDefault('JWT_REFRESH_TOKEN_SECRET', getEnv('JWT_SECRET')),
     accessTokenExpiresIn: getEnvOrDefault('JWT_ACCESS_TOKEN_EXPIRES_IN', '1h'),
     refreshTokenExpiresIn: getEnvOrDefault('JWT_REFRESH_TOKEN_EXPIRES_IN', '7d')
   },
   email: {
-    host: getEnvOrDefault('EMAIL_HOST', 'smtp.mailtrap.io'),
-    port: getNumberEnv('EMAIL_PORT', 587),
+    host: getEnvOrDefault('EMAIL_HOST', 'sandbox.smtp.mailtrap.io'),
+    port: getNumberEnv('EMAIL_PORT', 2525),
     secure: getBooleanEnv('EMAIL_SECURE', false),
     auth: {
       user: getEnvOrDefault('EMAIL_USER', ''),
       pass: getEnvOrDefault('EMAIL_PASS', '')
     },
-    from: getEnvOrDefault('EMAIL_FROM', 'noreply@example.com')
+    from: getEnvOrDefault('EMAIL_FROM', 'noreply@noderplate.local')
   }
 }

@@ -4,8 +4,8 @@ import { UserMikroORM } from '../../infrastructure/persistence/mikro-orm/users/e
 export default defineConfig({
   host: process.env.DATABASE_HOST ?? 'localhost',
   port: Number(process.env.DATABASE_PORT ?? 5432),
-  user: process.env.DATABASE_USER ?? 'axel',
-  password: process.env.DATABASE_PASS ?? 'secret',
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASS,
   dbName: process.env.DATABASE_NAME ?? 'noderplate',
   entities:
     process.env.NODE_ENV === 'production'
