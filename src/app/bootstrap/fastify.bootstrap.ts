@@ -2,6 +2,7 @@ import Fastify, { type FastifyInstance } from 'fastify'
 import fastifyCookie from '@fastify/cookie'
 import { buildContainer } from '../container/build-container'
 import { registerUserRoutes } from '../../interfaces/http/fastify/users/routes/user.route'
+import { registerAuth2FARoutes } from '../../interfaces/http/fastify/auth/routes/auth-2fa.route'
 import type { AppContainer } from '../container/types'
 
 interface AppRuntime {
@@ -30,6 +31,7 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
   await app.register(fastifyCookie)
 
   registerUserRoutes(app, container)
+  registerAuth2FARoutes(app, container)
 
   app.get('/health', async () => {
     return { status: 'ok' }

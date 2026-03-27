@@ -50,5 +50,15 @@ export const env = {
     refreshTokenSecret: getEnvOrDefault('JWT_REFRESH_TOKEN_SECRET', getEnvOrDefault('JWT_SECRET', 'default-secret')),
     accessTokenExpiresIn: getEnvOrDefault('JWT_ACCESS_TOKEN_EXPIRES_IN', '1h'),
     refreshTokenExpiresIn: getEnvOrDefault('JWT_REFRESH_TOKEN_EXPIRES_IN', '7d')
+  },
+  email: {
+    host: getEnvOrDefault('EMAIL_HOST', 'smtp.mailtrap.io'),
+    port: getNumberEnv('EMAIL_PORT') || 587,
+    secure: getBooleanEnv('EMAIL_SECURE'),
+    auth: {
+      user: getEnvOrDefault('EMAIL_USER', ''),
+      pass: getEnvOrDefault('EMAIL_PASS', '')
+    },
+    from: getEnvOrDefault('EMAIL_FROM', 'noreply@example.com')
   }
 }
