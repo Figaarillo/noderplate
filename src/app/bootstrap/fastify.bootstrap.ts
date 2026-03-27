@@ -1,11 +1,15 @@
 import Fastify, { type FastifyInstance } from 'fastify'
 import fastifyCookie from '@fastify/cookie'
 import fastifyMultipart from '@fastify/multipart'
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUi from '@fastify/swagger-ui'
 import AdminJSFastify from '@adminjs/fastify'
 import { buildContainer } from '../container/build-container'
 import { registerUserRoutes } from '../../interfaces/http/fastify/users/routes/user.route'
 import { registerAuth2FARoutes } from '../../interfaces/http/fastify/auth/routes/auth-2fa.route'
+import { registerAuthSwaggerRoutes } from '../../interfaces/http/fastify/swagger/auth-swagger.route'
 import { adminJsConfig } from '../../infrastructure/admin/admin.config'
+import { swaggerConfig } from '../../infrastructure/swagger/swagger.config'
 import type { AppContainer } from '../container/types'
 
 interface AppRuntime {
@@ -24,6 +28,8 @@ export async function createFastifyRuntime(): Promise<AppRuntime> {
       console.log(`Server is running! Go to http://localhost:${port}`)
       // eslint-disable-next-line no-console
       console.log(`Admin panel available at http://localhost:${port}/admin`)
+      // eslint-disable-next-line no-console
+      console.log(`Swagger UI available at http://localhost:${port}/api-docs`)
     }
   }
 }
@@ -36,6 +42,19 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
   await app.register(fastifyCookie)
   await app.register(fastifyMultipart)
 
+  await app.register(fastifySwagger, {
+    openapi: swaggerConfig,
+    mode: 'dynamic'
+  })
+
+  await app.register(fastifySwaggerUi, {
+    routePrefix: '/api-docs',
+    uiConfig: {
+      docExpansion: 'list',
+      deepLinking: false
+    }
+  })
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   // AdminJS types are not compatible with Fastify types
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -47,6 +66,7 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
 
   registerUserRoutes(app, container)
   registerAuth2FARoutes(app, container)
+  registerAuthSwaggerRoutes(app)
 
   app.get('/health', async () => {
     return { status: 'ok' }

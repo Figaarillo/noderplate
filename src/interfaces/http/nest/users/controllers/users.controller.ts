@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, Inject } from '@nestjs/common'
 /* eslint-disable @typescript-eslint/consistent-type-imports */
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery, ApiParam } from '@nestjs/swagger'
 import { ListUsersUseCase } from '../../../../../core/users/application/use-cases/list.usecase'
 import { FindByIdUseCase } from '../../../../../core/users/application/use-cases/find-by-id.usecase'
 import { FindByEmailUseCase } from '../../../../../core/users/application/use-cases/find-by-email.usecase'
@@ -34,6 +35,7 @@ import {
   DELETE_USER_USE_CASE
 } from '../providers/users.providers'
 
+@ApiTags('Users')
 @Controller('api/users')
 export class UsersController {
   constructor(
@@ -49,6 +51,14 @@ export class UsersController {
   ) {}
 
   @Get()
+  @ApiOperation({ summary: 'List all users', description: 'Returns a paginated list of users' })
+  @ApiQuery({ name: 'offset', required: false, type: Number, default: 0 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, default: 10 })
+  @ApiResponse({
+    status: 200,
+    description: 'List of users',
+    schema: { example: { data: [{ id: 'uuid', email: 'user@example.com', firstName: 'John', lastName: 'Doe' }] } }
+  })
   async list(@Query() query: PaginationQueryDto): Promise<{ data: unknown[] }> {
     const offset = query.offset ?? 0
     const limit = query.limit ?? 10
@@ -58,12 +68,19 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiParam({ name: 'id', description: 'User UUID' })
+  @ApiResponse({ status: 200, description: 'User found' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async findById(@Param() params: IdParamDto): Promise<{ data: unknown }> {
     const user = await this.findByIdUseCase.execute(params.id)
     return { data: user }
   }
 
   @Get('email')
+  @ApiOperation({ summary: 'Get user by email' })
+  @ApiQuery({ name: 'email', description: 'User email', example: 'user@example.com' })
+  @ApiResponse({ status: 200, description: 'User found' })
   async findByEmail(@Query() query: EmailQueryDto): Promise<{ data: unknown }> {
     const user = await this.findByEmailUseCase.execute(query.email)
     return { data: user }
@@ -71,6 +88,13 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User registered successfully',
+    schema: { example: { data: { id: 'uuid', tokens: { accessToken: 'eyJhbGci...', refreshToken: 'eyJhbGci...' } } } }
+  })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
   async register(
     @Body() dto: RegisterUserDto
   ): Promise<{ data: { id: string; tokens: { accessToken: string; refreshToken: string } } }> {
@@ -91,6 +115,13 @@ export class UsersController {
   }
 
   @Post('auth/login')
+  @ApiOperation({ summary: 'Login user', description: 'Authenticate user and receive JWT tokens in cookies' })
+  @ApiResponse({
+    status: 200,
+    description: 'Login successful',
+    schema: { example: { data: { id: 'uuid', tokens: { accessToken: 'eyJhbGci...', refreshToken: 'eyJhbGci...' } } } }
+  })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async login(
     @Body() dto: LoginUserDto
   ): Promise<{ data: { id: string; tokens: { accessToken: string; refreshToken: string } } }> {
@@ -104,6 +135,13 @@ export class UsersController {
   }
 
   @Post('auth/refresh')
+  @ApiOperation({ summary: 'Refresh access token', description: 'Refresh JWT access token using refresh token cookie' })
+  @ApiResponse({
+    status: 200,
+    description: 'Tokens refreshed',
+    schema: { example: { data: { accessToken: 'eyJhbGci...', refreshToken: 'eyJhbGci...' } } }
+  })
+  @ApiResponse({ status: 401, description: 'Invalid refresh token' })
   async refreshToken(
     @Body() body: { refreshToken: string }
   ): Promise<{ data: { accessToken: string; refreshToken: string } }> {
@@ -112,6 +150,15 @@ export class UsersController {
   }
 
   @Post('auth/change-password')
+  @ApiOperation({ summary: 'Change password', description: 'Change password for authenticated user' })
+  @ApiBearerAuth('bearerAuth')
+  @ApiResponse({
+    status: 200,
+    description: 'Password changed successfully',
+    schema: { example: { data: { message: 'Password changed successfully' } } }
+  })
+  @ApiResponse({ status: 400, description: 'Invalid current password' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
   async changePassword(@Body() dto: ChangePasswordDto): Promise<{ data: { message: string } }> {
     const payload: ChangePasswordPayload = {
       userId: dto.userId,
@@ -124,6 +171,10 @@ export class UsersController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Update user' })
+  @ApiParam({ name: 'id', description: 'User UUID' })
+  @ApiResponse({ status: 200, description: 'User updated', schema: { example: { data: { id: 'uuid' } } } })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async update(@Param() params: IdParamDto, @Body() dto: UpdateUserDto): Promise<{ data: { id: string } }> {
     const payload: UpdateUserPayload = {
       firstName: dto.firstName,
@@ -140,6 +191,10 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiParam({ name: 'id', description: 'User UUID' })
+  @ApiResponse({ status: 200, description: 'User deleted', schema: { example: { data: { id: 'uuid' } } } })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async delete(@Param() params: IdParamDto): Promise<{ data: { id: string } }> {
     await this.deleteUserUseCase.execute(params.id)
     return { data: { id: params.id } }

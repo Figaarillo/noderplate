@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Query, Res, HttpStatus, Inject } from '@nestjs/common'
 import { Response } from 'express'
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger'
 import {
   verificationPageHtml,
   verificationCodeEmailTemplate,
@@ -35,6 +36,7 @@ export const TOKEN_PROVIDER = 'TOKEN_PROVIDER'
 export const EMAIL_PROVIDER = 'EMAIL_PROVIDER'
 export const VERIFICATION_CODE_REPOSITORY = 'VERIFICATION_CODE_REPOSITORY'
 
+@ApiTags('2FA')
 @Controller()
 export class AuthController {
   constructor(
@@ -49,6 +51,11 @@ export class AuthController {
   ) {}
 
   @Get('auth/verify')
+  @ApiOperation({ summary: 'Get 2FA verification page', description: 'Renders HTML page for 2FA code verification' })
+  @ApiQuery({ name: 'token', required: true, description: 'Temporary JWT token' })
+  @ApiQuery({ name: 'type', required: true, enum: ['LOGIN', 'REGISTER', 'PASSWORD_RESET', 'EMAIL_VERIFICATION'] })
+  @ApiResponse({ status: 200, description: 'HTML verification page' })
+  @ApiResponse({ status: 400, description: 'Missing parameters' })
   getVerificationPage(@Query('token') token: string, @Query('type') type: string, @Res() res: Response): Response {
     if (!token || !type) {
       return res.status(HttpStatus.BAD_REQUEST).send('Missing token or type parameter')
@@ -59,6 +66,10 @@ export class AuthController {
   }
 
   @Get('auth/reset-password')
+  @ApiOperation({ summary: 'Get password reset page', description: 'Renders HTML page for password reset' })
+  @ApiQuery({ name: 'token', required: true, description: 'Temporary JWT token' })
+  @ApiResponse({ status: 200, description: 'HTML password reset page' })
+  @ApiResponse({ status: 400, description: 'Missing token' })
   getResetPasswordPage(@Query('token') token: string, @Res() res: Response): Response {
     if (!token) {
       return res.status(HttpStatus.BAD_REQUEST).send('Missing token parameter')
@@ -69,6 +80,13 @@ export class AuthController {
   }
 
   @Post('api/auth/verify-2fa')
+  @ApiOperation({ summary: 'Verify 2FA code' })
+  @ApiResponse({
+    status: 200,
+    description: 'Verification successful',
+    schema: { example: { message: 'Verification successful', redirect: '/dashboard' } }
+  })
+  @ApiResponse({ status: 400, description: 'Invalid code or token' })
   async verifyTwoFactor(@Body() dto: VerifyTwoFactorCodeDto): Promise<{ message: string; redirect?: string }> {
     const tokenPayload = this.authService.verifyAccessToken(dto.token)
     if (!tokenPayload?.sub) {
@@ -98,6 +116,9 @@ export class AuthController {
   }
 
   @Post('api/auth/resend-2fa')
+  @ApiOperation({ summary: 'Resend 2FA code' })
+  @ApiResponse({ status: 200, description: 'Code sent successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid token' })
   async resendTwoFactorCode(@Body() dto: ResendTwoFactorCodeDto): Promise<{ message: string }> {
     const tokenPayload = this.authService.verifyAccessToken(dto.token)
     if (!tokenPayload?.sub) {
@@ -121,6 +142,13 @@ export class AuthController {
   }
 
   @Post('api/auth/login-2fa')
+  @ApiOperation({ summary: 'Login with 2FA enabled' })
+  @ApiResponse({
+    status: 200,
+    description: 'Login requires 2FA verification',
+    schema: { example: { requiresVerification: true, tempToken: 'eyJhbGci...' } }
+  })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async loginWithTwoFactor(
     @Body() dto: LoginWithTwoFactorDto
   ): Promise<{ requiresVerification: boolean; tempToken?: string }> {
@@ -154,12 +182,25 @@ export class AuthController {
   }
 
   @Post('api/auth/forgot-password')
+  @ApiOperation({ summary: 'Request password reset', description: 'Sends password reset code to email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset code sent if email exists',
+    schema: { example: { message: 'If the email exists, a verification code has been sent' } }
+  })
   async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<{ message: string }> {
     await this.requestPasswordReset.execute(dto.email, passwordResetEmailTemplate)
     return { message: 'If the email exists, a verification code has been sent' }
   }
 
   @Post('api/auth/reset-password')
+  @ApiOperation({ summary: 'Reset password', description: 'Reset password using verification code' })
+  @ApiResponse({
+    status: 200,
+    description: 'Password reset successful',
+    schema: { example: { message: 'Password reset successfully' } }
+  })
+  @ApiResponse({ status: 400, description: 'Invalid or expired code' })
   async resetPasswordEndpoint(@Body() dto: ResetPasswordDto): Promise<{ message: string }> {
     const tokenPayload = this.tokenProvider.verifyAccessToken(dto.token)
     if (!tokenPayload?.sub) {
