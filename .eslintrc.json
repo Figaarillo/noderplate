@@ -11,7 +11,7 @@
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint"],
-  "ignorePatterns": ["vitest.config.ts", "vitest.unit.config.ts", "mikro-orm.config.ts"],
+  "ignorePatterns": ["vitest.config.ts", "vitest.unit.config.ts", "mikro-orm.config.ts", "prisma/seed.ts"],
   "rules": {
     "prettier/prettier": "error",
     "quotes": ["error", "single"],

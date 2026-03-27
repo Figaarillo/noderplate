@@ -1,4 +1,4 @@
-.PHONY: help run run.dev docker docker.build docker.run docker.run.db docker.stop docker.clean docker.restart.server db.migrate db.migrate.create db.migrate.up db.prisma.generate db.prisma.push db.prisma.migrate test test.unit test.e2e clean build check lint lint.fix format
+.PHONY: help run run.dev docker docker.build docker.run docker.run.db docker.stop docker.clean docker.restart.server db.migrate db.migrate.create db.migrate.up db.prisma.generate db.prisma.push db.prisma.migrate db.seed test test.unit test.e2e clean build check lint lint.fix format
 
 # ############ VARIABLES ############ #
 DB_HOST?=localhost
@@ -18,10 +18,13 @@ help:
 	@echo "    make docker.restart.server - Restart API server"
 	@echo ""
 	@echo "  Development:"
-	@echo "    make run             - Run server (with migrations)"
+	@echo "    make run             - Run server (with migrations and seed)"
 	@echo "    make run.dev         - Run development server (watch mode)"
 	@echo "    make build           - Build project"
 	@echo "    make clean           - Clean build artifacts"
+	@echo ""
+	@echo "  Database:"
+	@echo "    make db.seed         - Seed database with default users"
 	@echo ""
 	@echo "  Testing:"
 	@echo "    make test            - Run all tests"
@@ -103,6 +106,10 @@ run: docker.run.db
 	@echo " ╰────────────────────────────────────────╯ "
 	pnpm prisma:migrate
 	@echo " ╭────────────────────────────────────────╮ "
+	@echo " │         SEEDING DATABASE               │ "
+	@echo " ╰────────────────────────────────────────╯ "
+	pnpm seed
+	@echo " ╭────────────────────────────────────────╮ "
 	@echo " │             RUNNING SERVER             │ "
 	@echo " ╰────────────────────────────────────────╯ "
 	DATABASE_HOST=$(DB_HOST) pnpm start
@@ -120,6 +127,10 @@ run.dev: docker.run.db
 	@echo " │           RUNNING MIGRATIONS            │ "
 	@echo " ╰────────────────────────────────────────╯ "
 	pnpm prisma:push
+	@echo " ╭────────────────────────────────────────╮ "
+	@echo " │         SEEDING DATABASE               │ "
+	@echo " ╰────────────────────────────────────────╯ "
+	pnpm seed
 	@echo " ╭────────────────────────────────────────╮ "
 	@echo " │      RUNNING SERVER IN WATCH MODE      │ "
 	@echo " ╰────────────────────────────────────────╯ "
@@ -162,6 +173,12 @@ db.prisma.migrate:
 	@echo " │      APPLYING PRISMA MIGRATIONS        │ "
 	@echo " ╰────────────────────────────────────────╯ "
 	pnpm prisma:migrate
+
+db.seed:
+	@echo " ╭────────────────────────────────────────╮ "
+	@echo " │         SEEDING DATABASE               │ "
+	@echo " ╰────────────────────────────────────────╯ "
+	pnpm seed
 
 # ############# TEST COMMANDS ############ #
 
