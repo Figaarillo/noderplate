@@ -19,12 +19,22 @@ export function getEnvOrDefault(key: string, defaultValue: string): string {
   return process.env[key.toUpperCase()] ?? defaultValue
 }
 
-export function getNumberEnv(key: string): number {
-  return Number(getEnv(key))
+export function getNumberEnv(key: string, defaultValue?: number): number {
+  const value = process.env[key.toUpperCase()]
+  if (value === undefined) {
+    if (defaultValue !== undefined) return defaultValue
+    throw new Error(`Environment variable ${key} is not defined`)
+  }
+  return Number(value)
 }
 
-export function getBooleanEnv(key: string): boolean {
-  return getEnv(key) === 'true'
+export function getBooleanEnv(key: string, defaultValue?: boolean): boolean {
+  const value = process.env[key.toUpperCase()]
+  if (value === undefined) {
+    if (defaultValue !== undefined) return defaultValue
+    throw new Error(`Environment variable ${key} is not defined`)
+  }
+  return value === 'true'
 }
 
 export const env = {
@@ -53,8 +63,8 @@ export const env = {
   },
   email: {
     host: getEnvOrDefault('EMAIL_HOST', 'smtp.mailtrap.io'),
-    port: getNumberEnv('EMAIL_PORT') || 587,
-    secure: getBooleanEnv('EMAIL_SECURE'),
+    port: getNumberEnv('EMAIL_PORT', 587),
+    secure: getBooleanEnv('EMAIL_SECURE', false),
     auth: {
       user: getEnvOrDefault('EMAIL_USER', ''),
       pass: getEnvOrDefault('EMAIL_PASS', '')

@@ -3,12 +3,10 @@ import fastifyCookie from '@fastify/cookie'
 import fastifyMultipart from '@fastify/multipart'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
-import AdminJSFastify from '@adminjs/fastify'
 import { buildContainer } from '../container/build-container'
 import { registerUserRoutes } from '../../interfaces/http/fastify/users/routes/user.route'
 import { registerAuth2FARoutes } from '../../interfaces/http/fastify/auth/routes/auth-2fa.route'
 import { registerAuthSwaggerRoutes } from '../../interfaces/http/fastify/swagger/auth-swagger.route'
-import { adminJsConfig } from '../../infrastructure/admin/admin.config'
 import { swaggerConfig } from '../../infrastructure/swagger/swagger.config'
 import type { AppContainer } from '../container/types'
 
@@ -26,8 +24,6 @@ export async function createFastifyRuntime(): Promise<AppRuntime> {
       await app.listen({ host: '0.0.0.0', port })
       // eslint-disable-next-line no-console
       console.log(`Server is running! Go to http://localhost:${port}`)
-      // eslint-disable-next-line no-console
-      console.log(`Admin panel available at http://localhost:${port}/admin`)
       // eslint-disable-next-line no-console
       console.log(`Swagger UI available at http://localhost:${port}/api-docs`)
     }
@@ -53,15 +49,6 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
       docExpansion: 'list',
       deepLinking: false
     }
-  })
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  // AdminJS types are not compatible with Fastify types
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  await app.register(AdminJSFastify, {
-    adminJs: adminJsConfig.adminJs,
-    auth: adminJsConfig.auth,
-    sessionSecret: adminJsConfig.sessionSecret
   })
 
   registerUserRoutes(app, container)

@@ -1,4 +1,4 @@
-import { hash, compare } from 'bcrypt'
+import { hash, compare } from 'bcryptjs'
 import type { HashProvider } from '../../core/shared/application/hash.provider'
 
 export class BcryptHashProvider implements HashProvider {

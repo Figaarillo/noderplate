@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from '../../interfaces/http/nest/app.module'
 import { env } from '../config/env'
+import { GlobalExceptionFilter } from '../../interfaces/http/nest/common/filters/global-exception.filter'
 
 interface AppRuntime {
   start: () => Promise<void>
@@ -18,6 +19,8 @@ export async function createNestRuntime(): Promise<AppRuntime> {
       forbidNonWhitelisted: true
     })
   )
+
+  app.useGlobalFilters(new GlobalExceptionFilter())
 
   const config = new DocumentBuilder()
     .setTitle('Noderplate API')

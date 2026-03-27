@@ -10,9 +10,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    "module": "ES2022",
+    "module": "CommonJS",
     "rootDir": "src/",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "baseUrl": "./",
     "resolveJsonModule": true,
 

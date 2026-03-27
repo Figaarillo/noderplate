@@ -12,7 +12,7 @@ import type { UserRepository } from '../../../../../core/users/domain/repositori
 import type { HashProvider } from '../../../../../core/shared/application/hash.provider'
 import type { TokenProvider } from '../../../../../core/shared/application/token.provider'
 import { PrismaUserRepository } from '../../../../../infrastructure/persistence/prisma/users/repositories/user.repository'
-import { BcryptHashProvider } from '../../../../../infrastructure/security/bcrypt-hash.provider'
+import { ArgonHashProvider } from '../../../../../infrastructure/security/argon-hash.provider'
 import { JwtTokenProvider } from '../../../../../infrastructure/security/jwt-token.provider'
 import { AuthService } from '../../../../../core/auth/application/services/auth.service'
 import { UsersController } from '../controllers/users.controller'
@@ -40,7 +40,7 @@ const DELETE_USER_USE_CASE = 'DELETE_USER_USE_CASE'
     },
     {
       provide: HASH_PROVIDER,
-      useFactory: (): HashProvider => new BcryptHashProvider()
+      useFactory: (): HashProvider => new ArgonHashProvider()
     },
     {
       provide: TOKEN_PROVIDER,

@@ -18,8 +18,8 @@ describe('DeleteUserUseCase', () => {
       await expect(useCase.execute(user.id)).resolves.toBeUndefined()
     })
 
-    it('does not throw when deleting non-existent user', async () => {
-      await expect(useCase.execute('non-existent-id')).resolves.toBeUndefined()
+    it('throws when deleting non-existent user', async () => {
+      await expect(useCase.execute('non-existent-id')).rejects.toThrow('not found')
     })
 
     it('removes user from repository', async () => {

@@ -10,7 +10,7 @@ import { VerifyTwoFactorCodeUseCase } from '../../../../../core/auth/application
 import { RequestPasswordResetUseCase } from '../../../../../core/auth/application/use-cases/request-password-reset.usecase'
 import { ResetPasswordUseCase } from '../../../../../core/auth/application/use-cases/reset-password.usecase'
 import { PrismaUserRepository } from '../../../../../infrastructure/persistence/prisma/users/repositories/user.repository'
-import { BcryptHashProvider } from '../../../../../infrastructure/security/bcrypt-hash.provider'
+import { ArgonHashProvider } from '../../../../../infrastructure/security/argon-hash.provider'
 import { JwtTokenProvider } from '../../../../../infrastructure/security/jwt-token.provider'
 import { NodemailerEmailProvider } from '../../../../../infrastructure/email/nodemailer.provider'
 import { InMemoryVerificationCodeRepository } from '../../../../../infrastructure/persistence/in-memory/verification-code.repository'
@@ -36,7 +36,7 @@ const RESET_PASSWORD_USE_CASE = 'RESET_PASSWORD_USE_CASE'
     },
     {
       provide: HASH_PROVIDER,
-      useFactory: (): HashProvider => new BcryptHashProvider()
+      useFactory: (): HashProvider => new ArgonHashProvider()
     },
     {
       provide: TOKEN_PROVIDER,
