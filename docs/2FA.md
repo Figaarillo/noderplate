@@ -121,11 +121,14 @@ Los códigos de verificación pueden ser de diferentes tipos:
 
 ## Rutas API
 
-| Método | Ruta                          | Descripción                        |
-| ------ | ----------------------------- | ---------------------------------- |
-| GET    | `/auth/verify?token=X&type=Y` | Página de verificación renderizada |
-| POST   | `/api/auth/verify-2fa`        | Verifica el código ingresa         |
-| POST   | `/api/auth/resend-2fa`        | Reenvía código de verificación     |
+| Método | Ruta                           | Descripción                               |
+| ------ | ------------------------------ | ----------------------------------------- |
+| GET    | `/auth/verify?token=X&type=Y`  | Página de verificación 2FA renderizada    |
+| POST   | `/api/auth/verify-2fa`         | Verifica el código de 2FA                 |
+| POST   | `/api/auth/resend-2fa`         | Reenvía código de verificación 2FA        |
+| POST   | `/api/auth/forgot-password`    | Solicita código para recuperar contraseña |
+| GET    | `/auth/reset-password?token=X` | Página de reset de password renderizada   |
+| POST   | `/api/auth/reset-password`     | Resetear password con código              |
 
 ## Runtime
 
@@ -208,12 +211,64 @@ Content-Type: application/json
 #### Paso 4: Reenviar código (si no llegó)
 
 ```http
-POST http://localhost:3000/api/auth/resend-2fa
+POST http://localhost:8080/api/auth/resend-2fa
 Content-Type: application/json
 
 {
   "token": "YOUR_TEMP_TOKEN",
   "type": "login"
+}
+```
+
+### Flujo de Recuperación de Contraseña
+
+#### Paso 1: Solicitar recuperación de contraseña
+
+```http
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+```
+
+**Respuesta esperada:**
+
+```json
+{
+  "message": "If the email exists, a verification code has been sent"
+}
+```
+
+#### Paso 2: Abrir página de reset de contraseña
+
+El usuario recibe un email con el código. Usar el token del paso anterior:
+
+```
+GET http://localhost:8080/auth/reset-password?token=YOUR_TEMP_TOKEN
+```
+
+Esto retorna una página HTML con un formulario para ingresar el código y la nueva contraseña.
+
+#### Paso 3: Resetear contraseña
+
+```http
+POST http://localhost:8080/api/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "YOUR_TEMP_TOKEN",
+  "code": "123456",
+  "newPassword": "newpassword123"
+}
+```
+
+**Respuesta exitosa:**
+
+```json
+{
+  "message": "Password reset successfully"
 }
 ```
 
@@ -241,6 +296,60 @@ El usuario quería que la verificación 2FA no dependiera del frontend para rend
    - El frontend solo necesita redirigir a `/auth/verify?token=X&type=Y`
    - El backend maneja todo el proceso de verificación
    - Después de verificar, redirige a `/dashboard`
+
+## Flujo de Recuperación de Contraseña
+
+### 1. Usuario solicita recuperación
+
+```
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "user@example.com"
+}
+```
+
+**Respuesta:**
+
+```json
+{
+  "message": "If the email exists, a verification code has been sent"
+}
+```
+
+### 2. Usuario recibe código por email
+
+El código de 6 dígitos se envía por email.
+
+### 3. Usuario abre página de reset
+
+```
+GET http://localhost:8080/auth/reset-password?token=TEMP_TOKEN
+```
+
+Esto retorna una página HTML con formulario para ingresar código y nueva contraseña.
+
+### 4. Usuario ingresa código y nueva contraseña
+
+```http
+POST http://localhost:8080/api/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "YOUR_TEMP_TOKEN",
+  "code": "123456",
+  "newPassword": "newpassword123"
+}
+```
+
+**Respuesta exitosa:**
+
+```json
+{
+  "message": "Password reset successfully"
+}
+```
 
 ## Seguridad
 

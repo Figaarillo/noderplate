@@ -26,3 +26,19 @@ export class LoginWithTwoFactorDto {
   @IsString()
   password: string
 }
+
+export class ForgotPasswordDto {
+  @IsString()
+  email: string
+}
+
+export class ResetPasswordDto {
+  @IsString()
+  token: string
+
+  @IsString()
+  code: string
+
+  @IsString()
+  newPassword: string
+}

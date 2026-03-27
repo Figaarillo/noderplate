@@ -7,6 +7,8 @@ import type { EmailProvider } from '../../../../../core/shared/application/email
 import type { VerificationCodeRepository } from '../../../../../core/auth/domain/repositories/verification-code.repository'
 import { RequestTwoFactorCodeUseCase } from '../../../../../core/auth/application/use-cases/request-two-factor-code.usecase'
 import { VerifyTwoFactorCodeUseCase } from '../../../../../core/auth/application/use-cases/verify-two-factor-code.usecase'
+import { RequestPasswordResetUseCase } from '../../../../../core/auth/application/use-cases/request-password-reset.usecase'
+import { ResetPasswordUseCase } from '../../../../../core/auth/application/use-cases/reset-password.usecase'
 import { PrismaUserRepository } from '../../../../../infrastructure/persistence/prisma/users/repositories/user.repository'
 import { BcryptHashProvider } from '../../../../../infrastructure/security/bcrypt-hash.provider'
 import { JwtTokenProvider } from '../../../../../infrastructure/security/jwt-token.provider'
@@ -22,6 +24,8 @@ const EMAIL_PROVIDER = 'EMAIL_PROVIDER'
 const VERIFICATION_CODE_REPOSITORY = 'VERIFICATION_CODE_REPOSITORY'
 const REQUEST_TWO_FACTOR_CODE_USE_CASE = 'REQUEST_TWO_FACTOR_CODE_USE_CASE'
 const VERIFY_TWO_FACTOR_CODE_USE_CASE = 'VERIFY_TWO_FACTOR_CODE_USE_CASE'
+const REQUEST_PASSWORD_RESET_USE_CASE = 'REQUEST_PASSWORD_RESET_USE_CASE'
+const RESET_PASSWORD_USE_CASE = 'RESET_PASSWORD_USE_CASE'
 
 @Module({
   controllers: [AuthController],
@@ -72,6 +76,34 @@ const VERIFY_TWO_FACTOR_CODE_USE_CASE = 'VERIFY_TWO_FACTOR_CODE_USE_CASE'
         })
       },
       inject: [VERIFICATION_CODE_REPOSITORY]
+    },
+    {
+      provide: REQUEST_PASSWORD_RESET_USE_CASE,
+      useFactory: (
+        verificationCodeRepository: VerificationCodeRepository,
+        emailProvider: EmailProvider
+      ): RequestPasswordResetUseCase => {
+        return new RequestPasswordResetUseCase({
+          userRepository: new PrismaUserRepository(),
+          verificationCodeRepository,
+          emailProvider
+        })
+      },
+      inject: [VERIFICATION_CODE_REPOSITORY, EMAIL_PROVIDER]
+    },
+    {
+      provide: RESET_PASSWORD_USE_CASE,
+      useFactory: (
+        verificationCodeRepository: VerificationCodeRepository,
+        hashProvider: HashProvider
+      ): ResetPasswordUseCase => {
+        return new ResetPasswordUseCase({
+          userRepository: new PrismaUserRepository(),
+          verificationCodeRepository,
+          hashProvider
+        })
+      },
+      inject: [VERIFICATION_CODE_REPOSITORY, HASH_PROVIDER]
     }
   ]
 })
