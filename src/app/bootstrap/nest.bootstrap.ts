@@ -22,8 +22,6 @@ export async function createNestRuntime(): Promise<AppRuntime> {
     async start() {
       await app.listen(env.port)
       // eslint-disable-next-line no-console
-      console.log(`Server listening at http://0.0.0.0:${env.port}`)
-      // eslint-disable-next-line no-console
       console.log('Server is running! Go to http://localhost:' + env.port)
     }
   }
