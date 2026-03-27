@@ -41,3 +41,9 @@ export const UpdateUserDTO = z.object({
 export const CheckIdDTO = z.object({
   id: z.string().uuid({ message: 'The format of ID must be a valid UUID' })
 })
+
+export const ChangePasswordDTO = z.object({
+  userId: z.string().uuid({ message: 'The format of user ID must be a valid UUID' }),
+  currentPassword: z.string().min(1, { message: 'Current password is required' }),
+  newPassword: passwordDTO
+})

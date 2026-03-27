@@ -4,16 +4,32 @@ import { ListUsersUseCase } from '../../../../../core/users/application/use-case
 import { FindByIdUseCase } from '../../../../../core/users/application/use-cases/find-by-id.usecase'
 import { FindByEmailUseCase } from '../../../../../core/users/application/use-cases/find-by-email.usecase'
 import { RegisterUserUseCase } from '../../../../../core/users/application/use-cases/register.usecase'
+import { LoginUserUseCase } from '../../../../../core/users/application/use-cases/login.usecase'
+import { RefreshTokenUseCase } from '../../../../../core/users/application/use-cases/refresh-token.usecase'
+import { ChangePasswordUseCase } from '../../../../../core/users/application/use-cases/change-password.usecase'
 import { UpdateUserUseCase } from '../../../../../core/users/application/use-cases/update.usecase'
 import { DeleteUserUseCase } from '../../../../../core/users/application/use-cases/delete.usecase'
 import type { RegisterUserPayload } from '../../../../../core/users/domain/types/payloads/register-user.payload'
+import type { LoginUserPayload } from '../../../../../core/users/domain/types/payloads/login-user.payload'
 import type { UpdateUserPayload } from '../../../../../core/users/domain/types/payloads/update-user.payload'
-import { RegisterUserDto, UpdateUserDto, PaginationQueryDto, IdParamDto, EmailQueryDto } from '../schemas/user.dto'
+import type { ChangePasswordPayload } from '../../../../../core/users/domain/types/payloads/change-password.payload'
+import {
+  RegisterUserDto,
+  UpdateUserDto,
+  PaginationQueryDto,
+  IdParamDto,
+  EmailQueryDto,
+  LoginUserDto,
+  ChangePasswordDto
+} from '../schemas/user.dto'
 import {
   LIST_USERS_USE_CASE,
   FIND_BY_ID_USE_CASE,
   FIND_BY_EMAIL_USE_CASE,
   REGISTER_USER_USE_CASE,
+  LOGIN_USER_USE_CASE,
+  REFRESH_TOKEN_USE_CASE,
+  CHANGE_PASSWORD_USE_CASE,
   UPDATE_USER_USE_CASE,
   DELETE_USER_USE_CASE
 } from '../providers/users.providers'
@@ -25,6 +41,9 @@ export class UsersController {
     @Inject(FIND_BY_ID_USE_CASE) private readonly findByIdUseCase: FindByIdUseCase,
     @Inject(FIND_BY_EMAIL_USE_CASE) private readonly findByEmailUseCase: FindByEmailUseCase,
     @Inject(REGISTER_USER_USE_CASE) private readonly registerUserUseCase: RegisterUserUseCase,
+    @Inject(LOGIN_USER_USE_CASE) private readonly loginUserUseCase: LoginUserUseCase,
+    @Inject(REFRESH_TOKEN_USE_CASE) private readonly refreshTokenUseCase: RefreshTokenUseCase,
+    @Inject(CHANGE_PASSWORD_USE_CASE) private readonly changePasswordUseCase: ChangePasswordUseCase,
     @Inject(UPDATE_USER_USE_CASE) private readonly updateUserUseCase: UpdateUserUseCase,
     @Inject(DELETE_USER_USE_CASE) private readonly deleteUserUseCase: DeleteUserUseCase
   ) {}
@@ -52,7 +71,9 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() dto: RegisterUserDto): Promise<{ data: { id: string } }> {
+  async register(
+    @Body() dto: RegisterUserDto
+  ): Promise<{ data: { id: string; tokens: { accessToken: string; refreshToken: string } } }> {
     const payload: RegisterUserPayload = {
       firstName: dto.firstName,
       lastName: dto.lastName,
@@ -65,8 +86,41 @@ export class UsersController {
       role: dto.role ?? 'user'
     }
 
-    const user = await this.registerUserUseCase.execute(payload)
-    return { data: { id: user.id } }
+    const result = await this.registerUserUseCase.execute(payload)
+    return { data: { id: result.user.id, tokens: result.tokens } }
+  }
+
+  @Post('auth/login')
+  async login(
+    @Body() dto: LoginUserDto
+  ): Promise<{ data: { id: string; tokens: { accessToken: string; refreshToken: string } } }> {
+    const payload: LoginUserPayload = {
+      email: dto.email,
+      password: dto.password
+    }
+
+    const result = await this.loginUserUseCase.execute(payload)
+    return { data: { id: result.user.id, tokens: result.tokens } }
+  }
+
+  @Post('auth/refresh')
+  async refreshToken(
+    @Body() body: { refreshToken: string }
+  ): Promise<{ data: { accessToken: string; refreshToken: string } }> {
+    const tokens = await this.refreshTokenUseCase.execute(body.refreshToken)
+    return { data: tokens }
+  }
+
+  @Post('auth/change-password')
+  async changePassword(@Body() dto: ChangePasswordDto): Promise<{ data: { message: string } }> {
+    const payload: ChangePasswordPayload = {
+      userId: dto.userId,
+      currentPassword: dto.currentPassword,
+      newPassword: dto.newPassword
+    }
+
+    await this.changePasswordUseCase.execute(payload)
+    return { data: { message: 'Password changed successfully' } }
   }
 
   @Put(':id')

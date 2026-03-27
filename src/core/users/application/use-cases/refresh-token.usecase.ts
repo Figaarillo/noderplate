@@ -1,8 +1,6 @@
 import type { User } from '../../domain/entities/user.entity'
 import { InvalidCredentialsError } from '../../domain/errors/invalid-credentials.error'
 import type { UserRepository } from '../../domain/repositories/user.repository'
-import type { LoginUserPayload } from '../../domain/types/payloads/login-user.payload'
-import type { HashProvider } from '../../../shared/application/hash.provider'
 import type { TokenProvider } from '../../../shared/application/token.provider'
 
 export interface AuthTokens {
@@ -10,27 +8,29 @@ export interface AuthTokens {
   refreshToken: string
 }
 
-export class LoginUserUseCase {
+export class RefreshTokenUseCase {
   constructor(
     private readonly repository: UserRepository,
-    private readonly hashProvider: HashProvider,
     private readonly tokenProvider: TokenProvider
   ) {}
 
-  async execute(payload: LoginUserPayload): Promise<{ user: User; tokens: AuthTokens }> {
-    const user = await this.repository.findByEmail(payload.email)
+  async execute(refreshToken: string): Promise<AuthTokens> {
+    const payload = this.tokenProvider.verifyToken(refreshToken)
+    if (payload == null) {
+      throw new InvalidCredentialsError('Invalid refresh token')
+    }
+
+    if (payload.type !== 'refresh') {
+      throw new InvalidCredentialsError('Invalid token type')
+    }
+
+    const userId = payload.sub as string
+    const user = await this.repository.findById(userId)
     if (user == null) {
-      throw new InvalidCredentialsError()
+      throw new InvalidCredentialsError('User not found')
     }
 
-    const isValid = await this.hashProvider.compare(payload.password, user.password)
-    if (!isValid) {
-      throw new InvalidCredentialsError()
-    }
-
-    const tokens = this.generateTokens(user)
-
-    return { user, tokens }
+    return this.generateTokens(user)
   }
 
   private generateTokens(user: User): AuthTokens {
@@ -45,11 +45,11 @@ export class LoginUserUseCase {
       type: 'access'
     })
 
-    const refreshToken = this.tokenProvider.generateRefreshToken({
+    const newRefreshToken = this.tokenProvider.generateRefreshToken({
       ...payload,
       type: 'refresh'
     })
 
-    return { accessToken, refreshToken }
+    return { accessToken, refreshToken: newRefreshToken }
   }
 }

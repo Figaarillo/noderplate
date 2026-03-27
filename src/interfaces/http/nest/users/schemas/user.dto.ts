@@ -83,3 +83,23 @@ export class EmailQueryDto {
   @IsEmail()
   email: string
 }
+
+export class LoginUserDto {
+  @IsEmail()
+  email: string
+
+  @IsString()
+  password: string
+}
+
+export class ChangePasswordDto {
+  @IsUUID()
+  userId: string
+
+  @IsString()
+  currentPassword: string
+
+  @IsString()
+  @MinLength(8)
+  newPassword: string
+}

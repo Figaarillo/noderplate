@@ -6,4 +6,5 @@ export interface UpdateUserPayload {
   province?: string
   country?: string
   role?: string
+  password?: string
 }

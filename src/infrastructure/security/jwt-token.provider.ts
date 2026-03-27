@@ -17,7 +17,7 @@ export class JwtTokenProvider implements TokenProvider {
     }
   }
 
-  generateRefreshToken(): string {
-    return jwt.sign({}, this.secret, { expiresIn: '7d' })
+  generateRefreshToken(payload: Record<string, unknown>): string {
+    return jwt.sign(payload, this.secret, { expiresIn: '7d' })
   }
 }

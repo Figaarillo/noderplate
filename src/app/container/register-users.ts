@@ -6,11 +6,18 @@ import { FindByIdUseCase } from '../../core/users/application/use-cases/find-by-
 import { FindByEmailUseCase } from '../../core/users/application/use-cases/find-by-email.usecase'
 import { UpdateUserUseCase } from '../../core/users/application/use-cases/update.usecase'
 import { DeleteUserUseCase } from '../../core/users/application/use-cases/delete.usecase'
+import { LoginUserUseCase } from '../../core/users/application/use-cases/login.usecase'
+import { RefreshTokenUseCase } from '../../core/users/application/use-cases/refresh-token.usecase'
+import { ChangePasswordUseCase } from '../../core/users/application/use-cases/change-password.usecase'
 
 export function registerUsers(container: AppContainer): void {
   const userRepository = container.repositories.userRepository
+  const { hashProvider, tokenProvider } = container.providers
 
-  const registerUser = new RegisterUserUseCase(userRepository)
+  const registerUser = new RegisterUserUseCase(userRepository, hashProvider, tokenProvider)
+  const loginUser = new LoginUserUseCase(userRepository, hashProvider, tokenProvider)
+  const refreshToken = new RefreshTokenUseCase(userRepository, tokenProvider)
+  const changePassword = new ChangePasswordUseCase(userRepository, hashProvider)
   const listUsers = new ListUsersUseCase(userRepository)
   const findById = new FindByIdUseCase(userRepository)
   const findByEmail = new FindByEmailUseCase(userRepository)
@@ -22,6 +29,9 @@ export function registerUsers(container: AppContainer): void {
     findById,
     findByEmail,
     registerUser,
+    loginUser,
+    refreshToken,
+    changePassword,
     updateUser,
     deleteUser
   })

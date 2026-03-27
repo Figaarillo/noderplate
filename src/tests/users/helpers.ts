@@ -2,6 +2,8 @@ import type { User } from '../../core/users/domain/entities/user.entity'
 import type { RegisterUserPayload } from '../../core/users/domain/types/payloads/register-user.payload'
 import type { LoginUserPayload } from '../../core/users/domain/types/payloads/login-user.payload'
 import type { UpdateUserPayload } from '../../core/users/domain/types/payloads/update-user.payload'
+import type { HashProvider } from '../../core/shared/application/hash.provider'
+import type { TokenProvider } from '../../core/shared/application/token.provider'
 
 export const USER_FIXTURE: RegisterUserPayload = {
   firstName: 'John',
@@ -114,5 +116,32 @@ export class MockUserRepository {
 
   get size(): number {
     return this.users.size
+  }
+}
+
+export class MockHashProvider implements HashProvider {
+  async hash(value: string): Promise<string> {
+    return `hashed_${value}`
+  }
+
+  async compare(value: string, hash: string): Promise<boolean> {
+    return hash === `hashed_${value}`
+  }
+}
+
+export class MockTokenProvider implements TokenProvider {
+  generateToken(payload: Record<string, unknown>): string {
+    return `access_token_${JSON.stringify(payload)}`
+  }
+
+  verifyToken(token: string): Record<string, unknown> | null {
+    if (token.startsWith('access_token_') || token.startsWith('refresh_token_')) {
+      return JSON.parse(token.split('_')[2])
+    }
+    return null
+  }
+
+  generateRefreshToken(payload: Record<string, unknown>): string {
+    return `refresh_token_${JSON.stringify(payload)}`
   }
 }

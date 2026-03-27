@@ -2,9 +2,34 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import type { AppContainer } from '../../../../../app/container/types'
 import type { PaginationQuery, IdParams } from '../controllers/user.controller'
 import type { RegisterUserPayload } from '../../../../../core/users/domain/types/payloads/register-user.payload'
+import type { LoginUserPayload } from '../../../../../core/users/domain/types/payloads/login-user.payload'
 import type { UpdateUserPayload } from '../../../../../core/users/domain/types/payloads/update-user.payload'
-import { RegisterUserDTO, UpdateUserDTO, CheckIdDTO } from '../schemas/user.dto'
+import type { ChangePasswordPayload } from '../../../../../core/users/domain/types/payloads/change-password.payload'
+import { RegisterUserDTO, UpdateUserDTO, CheckIdDTO, LoginUserDTO, ChangePasswordDTO } from '../schemas/user.dto'
 import { SchemaValidator } from '../zod-schema-validator.middleware'
+
+const ACCESS_TOKEN_COOKIE_NAME = 'accessToken'
+const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken'
+const COOKIE_MAX_AGE_ACCESS = 60 * 60 * 1000
+const COOKIE_MAX_AGE_REFRESH = 7 * 24 * 60 * 60 * 1000
+
+function setAuthCookies(res: FastifyReply, accessToken: string, refreshToken: string): void {
+  res.setCookie(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: COOKIE_MAX_AGE_ACCESS
+  })
+
+  res.setCookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: COOKIE_MAX_AGE_REFRESH
+  })
+}
 
 export function registerUserRoutes(app: FastifyInstance, container: AppContainer): void {
   const controller = container.controllers.userController
@@ -24,14 +49,42 @@ export function registerUserRoutes(app: FastifyInstance, container: AppContainer
 
   app.post('/api/users', async (req: FastifyRequest, res: FastifyReply) => {
     new SchemaValidator(RegisterUserDTO, req.body).validate()
-    await controller.register(req as FastifyRequest<{ Body: RegisterUserPayload }>, res)
+    const result = await controller.register(req as FastifyRequest<{ Body: RegisterUserPayload }>, res)
+    if (result?.tokens) {
+      setAuthCookies(res, result.tokens.accessToken, result.tokens.refreshToken)
+    }
   })
 
-  // Login route will be added when auth module is implemented
-  // app.post('/api/users/auth/login', async (req: FastifyRequest, res: FastifyReply) => {
-  //   new SchemaValidator(LoginUserDTO, req.body).validate()
-  //   await controller.login(req as FastifyRequest<{ Body: LoginUserPayload }>, res)
-  // })
+  app.post('/api/users/auth/login', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(LoginUserDTO, req.body).validate()
+    const result = await controller.login(req as FastifyRequest<{ Body: LoginUserPayload }>, res)
+    if (result?.tokens) {
+      setAuthCookies(res, result.tokens.accessToken, result.tokens.refreshToken)
+    }
+  })
+
+  app.post('/api/users/auth/refresh', async (req: FastifyRequest, res: FastifyReply) => {
+    const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE_NAME]
+    if (!refreshToken) {
+      res.status(401).send({ error: 'Refresh token not found' })
+      return
+    }
+    const result = await controller.refreshToken(req as FastifyRequest<{ Body: { refreshToken: string } }>, res)
+    if (result?.accessToken) {
+      res.setCookie(ACCESS_TOKEN_COOKIE_NAME, result.accessToken, {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: COOKIE_MAX_AGE_ACCESS
+      })
+    }
+  })
+
+  app.post('/api/users/auth/change-password', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(ChangePasswordDTO, req.body).validate()
+    await controller.changePassword(req as FastifyRequest<{ Body: ChangePasswordPayload }>, res)
+  })
 
   app.put('/api/users/:id', async (req: FastifyRequest, res: FastifyReply) => {
     new SchemaValidator(CheckIdDTO, req.params).validate()

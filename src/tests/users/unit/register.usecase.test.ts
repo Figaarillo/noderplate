@@ -1,10 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { RegisterUserUseCase } from '../../../core/users/application/use-cases/register.usecase'
-import { createMockUser, MockUserRepository, USER_FIXTURE } from '../helpers'
+import { createMockUser, MockUserRepository, MockHashProvider, MockTokenProvider, USER_FIXTURE } from '../helpers'
 
 describe('RegisterUserUseCase', () => {
   const repository = new MockUserRepository()
-  const useCase = new RegisterUserUseCase(repository)
+  const hashProvider = new MockHashProvider()
+  const tokenProvider = new MockTokenProvider()
+  const useCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
 
   afterEach(() => {
     repository.clear()
@@ -15,17 +17,17 @@ describe('RegisterUserUseCase', () => {
       const result = await useCase.execute(USER_FIXTURE)
 
       expect(result).toBeDefined()
-      expect(result.id).toBeDefined()
-      expect(result.email).toBe(USER_FIXTURE.email)
-      expect(result.firstName).toBe(USER_FIXTURE.firstName)
-      expect(result.lastName).toBe(USER_FIXTURE.lastName)
-      expect(result.role).toBe('user')
+      expect(result.user.id).toBeDefined()
+      expect(result.user.email).toBe(USER_FIXTURE.email)
+      expect(result.user.firstName).toBe(USER_FIXTURE.firstName)
+      expect(result.user.lastName).toBe(USER_FIXTURE.lastName)
+      expect(result.user.role).toBe('user')
     })
 
     it('uses custom role when provided', async () => {
       const result = await useCase.execute({ ...USER_FIXTURE, role: 'admin' })
 
-      expect(result.role).toBe('admin')
+      expect(result.user.role).toBe('admin')
     })
 
     it('throws error when email already exists', async () => {
@@ -38,14 +40,22 @@ describe('RegisterUserUseCase', () => {
       const user1 = await useCase.execute(USER_FIXTURE)
       const user2 = await useCase.execute({ ...USER_FIXTURE, email: 'another@example.com' })
 
-      expect(user1.id).not.toBe(user2.id)
+      expect(user1.user.id).not.toBe(user2.user.id)
     })
 
     it('sets createdAt and updatedAt timestamps', async () => {
       const result = await useCase.execute(USER_FIXTURE)
 
-      expect(result.createdAt).toBeInstanceOf(Date)
-      expect(result.updatedAt).toBeInstanceOf(Date)
+      expect(result.user.createdAt).toBeInstanceOf(Date)
+      expect(result.user.updatedAt).toBeInstanceOf(Date)
+    })
+
+    it('generates tokens on registration', async () => {
+      const result = await useCase.execute(USER_FIXTURE)
+
+      expect(result.tokens).toBeDefined()
+      expect(result.tokens.accessToken).toBeDefined()
+      expect(result.tokens.refreshToken).toBeDefined()
     })
   })
 })

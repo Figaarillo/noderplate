@@ -1,4 +1,5 @@
 import Fastify, { type FastifyInstance } from 'fastify'
+import fastifyCookie from '@fastify/cookie'
 import { buildContainer } from '../container/build-container'
 import { registerUserRoutes } from '../../interfaces/http/fastify/users/routes/user.route'
 import type { AppContainer } from '../container/types'
@@ -25,6 +26,8 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
   const app = Fastify({
     logger: true
   })
+
+  await app.register(fastifyCookie)
 
   registerUserRoutes(app, container)
 
