@@ -2,6 +2,8 @@ import type { User } from '../../../../../core/users/domain/entities/user.entity
 import type { UpdateUserPayload } from '../../../../../core/users/domain/types/payloads/update-user.payload'
 import type { UserRepository } from '../../../../../core/users/domain/repositories/user.repository'
 import { prisma } from '../../shared/client'
+import { UserNotFoundError, UserUpdateError, UserDeleteError } from './user-errors'
+import { Prisma } from '@prisma/client'
 
 export class PrismaUserRepository implements UserRepository {
   async list(offset: number, limit: number): Promise<User[]> {
@@ -42,7 +44,7 @@ export class PrismaUserRepository implements UserRepository {
     return this.mapToDomain(created)
   }
 
-  async update(id: string, data: UpdateUserPayload): Promise<User | null> {
+  async update(id: string, data: UpdateUserPayload): Promise<User> {
     try {
       const updated = await prisma.user.update({
         where: { id },
@@ -57,13 +59,23 @@ export class PrismaUserRepository implements UserRepository {
         }
       })
       return this.mapToDomain(updated)
-    } catch {
-      return null
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new UserNotFoundError(`User with id ${id} not found`)
+      }
+      throw new UserUpdateError('Failed to update user')
     }
   }
 
   async delete(id: string): Promise<void> {
-    await prisma.user.delete({ where: { id } }).catch(() => {})
+    try {
+      await prisma.user.delete({ where: { id } })
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+        throw new UserNotFoundError(`User with id ${id} not found`)
+      }
+      throw new UserDeleteError('Failed to delete user')
+    }
   }
 
   private mapToDomain(prismaUser: {

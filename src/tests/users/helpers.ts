@@ -4,6 +4,7 @@ import type { LoginUserPayload } from '../../core/users/domain/types/payloads/lo
 import type { UpdateUserPayload } from '../../core/users/domain/types/payloads/update-user.payload'
 import type { HashProvider } from '../../core/shared/application/hash.provider'
 import type { TokenProvider, TokenPayload, AuthTokens } from '../../core/shared/application/token.provider'
+import type { EmailProvider, EmailPayload } from '../../core/shared/application/email.provider'
 
 export const USER_FIXTURE: RegisterUserPayload = {
   firstName: 'John',
@@ -202,5 +203,17 @@ export class MockAuthService {
       }
     }
     return null
+  }
+}
+
+export class MockEmailProvider implements EmailProvider {
+  readonly sentEmails: EmailPayload[] = []
+
+  async sendEmail(payload: EmailPayload): Promise<void> {
+    this.sentEmails.push(payload)
+  }
+
+  clear(): void {
+    this.sentEmails.length = 0
   }
 }

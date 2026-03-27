@@ -21,7 +21,13 @@ export class RegisterUserUseCase {
     }
 
     const hashedPassword = await this.hashProvider.hash(payload.password)
-    const userEntity = UserEntity.create(payload, hashedPassword)
+
+    const registerPayload = {
+      ...payload,
+      role: 'user'
+    }
+
+    const userEntity = UserEntity.create(registerPayload, hashedPassword)
     const user = userEntity.toPrimitive()
 
     const savedUser = await this.repository.save(user)

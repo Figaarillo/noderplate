@@ -24,10 +24,10 @@ describe('RegisterUserUseCase', () => {
       expect(result.user.role).toBe('user')
     })
 
-    it('uses custom role when provided', async () => {
+    it('ignores custom role and always uses user role (security)', async () => {
       const result = await useCase.execute({ ...USER_FIXTURE, role: 'admin' })
 
-      expect(result.user.role).toBe('admin')
+      expect(result.user.role).toBe('user')
     })
 
     it('throws error when email already exists', async () => {

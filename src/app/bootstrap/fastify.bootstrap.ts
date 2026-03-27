@@ -2,6 +2,7 @@ import Fastify, { type FastifyInstance } from 'fastify'
 import fastifyCookie from '@fastify/cookie'
 import fastifyMultipart from '@fastify/multipart'
 import fastifyCors from '@fastify/cors'
+import fastifyRateLimit from '@fastify/rate-limit'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
 import { buildContainer } from '../container/build-container'
@@ -66,6 +67,12 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
   await app.register(fastifyCors, {
     origin: true,
     credentials: true
+  })
+
+  await app.register(fastifyRateLimit, {
+    max: 100,
+    timeWindow: '1 minute',
+    allowList: ['/health', '/api-docs', '/api-docs-json']
   })
 
   await app.register(fastifyCookie)
