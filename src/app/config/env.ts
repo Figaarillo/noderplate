@@ -28,7 +28,7 @@ export function getBooleanEnv(key: string): boolean {
 }
 
 export const env = {
-  httpRuntime: getEnvOrDefault('HTTP_RUNTIME', 'fastify'),
+  httpRuntime: getEnvOrDefault('HTTP_RUNTIME', 'nest'),
   orm: getEnvOrDefault('ORM', 'mikroorm'),
   port: getNumberEnv('PORT'),
   database: {
