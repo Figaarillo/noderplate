@@ -1,4 +1,4 @@
-.PHONY: help run run.dev docker docker.build docker.run docker.run.db docker.stop docker.clean docker.restart.server db.migrate db.migrate.create db.migrate.up db.prisma.generate db.prisma.push db.prisma.migrate db.seed test test.unit test.e2e clean build check lint lint.fix format
+.PHONY: help run run.dev docker docker.build docker.run docker.run.db docker.stop docker.clean docker.restart.server db.migrate db.migrate.create db.migrate.up db.prisma.generate db.prisma.push db.prisma.migrate db.seed test test.unit test.e2e clean build check lint lint.fix format pgadmin pgadmin.stop
 
 # ############ VARIABLES ############ #
 DB_HOST?=localhost
@@ -25,6 +25,8 @@ help:
 	@echo ""
 	@echo "  Database:"
 	@echo "    make db.seed         - Seed database with default users"
+	@echo "    make pgadmin         - Run pgAdmin (http://localhost:8081)"
+	@echo "    make pgadmin.stop    - Stop pgAdmin"
 	@echo ""
 	@echo "  Testing:"
 	@echo "    make test            - Run all tests"
@@ -239,3 +241,22 @@ check:
 	@echo " │       RUNNING ALL QUALITY CHECKS       │ "
 	@echo " ╰────────────────────────────────────────╯ "
 	pnpm pre-check
+
+# ############# PGADMIN ############ #
+
+pgadmin:
+	@echo " ╭────────────────────────────────────────╮ "
+	@echo " │            RUNNING PGADMIN             │ "
+	@echo " ╰────────────────────────────────────────╯ "
+	docker compose up -d pgadmin
+	@echo " ╭────────────────────────────────────────╮ "
+	@echo " │  PGAdmin available at http://localhost:8081 │ "
+	@echo " │  Email: admin@example.com               │ "
+	@echo " │  Password: admin                         │ "
+	@echo " ╰────────────────────────────────────────╯ "
+
+pgadmin.stop:
+	@echo " ╭────────────────────────────────────────╮ "
+	@echo " │            STOPPING PGADMIN             │ "
+	@echo " ╰────────────────────────────────────────╯ "
+	docker compose stop pgadmin
