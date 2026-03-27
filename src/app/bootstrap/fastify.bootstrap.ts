@@ -36,6 +36,33 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
     logger: true
   })
 
+  app.setErrorHandler((error: Error & { statusCode?: number }, request, reply) => {
+    if (error.name === 'InvalidCredentialsError') {
+      reply.status(401).send({
+        statusCode: 401,
+        message: error.message,
+        error: 'Unauthorized'
+      })
+      return
+    }
+
+    if (error.message?.includes('not found')) {
+      reply.status(404).send({
+        statusCode: 404,
+        message: error.message,
+        error: 'Not Found'
+      })
+      return
+    }
+
+    request.log.error(error)
+    reply.status(error.statusCode ?? 500).send({
+      statusCode: error.statusCode ?? 500,
+      message: error.message,
+      error: 'Internal Server Error'
+    })
+  })
+
   await app.register(fastifyCors, {
     origin: true,
     credentials: true

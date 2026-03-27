@@ -33,6 +33,7 @@
     "seed": "pnpm ts-node prisma/seed.ts"
   },
   "prisma": {
+    "schema": "src/app/config/prisma/schema.prisma",
     "seed": "pnpm ts-node prisma/seed.ts"
   },
   "keywords": [
