@@ -12,6 +12,11 @@ interface AppRuntime {
 export async function createNestRuntime(): Promise<AppRuntime> {
   const app = await NestFactory.create(AppModule)
 
+  app.enableCors({
+    origin: true,
+    credentials: true
+  })
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,

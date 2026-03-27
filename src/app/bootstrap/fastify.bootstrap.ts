@@ -1,6 +1,7 @@
 import Fastify, { type FastifyInstance } from 'fastify'
 import fastifyCookie from '@fastify/cookie'
 import fastifyMultipart from '@fastify/multipart'
+import fastifyCors from '@fastify/cors'
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUi from '@fastify/swagger-ui'
 import { buildContainer } from '../container/build-container'
@@ -33,6 +34,11 @@ export async function createFastifyRuntime(): Promise<AppRuntime> {
 export async function createFastifyApp(container: AppContainer): Promise<FastifyInstance> {
   const app = Fastify({
     logger: true
+  })
+
+  await app.register(fastifyCors, {
+    origin: true,
+    credentials: true
   })
 
   await app.register(fastifyCookie)
