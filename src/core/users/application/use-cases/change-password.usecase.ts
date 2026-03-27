@@ -1,7 +1,7 @@
 import type { UserRepository } from '../../domain/repositories/user.repository'
 import type { ChangePasswordPayload } from '../../domain/types/payloads/change-password.payload'
 import type { HashProvider } from '../../../shared/application/hash.provider'
-import { InvalidCredentialsError } from '../../domain/errors/invalid-credentials.error'
+import { InvalidCredentialsError } from '../../../auth/domain/errors/invalid-credentials.error'
 
 export class ChangePasswordUseCase {
   constructor(

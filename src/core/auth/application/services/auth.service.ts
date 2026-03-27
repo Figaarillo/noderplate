@@ -1,15 +1,4 @@
-import type { TokenProvider } from '../../../shared/application/token.provider'
-
-export interface AuthTokens {
-  accessToken: string
-  refreshToken: string
-}
-
-export interface TokenPayload {
-  sub: string
-  email: string
-  role: string
-}
+import type { TokenProvider, AuthTokens, TokenPayload } from '../../../shared/application/token.provider'
 
 export class AuthService {
   constructor(readonly tokenProvider: TokenProvider) {}
