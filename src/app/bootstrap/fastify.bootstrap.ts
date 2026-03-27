@@ -15,7 +15,7 @@ export async function createFastifyRuntime(): Promise<AppRuntime> {
 
   return {
     async start() {
-      const port = Number(process.env.PORT ?? 5000)
+      const port = Number(process.env.PORT ?? 8080)
       await app.listen({ host: '0.0.0.0', port })
       // eslint-disable-next-line no-console
       console.log(`Server is running! Go to http://localhost:${port}`)

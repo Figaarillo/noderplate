@@ -43,6 +43,7 @@
     "@nestjs/cli": "^11.0.16",
     "@nestjs/testing": "^11.1.17",
     "@types/bcrypt": "5.0.2",
+    "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "9.0.5",
     "@types/module-alias": "2.0.4",
     "@types/node": "20.10.5",

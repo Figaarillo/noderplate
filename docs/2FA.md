@@ -40,12 +40,18 @@ src/
 │           └── verification-code.repository.ts      # Repositorio en memoria
 └── interfaces/
     └── http/
-        └── fastify/
+        ├── fastify/
+        │   └── auth/
+        │       ├── controllers/
+        │       │   └── auth.controller.ts           # Controlador de auth
+        │       └── routes/
+        │           └── auth-2fa.route.ts          # Rutas de 2FA
+        └── nest/                    # ✅ 2FA también disponible en NestJS
             └── auth/
                 ├── controllers/
-                │   └── auth.controller.ts           # Controlador de auth
-                └── routes/
-                    └── auth-2fa.route.ts          # Rutas de 2FA
+                │   └── auth.controller.ts        # Controlador NestJS
+                └── modules/
+                    └── auth.module.ts             # Módulo de auth
 ```
 
 ## Flujo de Login con 2FA
@@ -121,6 +127,12 @@ Los códigos de verificación pueden ser de diferentes tipos:
 | POST   | `/api/auth/verify-2fa`        | Verifica el código ingresa         |
 | POST   | `/api/auth/resend-2fa`        | Reenvía código de verificación     |
 
+## Runtime
+
+**2FA funciona tanto con Fastify como con NestJS.**
+
+Puerto unificado: `8080` (ambos runtimes usan el mismo puerto)
+
 ## Configuración de Email
 
 Variables de entorno requeridas en `.env`:
@@ -141,7 +153,7 @@ EMAIL_FROM=noreply@yourdomain.com
 #### Paso 1: Login inicial
 
 ```http
-POST http://localhost:5000/api/users/auth/login
+POST http://localhost:3000/api/users/auth/login
 Content-Type: application/json
 
 {
@@ -166,7 +178,7 @@ Content-Type: application/json
 Usar el `tempToken` de la respuesta anterior:
 
 ```
-GET http://localhost:5000/auth/verify?token=YOUR_TEMP_TOKEN&type=login
+GET http://localhost:3000/auth/verify?token=YOUR_TEMP_TOKEN&type=login
 ```
 
 Esto retorna una página HTML con un formulario para ingresar el código.
@@ -174,7 +186,7 @@ Esto retorna una página HTML con un formulario para ingresar el código.
 #### Paso 3: Verificar código (desde la página o API)
 
 ```http
-POST http://localhost:5000/api/auth/verify-2fa
+POST http://localhost:3000/api/auth/verify-2fa
 Content-Type: application/json
 
 {
@@ -196,7 +208,7 @@ Content-Type: application/json
 #### Paso 4: Reenviar código (si no llegó)
 
 ```http
-POST http://localhost:5000/api/auth/resend-2fa
+POST http://localhost:3000/api/auth/resend-2fa
 Content-Type: application/json
 
 {
@@ -238,3 +250,16 @@ El usuario quería que la verificación 2FA no dependiera del frontend para rend
 - Solo un código pendiente por usuario/tipo a la vez
 - Tokens temporales firmados con JWT
 - Cookies httpOnly para tokens de sesión
+
+---
+
+## Notas Adicionales
+
+### Arquitectura General
+
+El flujo de 2FA es independiente del framework HTTP:
+
+- La lógica de negocio está en `src/core/auth/`
+- El servicio `TwoFactorAuthService` maneja la generación y verificación de códigos
+- El HTML de verificación es generado por `src/infrastructure/templates/verification-code.email.template.ts`
+- Los controladores existen para ambos frameworks: Fastify y NestJS

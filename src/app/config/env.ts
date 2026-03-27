@@ -29,8 +29,8 @@ export function getBooleanEnv(key: string): boolean {
 
 export const env = {
   httpRuntime: getEnvOrDefault('HTTP_RUNTIME', 'nest'),
-  orm: getEnvOrDefault('ORM', 'mikroorm'),
-  port: getNumberEnv('PORT'),
+  orm: getEnvOrDefault('ORM', 'prisma'),
+  port: getNumberEnv('PORT') || 8080,
   database: {
     host: getEnvOrDefault('DATABASE_HOST', 'localhost'),
     port: getNumberEnv('DATABASE_PORT'),

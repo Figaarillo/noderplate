@@ -9,7 +9,7 @@ import { NodemailerEmailProvider } from '../../infrastructure/email/nodemailer.p
 import type { AppContainer } from './types'
 
 export async function registerInfrastructure(container: AppContainer): Promise<void> {
-  const ormType = process.env.ORM ?? 'mikroorm'
+  const ormType = process.env.ORM ?? 'prisma'
 
   container.providers = {
     hashProvider: new BcryptHashProvider(),
