@@ -3,14 +3,13 @@ import { CannotSaveUserError } from '../../domain/errors/cannot-save-user.error'
 import type { UserRepository } from '../../domain/repositories/user.repository'
 import type { RegisterUserPayload } from '../../domain/types/payloads/register-user.payload'
 import type { HashProvider } from '../../../shared/application/hash.provider'
-import type { TokenProvider } from '../../../shared/application/token.provider'
-import type { AuthTokens } from './login.usecase'
+import type { AuthService, AuthTokens } from '../../../auth/application/services/auth.service'
 
 export class RegisterUserUseCase {
   constructor(
     private readonly repository: UserRepository,
     private readonly hashProvider: HashProvider,
-    private readonly tokenProvider: TokenProvider
+    private readonly authService: AuthService
   ) {}
 
   async execute(
@@ -30,28 +29,12 @@ export class RegisterUserUseCase {
       throw new CannotSaveUserError()
     }
 
-    const tokens = this.generateTokens(savedUser)
+    const tokens = this.authService.generateTokens({
+      sub: savedUser.id,
+      email: savedUser.email,
+      role: savedUser.role
+    })
 
     return { user: savedUser, tokens }
-  }
-
-  private generateTokens(user: ReturnType<UserEntity['toPrimitive']>): AuthTokens {
-    const payload = {
-      sub: user.id,
-      email: user.email,
-      role: user.role
-    }
-
-    const accessToken = this.tokenProvider.generateToken({
-      ...payload,
-      type: 'access'
-    })
-
-    const refreshToken = this.tokenProvider.generateRefreshToken({
-      ...payload,
-      type: 'refresh'
-    })
-
-    return { accessToken, refreshToken }
   }
 }

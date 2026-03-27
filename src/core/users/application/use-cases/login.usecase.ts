@@ -1,20 +1,15 @@
 import type { User } from '../../domain/entities/user.entity'
-import { InvalidCredentialsError } from '../../domain/errors/invalid-credentials.error'
+import { InvalidCredentialsError } from '../../../auth/domain/errors/invalid-credentials.error'
 import type { UserRepository } from '../../domain/repositories/user.repository'
 import type { LoginUserPayload } from '../../domain/types/payloads/login-user.payload'
 import type { HashProvider } from '../../../shared/application/hash.provider'
-import type { TokenProvider } from '../../../shared/application/token.provider'
-
-export interface AuthTokens {
-  accessToken: string
-  refreshToken: string
-}
+import type { AuthService, AuthTokens } from '../../../auth/application/services/auth.service'
 
 export class LoginUserUseCase {
   constructor(
     private readonly repository: UserRepository,
     private readonly hashProvider: HashProvider,
-    private readonly tokenProvider: TokenProvider
+    private readonly authService: AuthService
   ) {}
 
   async execute(payload: LoginUserPayload): Promise<{ user: User; tokens: AuthTokens }> {
@@ -28,28 +23,12 @@ export class LoginUserUseCase {
       throw new InvalidCredentialsError()
     }
 
-    const tokens = this.generateTokens(user)
-
-    return { user, tokens }
-  }
-
-  private generateTokens(user: User): AuthTokens {
-    const payload = {
+    const tokens = this.authService.generateTokens({
       sub: user.id,
       email: user.email,
       role: user.role
-    }
-
-    const accessToken = this.tokenProvider.generateToken({
-      ...payload,
-      type: 'access'
     })
 
-    const refreshToken = this.tokenProvider.generateRefreshToken({
-      ...payload,
-      type: 'refresh'
-    })
-
-    return { accessToken, refreshToken }
+    return { user, tokens }
   }
 }

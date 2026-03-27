@@ -3,7 +3,7 @@ import type { RegisterUserPayload } from '../../core/users/domain/types/payloads
 import type { LoginUserPayload } from '../../core/users/domain/types/payloads/login-user.payload'
 import type { UpdateUserPayload } from '../../core/users/domain/types/payloads/update-user.payload'
 import type { HashProvider } from '../../core/shared/application/hash.provider'
-import type { TokenProvider } from '../../core/shared/application/token.provider'
+import type { TokenProvider, TokenPayload, AuthTokens } from '../../core/shared/application/token.provider'
 
 export const USER_FIXTURE: RegisterUserPayload = {
   firstName: 'John',
@@ -130,18 +130,77 @@ export class MockHashProvider implements HashProvider {
 }
 
 export class MockTokenProvider implements TokenProvider {
-  generateToken(payload: Record<string, unknown>): string {
-    return `access_token_${JSON.stringify(payload)}`
+  generateToken(payload: TokenPayload): AuthTokens {
+    return {
+      accessToken: `access_token_${payload.sub}_${payload.email}_${payload.role}`,
+      refreshToken: `refresh_token_${payload.sub}_${payload.email}_${payload.role}`
+    }
   }
 
-  verifyToken(token: string): Record<string, unknown> | null {
-    if (token.startsWith('access_token_') || token.startsWith('refresh_token_')) {
-      return JSON.parse(token.split('_')[2])
+  verifyAccessToken(token: string): Record<string, unknown> | null {
+    if (token.startsWith('access_token_')) {
+      const parts = token.split('_')
+      return {
+        sub: parts[2],
+        email: parts[3],
+        role: parts[4],
+        type: 'access'
+      }
     }
     return null
   }
 
-  generateRefreshToken(payload: Record<string, unknown>): string {
-    return `refresh_token_${JSON.stringify(payload)}`
+  verifyRefreshToken(token: string): Record<string, unknown> | null {
+    if (token.startsWith('refresh_token_')) {
+      const parts = token.split('_')
+      return {
+        sub: parts[2],
+        email: parts[3],
+        role: parts[4],
+        type: 'refresh'
+      }
+    }
+    return null
+  }
+}
+
+export class MockAuthService {
+  tokenProvider: MockTokenProvider
+
+  constructor() {
+    this.tokenProvider = new MockTokenProvider()
+  }
+
+  generateTokens(payload: TokenPayload): AuthTokens {
+    return {
+      accessToken: `access_token_${payload.sub}_${payload.email}_${payload.role}`,
+      refreshToken: `refresh_token_${payload.sub}_${payload.email}_${payload.role}`
+    }
+  }
+
+  verifyAccessToken(token: string): Record<string, unknown> | null {
+    if (token.startsWith('access_token_')) {
+      const parts = token.split('_')
+      return {
+        sub: parts[2],
+        email: parts[3],
+        role: parts[4],
+        type: 'access'
+      }
+    }
+    return null
+  }
+
+  verifyRefreshToken(token: string): Record<string, unknown> | null {
+    if (token.startsWith('refresh_token_')) {
+      const parts = token.split('_')
+      return {
+        sub: parts[2],
+        email: parts[3],
+        role: parts[4],
+        type: 'refresh'
+      }
+    }
+    return null
   }
 }

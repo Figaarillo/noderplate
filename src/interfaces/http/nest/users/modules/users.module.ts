@@ -14,11 +14,13 @@ import type { TokenProvider } from '../../../../../core/shared/application/token
 import { PrismaUserRepository } from '../../../../../infrastructure/persistence/prisma/users/repositories/user.repository'
 import { BcryptHashProvider } from '../../../../../infrastructure/security/bcrypt-hash.provider'
 import { JwtTokenProvider } from '../../../../../infrastructure/security/jwt-token.provider'
+import { AuthService } from '../../../../../core/auth/application/services/auth.service'
 import { UsersController } from '../controllers/users.controller'
 
 const USER_REPOSITORY = 'USER_REPOSITORY'
 const HASH_PROVIDER = 'HASH_PROVIDER'
 const TOKEN_PROVIDER = 'TOKEN_PROVIDER'
+const AUTH_SERVICE = 'AUTH_SERVICE'
 const LIST_USERS_USE_CASE = 'LIST_USERS_USE_CASE'
 const FIND_BY_ID_USE_CASE = 'FIND_BY_ID_USE_CASE'
 const FIND_BY_EMAIL_USE_CASE = 'FIND_BY_EMAIL_USE_CASE'
@@ -45,6 +47,11 @@ const DELETE_USER_USE_CASE = 'DELETE_USER_USE_CASE'
       useFactory: (): TokenProvider => new JwtTokenProvider()
     },
     {
+      provide: AUTH_SERVICE,
+      useFactory: (tokenProvider: TokenProvider) => new AuthService(tokenProvider),
+      inject: [TOKEN_PROVIDER]
+    },
+    {
       provide: LIST_USERS_USE_CASE,
       useFactory: (userRepository: UserRepository) => new ListUsersUseCase(userRepository),
       inject: [USER_REPOSITORY]
@@ -61,21 +68,21 @@ const DELETE_USER_USE_CASE = 'DELETE_USER_USE_CASE'
     },
     {
       provide: REGISTER_USER_USE_CASE,
-      useFactory: (userRepository: UserRepository, hashProvider: HashProvider, tokenProvider: TokenProvider) =>
-        new RegisterUserUseCase(userRepository, hashProvider, tokenProvider),
-      inject: [USER_REPOSITORY, HASH_PROVIDER, TOKEN_PROVIDER]
+      useFactory: (userRepository: UserRepository, hashProvider: HashProvider, authService: AuthService) =>
+        new RegisterUserUseCase(userRepository, hashProvider, authService),
+      inject: [USER_REPOSITORY, HASH_PROVIDER, AUTH_SERVICE]
     },
     {
       provide: LOGIN_USER_USE_CASE,
-      useFactory: (userRepository: UserRepository, hashProvider: HashProvider, tokenProvider: TokenProvider) =>
-        new LoginUserUseCase(userRepository, hashProvider, tokenProvider),
-      inject: [USER_REPOSITORY, HASH_PROVIDER, TOKEN_PROVIDER]
+      useFactory: (userRepository: UserRepository, hashProvider: HashProvider, authService: AuthService) =>
+        new LoginUserUseCase(userRepository, hashProvider, authService),
+      inject: [USER_REPOSITORY, HASH_PROVIDER, AUTH_SERVICE]
     },
     {
       provide: REFRESH_TOKEN_USE_CASE,
-      useFactory: (userRepository: UserRepository, tokenProvider: TokenProvider) =>
-        new RefreshTokenUseCase(userRepository, tokenProvider),
-      inject: [USER_REPOSITORY, TOKEN_PROVIDER]
+      useFactory: (userRepository: UserRepository, authService: AuthService) =>
+        new RefreshTokenUseCase(userRepository, authService),
+      inject: [USER_REPOSITORY, AUTH_SERVICE]
     },
     {
       provide: CHANGE_PASSWORD_USE_CASE,

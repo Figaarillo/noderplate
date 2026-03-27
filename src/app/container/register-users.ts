@@ -9,14 +9,16 @@ import { DeleteUserUseCase } from '../../core/users/application/use-cases/delete
 import { LoginUserUseCase } from '../../core/users/application/use-cases/login.usecase'
 import { RefreshTokenUseCase } from '../../core/users/application/use-cases/refresh-token.usecase'
 import { ChangePasswordUseCase } from '../../core/users/application/use-cases/change-password.usecase'
+import { AuthService } from '../../core/auth/application/services/auth.service'
 
 export function registerUsers(container: AppContainer): void {
   const userRepository = container.repositories.userRepository
   const { hashProvider, tokenProvider } = container.providers
+  const authService = new AuthService(tokenProvider)
 
-  const registerUser = new RegisterUserUseCase(userRepository, hashProvider, tokenProvider)
-  const loginUser = new LoginUserUseCase(userRepository, hashProvider, tokenProvider)
-  const refreshToken = new RefreshTokenUseCase(userRepository, tokenProvider)
+  const registerUser = new RegisterUserUseCase(userRepository, hashProvider, authService)
+  const loginUser = new LoginUserUseCase(userRepository, hashProvider, authService)
+  const refreshToken = new RefreshTokenUseCase(userRepository, authService)
   const changePassword = new ChangePasswordUseCase(userRepository, hashProvider)
   const listUsers = new ListUsersUseCase(userRepository)
   const findById = new FindByIdUseCase(userRepository)

@@ -1,23 +1,38 @@
 import jwt from 'jsonwebtoken'
-import type { TokenProvider } from '../../core/shared/application/token.provider'
+import type { TokenProvider, TokenPayload, AuthTokens } from '../../core/shared/application/token.provider'
+import { env } from '../../app/config/env'
 
 export class JwtTokenProvider implements TokenProvider {
-  private readonly secret = process.env.JWT_SECRET ?? 'default-secret'
-  private readonly expiresIn = '1h'
+  private readonly accessTokenSecret = env.jwt.accessTokenSecret
+  private readonly refreshTokenSecret = env.jwt.refreshTokenSecret
+  private readonly accessTokenExpiresIn = env.jwt.accessTokenExpiresIn
+  private readonly refreshTokenExpiresIn = env.jwt.refreshTokenExpiresIn
 
-  generateToken(payload: Record<string, unknown>): string {
-    return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn })
+  generateToken(payload: TokenPayload): AuthTokens {
+    const accessToken = jwt.sign({ ...payload, type: 'access' }, this.accessTokenSecret, {
+      expiresIn: this.accessTokenExpiresIn
+    })
+
+    const refreshToken = jwt.sign({ ...payload, type: 'refresh' }, this.refreshTokenSecret, {
+      expiresIn: this.refreshTokenExpiresIn
+    })
+
+    return { accessToken, refreshToken }
   }
 
-  verifyToken(token: string): Record<string, unknown> | null {
+  verifyAccessToken(token: string): Record<string, unknown> | null {
     try {
-      return jwt.verify(token, this.secret) as Record<string, unknown>
+      return jwt.verify(token, this.accessTokenSecret) as Record<string, unknown>
     } catch {
       return null
     }
   }
 
-  generateRefreshToken(payload: Record<string, unknown>): string {
-    return jwt.sign(payload, this.secret, { expiresIn: '7d' })
+  verifyRefreshToken(token: string): Record<string, unknown> | null {
+    try {
+      return jwt.verify(token, this.refreshTokenSecret) as Record<string, unknown>
+    } catch {
+      return null
+    }
   }
 }

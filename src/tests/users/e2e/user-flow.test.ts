@@ -3,7 +3,7 @@ import type { UserRepository } from '../../../core/users/domain/repositories/use
 import {
   MockUserRepository,
   MockHashProvider,
-  MockTokenProvider,
+  MockAuthService,
   USER_FIXTURE,
   USER_FIXTURE_2,
   UPDATE_FIXTURE
@@ -18,17 +18,17 @@ import { UpdateUserUseCase } from '../../../core/users/application/use-cases/upd
 describe('User Module E2E', () => {
   let repository: UserRepository
   let hashProvider: MockHashProvider
-  let tokenProvider: MockTokenProvider
+  let authService: MockAuthService
 
   beforeEach(() => {
     repository = new MockUserRepository()
     hashProvider = new MockHashProvider()
-    tokenProvider = new MockTokenProvider()
+    authService = new MockAuthService()
   })
 
   describe('CRUD Flow', () => {
     it('performs full CRUD lifecycle', async () => {
-      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
+      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, authService)
       const findByIdUseCase = new FindByIdUseCase(repository)
       const updateUseCase = new UpdateUserUseCase(repository)
       const deleteUseCase = new DeleteUserUseCase(repository)
@@ -47,7 +47,7 @@ describe('User Module E2E', () => {
     })
 
     it('handles multiple users independently', async () => {
-      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
+      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, authService)
       const findByEmailUseCase = new FindByEmailUseCase(repository)
       const listUseCase = new ListUsersUseCase(repository)
 
@@ -66,14 +66,14 @@ describe('User Module E2E', () => {
     })
 
     it('prevents duplicate emails on registration', async () => {
-      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
+      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, authService)
 
       await registerUseCase.execute(USER_FIXTURE)
       await expect(registerUseCase.execute(USER_FIXTURE)).rejects.toThrow('User already exists')
     })
 
     it('supports pagination on list', async () => {
-      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
+      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, authService)
       const listUseCase = new ListUsersUseCase(repository)
 
       for (let i = 0; i < 5; i++) {
@@ -93,7 +93,7 @@ describe('User Module E2E', () => {
     })
 
     it('generates tokens on registration', async () => {
-      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
+      const registerUseCase = new RegisterUserUseCase(repository, hashProvider, authService)
 
       const result = await registerUseCase.execute(USER_FIXTURE)
 

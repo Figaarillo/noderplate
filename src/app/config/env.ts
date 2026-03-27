@@ -46,6 +46,9 @@ export const env = {
   },
   jwt: {
     secret: getEnvOrDefault('JWT_SECRET', 'default-secret'),
-    expiresIn: getEnvOrDefault('JWT_EXPIRES_IN', '1h')
+    accessTokenSecret: getEnvOrDefault('JWT_ACCESS_TOKEN_SECRET', getEnvOrDefault('JWT_SECRET', 'default-secret')),
+    refreshTokenSecret: getEnvOrDefault('JWT_REFRESH_TOKEN_SECRET', getEnvOrDefault('JWT_SECRET', 'default-secret')),
+    accessTokenExpiresIn: getEnvOrDefault('JWT_ACCESS_TOKEN_EXPIRES_IN', '1h'),
+    refreshTokenExpiresIn: getEnvOrDefault('JWT_REFRESH_TOKEN_EXPIRES_IN', '7d')
   }
 }

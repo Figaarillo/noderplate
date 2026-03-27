@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest'
 import { RegisterUserUseCase } from '../../../core/users/application/use-cases/register.usecase'
-import { createMockUser, MockUserRepository, MockHashProvider, MockTokenProvider, USER_FIXTURE } from '../helpers'
+import { createMockUser, MockUserRepository, MockHashProvider, MockAuthService, USER_FIXTURE } from '../helpers'
 
 describe('RegisterUserUseCase', () => {
   const repository = new MockUserRepository()
   const hashProvider = new MockHashProvider()
-  const tokenProvider = new MockTokenProvider()
-  const useCase = new RegisterUserUseCase(repository, hashProvider, tokenProvider)
+  const authService = new MockAuthService()
+  const useCase = new RegisterUserUseCase(repository, hashProvider, authService)
 
   afterEach(() => {
     repository.clear()
