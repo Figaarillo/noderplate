@@ -70,20 +70,25 @@ export class UserController {
   }
 
   async register(
-    req: FastifyRequest<{ Body: RegisterUserPayload }>,
+    req: FastifyRequest<{ Body: RegisterUserPayload & { redirectUrl?: string } }>,
     res: FastifyReply
-  ): Promise<{ id: string; message: string }> {
-    const payload = req.body
+  ): Promise<{ id: string; message: string; verificationUrl: string }> {
+    const { redirectUrl, ...payload } = req.body
 
-    const result = await this.deps.registerUser.execute(payload)
+    const result = await this.deps.registerUser.execute(payload, redirectUrl)
 
     res.status(201).send({
       data: {
         id: result.user.id,
-        message: 'Usuario registrado. Por favor verifica tu email.'
+        message: 'Usuario registrado. Por favor verifica tu email.',
+        verificationUrl: result.verificationUrl
       }
     })
-    return { id: result.user.id, message: 'Usuario registrado. Por favor verifica tu email.' }
+    return {
+      id: result.user.id,
+      message: 'Usuario registrado. Por favor verifica tu email.',
+      verificationUrl: result.verificationUrl
+    }
   }
 
   async verifyEmail(req: FastifyRequest<{ Body: VerifyEmailBody }>, res: FastifyReply): Promise<void> {

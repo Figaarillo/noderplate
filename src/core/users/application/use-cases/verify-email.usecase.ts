@@ -1,10 +1,15 @@
 import type { UserRepository } from '../../domain/repositories/user.repository'
 import { UserStatus } from '../../domain/user-status'
 
+const MAX_ATTEMPTS = 3
+
 export class VerifyEmailUseCase {
   constructor(private readonly repository: UserRepository) {}
 
-  async execute(email: string, code: string): Promise<{ success: boolean; message: string }> {
+  async execute(
+    email: string,
+    code: string
+  ): Promise<{ success: boolean; message: string; attemptsRemaining?: number }> {
     const user = await this.repository.findByEmail(email)
     if (user == null) {
       return { success: false, message: 'Usuario no encontrado' }
@@ -15,7 +20,7 @@ export class VerifyEmailUseCase {
     }
 
     if (user.verificationCode !== code) {
-      return { success: false, message: 'Código de verificación inválido' }
+      return { success: false, message: `Código de verificación inválido. Intentos restantes: ${MAX_ATTEMPTS}` }
     }
 
     if (user.verificationExp && new Date() > user.verificationExp) {

@@ -99,21 +99,30 @@ export class UsersController {
     schema: { example: { data: { id: 'uuid', message: 'Usuario registrado. Por favor verifica tu email.' } } }
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
-  async register(@Body() dto: RegisterUserDto): Promise<{ data: { id: string; message: string } }> {
+  async register(
+    @Body() dto: RegisterUserDto & { redirectUrl?: string }
+  ): Promise<{ data: { id: string; message: string; verificationUrl: string } }> {
+    const { redirectUrl, ...rest } = dto
     const payload: RegisterUserPayload = {
-      firstName: dto.firstName,
-      lastName: dto.lastName,
-      email: dto.email,
-      password: dto.password,
-      phoneNumber: dto.phoneNumber,
-      city: dto.city,
-      province: dto.province,
-      country: dto.country,
-      role: dto.role ?? 'user'
+      firstName: rest.firstName,
+      lastName: rest.lastName,
+      email: rest.email,
+      password: rest.password,
+      phoneNumber: rest.phoneNumber,
+      city: rest.city,
+      province: rest.province,
+      country: rest.country,
+      role: rest.role ?? 'user'
     }
 
-    const result = await this.registerUserUseCase.execute(payload)
-    return { data: { id: result.user.id, message: 'Usuario registrado. Por favor verifica tu email.' } }
+    const result = await this.registerUserUseCase.execute(payload, redirectUrl)
+    return {
+      data: {
+        id: result.user.id,
+        message: 'Usuario registrado. Por favor verifica tu email.',
+        verificationUrl: result.verificationUrl
+      }
+    }
   }
 
   @Post('verify')

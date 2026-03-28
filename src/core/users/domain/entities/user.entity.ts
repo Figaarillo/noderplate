@@ -84,4 +84,9 @@ export class UserEntity {
   toPrimitive(): User {
     return { ...this.user }
   }
+
+  toPublic(): Omit<User, 'password' | 'verificationCode' | 'verificationExp'> {
+    const { password, verificationCode, verificationExp, ...user } = this.user
+    return user
+  }
 }

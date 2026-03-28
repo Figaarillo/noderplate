@@ -14,6 +14,7 @@ import {
   VerifyEmailDTO
 } from '../schemas/user.dto'
 import { SchemaValidator } from '../zod-schema-validator.middleware'
+import { verifyEmailPageHtml } from './verify-email-page.route'
 
 const ACCESS_TOKEN_COOKIE_NAME = 'accessToken'
 const REFRESH_TOKEN_COOKIE_NAME = 'refreshToken'
@@ -62,6 +63,16 @@ export function registerUserRoutes(app: FastifyInstance, container: AppContainer
   app.post('/api/users/verify', async (req: FastifyRequest, res: FastifyReply) => {
     new SchemaValidator(VerifyEmailDTO, req.body).validate()
     await controller.verifyEmail(req as FastifyRequest<{ Body: VerifyEmailBody }>, res)
+  })
+
+  app.get('/verify-email', async (req: FastifyRequest, res: FastifyReply) => {
+    const { email } = req.query as { email?: string }
+    if (!email) {
+      res.status(400).send('Missing email')
+      return
+    }
+    const html = verifyEmailPageHtml(email)
+    res.status(200).header('Content-Type', 'text/html').send(html)
   })
 
   app.post('/api/users/auth/login', async (req: FastifyRequest, res: FastifyReply) => {

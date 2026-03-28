@@ -12,6 +12,7 @@ function generateVerificationCode(): string {
 export interface RegisterUserResult {
   user: ReturnType<UserEntity['toPrimitive']>
   verificationCode: string
+  verificationUrl: string
 }
 
 export class RegisterUserUseCase {
@@ -21,7 +22,7 @@ export class RegisterUserUseCase {
     private readonly emailProvider: EmailProvider
   ) {}
 
-  async execute(payload: RegisterUserPayload): Promise<RegisterUserResult> {
+  async execute(payload: RegisterUserPayload, redirectUrl?: string): Promise<RegisterUserResult> {
     const existingUser = await this.repository.findByEmail(payload.email)
     if (existingUser != null) {
       throw new CannotSaveUserError('User already exists')
@@ -45,16 +46,22 @@ export class RegisterUserUseCase {
       throw new CannotSaveUserError()
     }
 
+    const baseUrl = redirectUrl ?? process.env.APP_URL ?? 'http://localhost:8080'
+    const verificationUrl = `${baseUrl}/verify-email?email=${encodeURIComponent(savedUser.email)}`
+
     await this.emailProvider.sendEmail({
       to: savedUser.email,
       subject: 'Verifica tu cuenta',
       html: `
         <h1>Verificación de cuenta</h1>
-        <p>Tu código de verificación es: <strong>${verificationCode}</strong></p>
+        <p>Para verificar tu cuenta, ingresa el código de 6 dígitos en la página de verificación.</p>
+        <p>Tu código es: <strong>${verificationCode}</strong></p>
+        <p>Haz clic en el siguiente enlace para verificar:</p>
+        <p><a href="${verificationUrl}">Verificar mi cuenta</a></p>
         <p>Este código expira en 15 minutos.</p>
       `
     })
 
-    return { user: savedUser, verificationCode }
+    return { user: savedUser, verificationCode, verificationUrl }
   }
 }
