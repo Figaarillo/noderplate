@@ -3,18 +3,25 @@ import { CannotSaveUserError } from '../../domain/errors/cannot-save-user.error'
 import type { UserRepository } from '../../domain/repositories/user.repository'
 import type { RegisterUserPayload } from '../../domain/types/payloads/register-user.payload'
 import type { HashProvider } from '../../../shared/application/hash.provider'
-import type { AuthService, AuthTokens } from '../../../auth/application/services/auth.service'
+import type { EmailProvider } from '../../../shared/application/email.provider'
+
+function generateVerificationCode(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString()
+}
+
+export interface RegisterUserResult {
+  user: ReturnType<UserEntity['toPrimitive']>
+  verificationCode: string
+}
 
 export class RegisterUserUseCase {
   constructor(
     private readonly repository: UserRepository,
     private readonly hashProvider: HashProvider,
-    private readonly authService: AuthService
+    private readonly emailProvider: EmailProvider
   ) {}
 
-  async execute(
-    payload: RegisterUserPayload
-  ): Promise<{ user: ReturnType<UserEntity['toPrimitive']>; tokens: AuthTokens }> {
+  async execute(payload: RegisterUserPayload): Promise<RegisterUserResult> {
     const existingUser = await this.repository.findByEmail(payload.email)
     if (existingUser != null) {
       throw new CannotSaveUserError('User already exists')
@@ -28,6 +35,9 @@ export class RegisterUserUseCase {
     }
 
     const userEntity = UserEntity.create(registerPayload, hashedPassword)
+    const verificationCode = generateVerificationCode()
+    userEntity.setVerificationCode(verificationCode)
+
     const user = userEntity.toPrimitive()
 
     const savedUser = await this.repository.save(user)
@@ -35,12 +45,16 @@ export class RegisterUserUseCase {
       throw new CannotSaveUserError()
     }
 
-    const tokens = this.authService.generateTokens({
-      sub: savedUser.id,
-      email: savedUser.email,
-      role: savedUser.role
+    await this.emailProvider.sendEmail({
+      to: savedUser.email,
+      subject: 'Verifica tu cuenta',
+      html: `
+        <h1>Verificación de cuenta</h1>
+        <p>Tu código de verificación es: <strong>${verificationCode}</strong></p>
+        <p>Este código expira en 15 minutos.</p>
+      `
     })
 
-    return { user: savedUser, tokens }
+    return { user: savedUser, verificationCode }
   }
 }

@@ -7,5 +7,12 @@ export interface UserRepository {
   findByEmail: (email: string) => Promise<User | null>
   save: (user: User) => Promise<User>
   update: (id: string, data: UpdateUserPayload) => Promise<User | null>
+  updateVerification: (
+    id: string,
+    isEmailVerified: boolean,
+    status: string,
+    verificationCode?: string | null,
+    verificationExp?: Date | null
+  ) => Promise<User | null>
   delete: (id: string) => Promise<void>
 }

@@ -11,6 +11,7 @@ import { registerAuth2FARoutes } from '../../interfaces/http/fastify/auth/routes
 import { registerAuthSwaggerRoutes } from '../../interfaces/http/fastify/swagger/auth-swagger.route'
 import { swaggerConfig } from '../../infrastructure/swagger/swagger.config'
 import type { AppContainer } from '../container/types'
+import { SchemaValidationException } from '../../interfaces/http/fastify/shared/zod-error-map'
 
 interface AppRuntime {
   start: () => Promise<void>
@@ -38,6 +39,16 @@ export async function createFastifyApp(container: AppContainer): Promise<Fastify
   })
 
   app.setErrorHandler((error: Error & { statusCode?: number }, request, reply) => {
+    if (error instanceof SchemaValidationException) {
+      reply.status(400).send({
+        statusCode: 400,
+        success: false,
+        error: error.response.error,
+        details: error.response.details
+      })
+      return
+    }
+
     if (error.name === 'InvalidCredentialsError') {
       reply.status(401).send({
         statusCode: 401,

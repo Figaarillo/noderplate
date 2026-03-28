@@ -1,6 +1,6 @@
 {
   "include": ["src/**/*.ts"],
-  "exclude": [],
+  "exclude": ["src/tests"],
 
   "compilerOptions": {
     "incremental": true,

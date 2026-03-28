@@ -5,6 +5,7 @@ import { ListUsersUseCase } from '../../../../../core/users/application/use-case
 import { FindByIdUseCase } from '../../../../../core/users/application/use-cases/find-by-id.usecase'
 import { FindByEmailUseCase } from '../../../../../core/users/application/use-cases/find-by-email.usecase'
 import { RegisterUserUseCase } from '../../../../../core/users/application/use-cases/register.usecase'
+import { VerifyEmailUseCase } from '../../../../../core/users/application/use-cases/verify-email.usecase'
 import { LoginUserUseCase } from '../../../../../core/users/application/use-cases/login.usecase'
 import { RefreshTokenUseCase } from '../../../../../core/users/application/use-cases/refresh-token.usecase'
 import { ChangePasswordUseCase } from '../../../../../core/users/application/use-cases/change-password.usecase'
@@ -16,6 +17,7 @@ import type { UpdateUserPayload } from '../../../../../core/users/domain/types/p
 import type { ChangePasswordPayload } from '../../../../../core/users/domain/types/payloads/change-password.payload'
 import {
   RegisterUserDto,
+  VerifyEmailDto,
   UpdateUserDto,
   PaginationQueryDto,
   IdParamDto,
@@ -28,6 +30,7 @@ import {
   FIND_BY_ID_USE_CASE,
   FIND_BY_EMAIL_USE_CASE,
   REGISTER_USER_USE_CASE,
+  VERIFY_EMAIL_USE_CASE,
   LOGIN_USER_USE_CASE,
   REFRESH_TOKEN_USE_CASE,
   CHANGE_PASSWORD_USE_CASE,
@@ -43,6 +46,7 @@ export class UsersController {
     @Inject(FIND_BY_ID_USE_CASE) private readonly findByIdUseCase: FindByIdUseCase,
     @Inject(FIND_BY_EMAIL_USE_CASE) private readonly findByEmailUseCase: FindByEmailUseCase,
     @Inject(REGISTER_USER_USE_CASE) private readonly registerUserUseCase: RegisterUserUseCase,
+    @Inject(VERIFY_EMAIL_USE_CASE) private readonly verifyEmailUseCase: VerifyEmailUseCase,
     @Inject(LOGIN_USER_USE_CASE) private readonly loginUserUseCase: LoginUserUseCase,
     @Inject(REFRESH_TOKEN_USE_CASE) private readonly refreshTokenUseCase: RefreshTokenUseCase,
     @Inject(CHANGE_PASSWORD_USE_CASE) private readonly changePasswordUseCase: ChangePasswordUseCase,
@@ -91,13 +95,11 @@ export class UsersController {
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({
     status: 201,
-    description: 'User registered successfully',
-    schema: { example: { data: { id: 'uuid', tokens: { accessToken: 'eyJhbGci...', refreshToken: 'eyJhbGci...' } } } }
+    description: 'User registered successfully. Please verify your email.',
+    schema: { example: { data: { id: 'uuid', message: 'Usuario registrado. Por favor verifica tu email.' } } }
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
-  async register(
-    @Body() dto: RegisterUserDto
-  ): Promise<{ data: { id: string; tokens: { accessToken: string; refreshToken: string } } }> {
+  async register(@Body() dto: RegisterUserDto): Promise<{ data: { id: string; message: string } }> {
     const payload: RegisterUserPayload = {
       firstName: dto.firstName,
       lastName: dto.lastName,
@@ -111,7 +113,20 @@ export class UsersController {
     }
 
     const result = await this.registerUserUseCase.execute(payload)
-    return { data: { id: result.user.id, tokens: result.tokens } }
+    return { data: { id: result.user.id, message: 'Usuario registrado. Por favor verifica tu email.' } }
+  }
+
+  @Post('verify')
+  @ApiOperation({ summary: 'Verify email', description: 'Verify user email with verification code' })
+  @ApiResponse({
+    status: 200,
+    description: 'Email verified successfully',
+    schema: { example: { data: { success: true, message: 'Email verificado correctamente' } } }
+  })
+  @ApiResponse({ status: 400, description: 'Invalid verification code' })
+  async verifyEmail(@Body() dto: VerifyEmailDto): Promise<{ data: { success: boolean; message: string } }> {
+    const result = await this.verifyEmailUseCase.execute(dto.email, dto.code)
+    return { data: result }
   }
 
   @Post('auth/login')

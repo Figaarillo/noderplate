@@ -18,6 +18,10 @@ export class LoginUserUseCase {
       throw new InvalidCredentialsError()
     }
 
+    if (!user.isEmailVerified) {
+      throw new InvalidCredentialsError('Email not verified. Please verify your email first.')
+    }
+
     const isValid = await this.hashProvider.compare(payload.password, user.password)
     if (!isValid) {
       throw new InvalidCredentialsError()

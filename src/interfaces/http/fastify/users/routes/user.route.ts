@@ -1,11 +1,18 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import type { AppContainer } from '../../../../../app/container/types'
-import type { PaginationQuery, IdParams } from '../controllers/user.controller'
+import type { PaginationQuery, IdParams, VerifyEmailBody } from '../controllers/user.controller'
 import type { RegisterUserPayload } from '../../../../../core/users/domain/types/payloads/register-user.payload'
 import type { LoginUserPayload } from '../../../../../core/users/domain/types/payloads/login-user.payload'
 import type { UpdateUserPayload } from '../../../../../core/users/domain/types/payloads/update-user.payload'
 import type { ChangePasswordPayload } from '../../../../../core/users/domain/types/payloads/change-password.payload'
-import { RegisterUserDTO, UpdateUserDTO, CheckIdDTO, LoginUserDTO, ChangePasswordDTO } from '../schemas/user.dto'
+import {
+  RegisterUserDTO,
+  UpdateUserDTO,
+  CheckIdDTO,
+  LoginUserDTO,
+  ChangePasswordDTO,
+  VerifyEmailDTO
+} from '../schemas/user.dto'
 import { SchemaValidator } from '../zod-schema-validator.middleware'
 
 const ACCESS_TOKEN_COOKIE_NAME = 'accessToken'
@@ -49,10 +56,12 @@ export function registerUserRoutes(app: FastifyInstance, container: AppContainer
 
   app.post('/api/users', async (req: FastifyRequest, res: FastifyReply) => {
     new SchemaValidator(RegisterUserDTO, req.body).validate()
-    const result = await controller.register(req as FastifyRequest<{ Body: RegisterUserPayload }>, res)
-    if (result?.tokens) {
-      setAuthCookies(res, result.tokens.accessToken, result.tokens.refreshToken)
-    }
+    await controller.register(req as FastifyRequest<{ Body: RegisterUserPayload }>, res)
+  })
+
+  app.post('/api/users/verify', async (req: FastifyRequest, res: FastifyReply) => {
+    new SchemaValidator(VerifyEmailDTO, req.body).validate()
+    await controller.verifyEmail(req as FastifyRequest<{ Body: VerifyEmailBody }>, res)
   })
 
   app.post('/api/users/auth/login', async (req: FastifyRequest, res: FastifyReply) => {

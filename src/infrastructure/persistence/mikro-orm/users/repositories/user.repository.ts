@@ -3,6 +3,7 @@ import type { User } from '../../../../../core/users/domain/entities/user.entity
 import type { UpdateUserPayload } from '../../../../../core/users/domain/types/payloads/update-user.payload'
 import type { UserRepository } from '../../../../../core/users/domain/repositories/user.repository'
 import { UserMikroORM } from '../entities/user.entity'
+import { UserStatus } from '../../../../../core/users/domain/user-status'
 
 export class MikroORMUserRepository implements UserRepository {
   constructor(private readonly em: EntityManager) {}
@@ -47,6 +48,24 @@ export class MikroORMUserRepository implements UserRepository {
     return this.mapToDomain(user)
   }
 
+  async updateVerification(
+    id: string,
+    _isEmailVerified: boolean,
+    _status: string,
+    _verificationCode?: string | null,
+    _verificationExp?: Date | null
+  ): Promise<User | null> {
+    const user = await this.em.findOne(UserMikroORM, { id })
+    if (user == null) {
+      return null
+    }
+
+    user.updatedAt = new Date()
+    await this.em.flush()
+
+    return this.mapToDomain(user)
+  }
+
   async delete(id: string): Promise<void> {
     const user = await this.em.findOne(UserMikroORM, { id })
     if (user != null) {
@@ -66,6 +85,10 @@ export class MikroORMUserRepository implements UserRepository {
       province: orm.province,
       country: orm.country,
       role: orm.role,
+      status: UserStatus.VERIFIED,
+      isEmailVerified: true,
+      verificationCode: null,
+      verificationExp: null,
       createdAt: orm.createdAt,
       updatedAt: orm.updatedAt
     }

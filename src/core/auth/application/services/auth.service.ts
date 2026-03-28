@@ -1,5 +1,7 @@
 import type { TokenProvider, AuthTokens, TokenPayload } from '../../../shared/application/token.provider'
 
+export type { AuthTokens }
+
 export class AuthService {
   constructor(readonly tokenProvider: TokenProvider) {}
 

@@ -2,6 +2,7 @@ import type { AppContainer } from './types'
 import { UserController } from '../../interfaces/http/fastify/users/controllers/user.controller'
 import { AuthController } from '../../interfaces/http/fastify/auth/controllers/auth.controller'
 import { RegisterUserUseCase } from '../../core/users/application/use-cases/register.usecase'
+import { VerifyEmailUseCase } from '../../core/users/application/use-cases/verify-email.usecase'
 import { ListUsersUseCase } from '../../core/users/application/use-cases/list.usecase'
 import { FindByIdUseCase } from '../../core/users/application/use-cases/find-by-id.usecase'
 import { FindByEmailUseCase } from '../../core/users/application/use-cases/find-by-email.usecase'
@@ -22,7 +23,8 @@ export function registerUsers(container: AppContainer): void {
   const emailProvider = container.providers.emailProvider
   const authService = new AuthService(tokenProvider)
 
-  const registerUser = new RegisterUserUseCase(userRepo, hashProvider, authService)
+  const registerUser = new RegisterUserUseCase(userRepo, hashProvider, emailProvider)
+  const verifyEmail = new VerifyEmailUseCase(userRepo)
   const loginUser = new LoginUserUseCase(userRepo, hashProvider, authService)
   const refreshToken = new RefreshTokenUseCase(userRepo, authService)
   const changePassword = new ChangePasswordUseCase(userRepo, hashProvider)
@@ -37,6 +39,7 @@ export function registerUsers(container: AppContainer): void {
     findById,
     findByEmail,
     registerUser,
+    verifyEmail,
     loginUser,
     refreshToken,
     changePassword,

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { RegisterUserUseCase } from '../../../../../core/users/application/use-cases/register.usecase'
+import { VerifyEmailUseCase } from '../../../../../core/users/application/use-cases/verify-email.usecase'
 import { ListUsersUseCase } from '../../../../../core/users/application/use-cases/list.usecase'
 import { FindByIdUseCase } from '../../../../../core/users/application/use-cases/find-by-id.usecase'
 import { FindByEmailUseCase } from '../../../../../core/users/application/use-cases/find-by-email.usecase'
@@ -11,20 +12,24 @@ import { ChangePasswordUseCase } from '../../../../../core/users/application/use
 import type { UserRepository } from '../../../../../core/users/domain/repositories/user.repository'
 import type { HashProvider } from '../../../../../core/shared/application/hash.provider'
 import type { TokenProvider } from '../../../../../core/shared/application/token.provider'
+import type { EmailProvider } from '../../../../../core/shared/application/email.provider'
 import { PrismaUserRepository } from '../../../../../infrastructure/persistence/prisma/users/repositories/user.repository'
 import { ArgonHashProvider } from '../../../../../infrastructure/security/argon-hash.provider'
 import { JwtTokenProvider } from '../../../../../infrastructure/security/jwt-token.provider'
 import { AuthService } from '../../../../../core/auth/application/services/auth.service'
 import { UsersController } from '../controllers/users.controller'
+import { NodemailerEmailProvider } from '../../../../../infrastructure/email/nodemailer.provider'
 
 const USER_REPOSITORY = 'USER_REPOSITORY'
 const HASH_PROVIDER = 'HASH_PROVIDER'
 const TOKEN_PROVIDER = 'TOKEN_PROVIDER'
+const EMAIL_PROVIDER = 'EMAIL_PROVIDER'
 const AUTH_SERVICE = 'AUTH_SERVICE'
 const LIST_USERS_USE_CASE = 'LIST_USERS_USE_CASE'
 const FIND_BY_ID_USE_CASE = 'FIND_BY_ID_USE_CASE'
 const FIND_BY_EMAIL_USE_CASE = 'FIND_BY_EMAIL_USE_CASE'
 const REGISTER_USER_USE_CASE = 'REGISTER_USER_USE_CASE'
+const VERIFY_EMAIL_USE_CASE = 'VERIFY_EMAIL_USE_CASE'
 const LOGIN_USER_USE_CASE = 'LOGIN_USER_USE_CASE'
 const REFRESH_TOKEN_USE_CASE = 'REFRESH_TOKEN_USE_CASE'
 const CHANGE_PASSWORD_USE_CASE = 'CHANGE_PASSWORD_USE_CASE'
@@ -45,6 +50,10 @@ const DELETE_USER_USE_CASE = 'DELETE_USER_USE_CASE'
     {
       provide: TOKEN_PROVIDER,
       useFactory: (): TokenProvider => new JwtTokenProvider()
+    },
+    {
+      provide: EMAIL_PROVIDER,
+      useFactory: (): EmailProvider => new NodemailerEmailProvider()
     },
     {
       provide: AUTH_SERVICE,
@@ -68,9 +77,14 @@ const DELETE_USER_USE_CASE = 'DELETE_USER_USE_CASE'
     },
     {
       provide: REGISTER_USER_USE_CASE,
-      useFactory: (userRepository: UserRepository, hashProvider: HashProvider, authService: AuthService) =>
-        new RegisterUserUseCase(userRepository, hashProvider, authService),
-      inject: [USER_REPOSITORY, HASH_PROVIDER, AUTH_SERVICE]
+      useFactory: (userRepository: UserRepository, hashProvider: HashProvider, emailProvider: EmailProvider) =>
+        new RegisterUserUseCase(userRepository, hashProvider, emailProvider),
+      inject: [USER_REPOSITORY, HASH_PROVIDER, EMAIL_PROVIDER]
+    },
+    {
+      provide: VERIFY_EMAIL_USE_CASE,
+      useFactory: (userRepository: UserRepository) => new VerifyEmailUseCase(userRepository),
+      inject: [USER_REPOSITORY]
     },
     {
       provide: LOGIN_USER_USE_CASE,

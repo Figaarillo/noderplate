@@ -47,3 +47,8 @@ export const ChangePasswordDTO = z.object({
   currentPassword: z.string().min(1, { message: 'Current password is required' }),
   newPassword: passwordDTO
 })
+
+export const VerifyEmailDTO = z.object({
+  email: emailDTO,
+  code: z.string().length(6, { message: 'Verification code must be 6 digits' })
+})

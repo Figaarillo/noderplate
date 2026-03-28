@@ -169,12 +169,12 @@ Content-Type: application/json
 {
   "email": "user@example.com",
   "password": "password123",
-  "firstName": "John",
-  "lastName": "Doe",
-  "phoneNumber": "+1234567890",
-  "city": "New York",
-  "province": "NY",
-  "country": "USA"
+  "firstname": "john",
+  "lastname": "doe",
+  "phonenumber": "+1234567890",
+  "city": "new york",
+  "province": "ny",
+  "country": "usa"
 }
 ```
 

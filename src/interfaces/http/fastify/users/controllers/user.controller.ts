@@ -3,6 +3,7 @@ import type { ListUsersUseCase } from '../../../../../core/users/application/use
 import type { FindByIdUseCase } from '../../../../../core/users/application/use-cases/find-by-id.usecase'
 import type { FindByEmailUseCase } from '../../../../../core/users/application/use-cases/find-by-email.usecase'
 import type { RegisterUserUseCase } from '../../../../../core/users/application/use-cases/register.usecase'
+import type { VerifyEmailUseCase } from '../../../../../core/users/application/use-cases/verify-email.usecase'
 import type { LoginUserUseCase } from '../../../../../core/users/application/use-cases/login.usecase'
 import type { RefreshTokenUseCase } from '../../../../../core/users/application/use-cases/refresh-token.usecase'
 import type { ChangePasswordUseCase } from '../../../../../core/users/application/use-cases/change-password.usecase'
@@ -22,11 +23,17 @@ export interface IdParams {
   id: string
 }
 
+export interface VerifyEmailBody {
+  email: string
+  code: string
+}
+
 export interface UserControllerDeps {
   listUsers: ListUsersUseCase
   findById: FindByIdUseCase
   findByEmail: FindByEmailUseCase
   registerUser: RegisterUserUseCase
+  verifyEmail: VerifyEmailUseCase
   loginUser: LoginUserUseCase
   refreshToken: RefreshTokenUseCase
   changePassword: ChangePasswordUseCase
@@ -65,13 +72,26 @@ export class UserController {
   async register(
     req: FastifyRequest<{ Body: RegisterUserPayload }>,
     res: FastifyReply
-  ): Promise<{ id: string; tokens: { accessToken: string; refreshToken: string } }> {
+  ): Promise<{ id: string; message: string }> {
     const payload = req.body
 
     const result = await this.deps.registerUser.execute(payload)
 
-    res.status(201).send({ data: { id: result.user.id, tokens: result.tokens } })
-    return { id: result.user.id, tokens: result.tokens }
+    res.status(201).send({
+      data: {
+        id: result.user.id,
+        message: 'Usuario registrado. Por favor verifica tu email.'
+      }
+    })
+    return { id: result.user.id, message: 'Usuario registrado. Por favor verifica tu email.' }
+  }
+
+  async verifyEmail(req: FastifyRequest<{ Body: VerifyEmailBody }>, res: FastifyReply): Promise<void> {
+    const { email, code } = req.body
+
+    const result = await this.deps.verifyEmail.execute(email, code)
+
+    res.status(200).send({ data: result })
   }
 
   async login(

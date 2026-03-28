@@ -25,7 +25,7 @@ src/
 │   └── container/                       # Contenedor DI (Fastify)
 │
 ├── core/                                # Dominio puro (sin dependencias externas)
-│   └── users/                          # Feature "users"
+│   └── users/                           # Feature "users"
 │       ├── domain/                      # Entidades, errores, payloads, repositorios
 │       │   ├── entities/
 │       │   ├── errors/
@@ -36,18 +36,18 @@ src/
 │
 ├── infrastructure/                      # Implementaciones externas
 │   └── persistence/
-│       ├── prisma/                     # Prisma adapter
+│       ├── prisma/                      # Prisma adapter
 │       │   ├── shared/
-│       │   │   └── client.ts          # Cliente Prisma global
+│       │   │   └── client.ts            # Cliente Prisma global
 │       │   └── users/
 │       │       └── repositories/
 │       │           └── user.repository.ts
-│       └── mikro-orm/                  # MikroORM adapter
+│       └── mikro-orm/                   # MikroORM adapter
 │
 ├── interfaces/                          # Adaptadores HTTP
 │   └── http/
-│       ├── nest/                       # NestJS adapter
-│       │   ├── app.module.ts           # Módulo principal
+│       ├── nest/                        # NestJS adapter
+│       │   ├── app.module.ts            # Módulo principal
 │       │   ├── health.controller.ts
 │       │   └── users/
 │       │       ├── controllers/

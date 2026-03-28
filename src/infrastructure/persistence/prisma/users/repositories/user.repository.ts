@@ -37,6 +37,10 @@ export class PrismaUserRepository implements UserRepository {
         province: user.province,
         country: user.country,
         role: user.role,
+        status: user.status,
+        isEmailVerified: user.isEmailVerified,
+        verificationCode: user.verificationCode,
+        verificationExp: user.verificationExp,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
       }
@@ -46,17 +50,18 @@ export class PrismaUserRepository implements UserRepository {
 
   async update(id: string, data: UpdateUserPayload): Promise<User> {
     try {
+      const updateData: Record<string, unknown> = {}
+      if (data.firstName !== undefined) updateData.firstName = data.firstName
+      if (data.lastName !== undefined) updateData.lastName = data.lastName
+      if (data.phoneNumber !== undefined) updateData.phoneNumber = data.phoneNumber
+      if (data.city !== undefined) updateData.city = data.city
+      if (data.province !== undefined) updateData.province = data.province
+      if (data.country !== undefined) updateData.country = data.country
+      if (data.role !== undefined) updateData.role = data.role
+
       const updated = await prisma.user.update({
         where: { id },
-        data: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          phoneNumber: data.phoneNumber,
-          city: data.city,
-          province: data.province,
-          country: data.country,
-          role: data.role
-        }
+        data: updateData
       })
       return this.mapToDomain(updated)
     } catch (error) {
@@ -64,6 +69,29 @@ export class PrismaUserRepository implements UserRepository {
         throw new UserNotFoundError(`User with id ${id} not found`)
       }
       throw new UserUpdateError('Failed to update user')
+    }
+  }
+
+  async updateVerification(
+    id: string,
+    isEmailVerified: boolean,
+    status: string,
+    verificationCode?: string | null,
+    verificationExp?: Date | null
+  ): Promise<User> {
+    try {
+      const updated = await prisma.user.update({
+        where: { id },
+        data: {
+          isEmailVerified,
+          status,
+          verificationCode,
+          verificationExp
+        }
+      })
+      return this.mapToDomain(updated)
+    } catch (error) {
+      throw new UserUpdateError('Failed to update verification')
     }
   }
 
@@ -89,6 +117,10 @@ export class PrismaUserRepository implements UserRepository {
     province: string
     country: string
     role: string
+    status: string
+    isEmailVerified: boolean
+    verificationCode: string | null
+    verificationExp: Date | null
     createdAt: Date
     updatedAt: Date
   }): User {
@@ -103,6 +135,10 @@ export class PrismaUserRepository implements UserRepository {
       province: prismaUser.province,
       country: prismaUser.country,
       role: prismaUser.role,
+      status: prismaUser.status as User['status'],
+      isEmailVerified: prismaUser.isEmailVerified,
+      verificationCode: prismaUser.verificationCode,
+      verificationExp: prismaUser.verificationExp,
       createdAt: prismaUser.createdAt,
       updatedAt: prismaUser.updatedAt
     }

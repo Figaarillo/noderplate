@@ -1,16 +1,5 @@
 import { ZodError, type ZodType } from 'zod'
-
-export class SchemaValidationError extends Error {
-  readonly code: number = 400
-
-  constructor(
-    message?: string,
-    public readonly details?: Record<string, string[]>
-  ) {
-    super(message ?? 'Validation errors occurred')
-    this.name = 'SchemaValidationError'
-  }
-}
+import { SchemaValidationException, type FieldError, type ValidationErrorResponse } from '../shared/zod-error-map'
 
 export class SchemaValidator {
   constructor(
@@ -23,29 +12,11 @@ export class SchemaValidator {
       return this.schema.parse(this.payload)
     } catch (error) {
       if (error instanceof ZodError) {
-        const details = this.formatErrors(error.errors)
-        throw new SchemaValidationError(error.errors.map(e => e.message).join(', '), details)
+        throw new SchemaValidationException(error)
       }
       throw error
     }
   }
-
-  private formatErrors(errors: Array<{ path: Array<string | number>; message: string }>): Record<string, string[]> {
-    const formatted: Record<string, string[]> = {}
-    for (const error of errors) {
-      const key = error.path.join('.')
-      if (key === '') {
-        if (formatted.root === undefined) {
-          formatted.root = []
-        }
-        formatted.root.push(error.message)
-      } else {
-        if (formatted[key] === undefined) {
-          formatted[key] = []
-        }
-        formatted[key].push(error.message)
-      }
-    }
-    return formatted
-  }
 }
+
+export { SchemaValidationException, type FieldError, type ValidationErrorResponse }
